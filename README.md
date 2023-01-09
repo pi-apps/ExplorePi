@@ -1,7 +1,7 @@
 # ExplorePi
 An novel, improved, and mobile friendly block explorer for the Pi blockchain made by Pioneers for Pioneers.
 
-##Structure
+## Structure
 
 ```
 ├── README.md
