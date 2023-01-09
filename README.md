@@ -2,6 +2,7 @@
 An novel, improved, and mobile friendly block explorer for the Pi blockchain made by Pioneers for Pioneers.
 
 ##Structure
+
 ```
 ├── README.md
 ├── docs
