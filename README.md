@@ -7,6 +7,9 @@ An novel, improved, and mobile friendly block explorer for the Pi blockchain mad
 ├── README.md
 ├── docs
 ├── crawler
+│   ├── lib
+│   ├── database.sql
+│   ├── index.js
 ├── website
 │   ├── NextJS structure
 └── License
