@@ -1,0 +1,20 @@
+{
+  "name": "crawlpi",
+  "version": "1.0.0",
+  "description": "A package to crawl necessary data on Pi Blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "PiNetwork"
+  ],
+  "author": "WenKai",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "mysql": "^2.18.1",
+    "stellar-sdk": "^10.4.1"
+  }
+}
