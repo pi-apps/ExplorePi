@@ -7,17 +7,11 @@ const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['EFFECT_CURSOR']; 
 let first_account = process.env['FIRST_ACCOUNT']
 let first_sql = "INSERT INTO Account(public_key,balance,Role) VALUES ('"+first_account+"',100000000000,'CoreTeam')"
-let query_first_sql = "SELECT COUNT(*) FROM Account WHERE public_key = '"+first_account+"' and balance = 100000000000 and Role = 'CoreTeam'"
 
 async function crawl(){
     try{
-        let results = pool.ex_sql(query_first_sql)
-
-        if (results === 0) {
-            pool.ex_sql(first_sql)//init memo:should add in init
-        }
-
-        query_ledger()
+    pool.ex_sql(first_sql)//init memo:should add in init
+    query_ledger()    
     }catch(e){
         console.log(lastCursor)
     }
