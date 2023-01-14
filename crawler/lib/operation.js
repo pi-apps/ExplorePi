@@ -55,9 +55,9 @@ function opHandler(res){
                 break;
         }
         
-        pool.ex_sql(sql)
+        let string = res.paging_token + ' operation finished'
+         pool.ex_sql(sql,string)
     }    
-    console.log(res.paging_token+" operation finished")
 }
 
 exports.crawl = operation()

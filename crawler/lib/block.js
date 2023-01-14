@@ -37,9 +37,8 @@ function lgHandler(res){
     res.fee_pool+",'"+
     date+"',"+
     spend_time+")"
-
-    pool.ex_sql(sql)
-    console.log(res.paging_token+" block finished")
+    let string = res.paging_token+" block finished"
+    pool.ex_sql(sql,string)
 }
 
 exports.crawl = block()

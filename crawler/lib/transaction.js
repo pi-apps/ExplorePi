@@ -25,9 +25,9 @@ function txHandler(res){
         let date = res.created_at.slice(0, 19).replace('T', ' ')
         let amount = (parseInt(res.fee_charged)/10000000)
         let sql = "INSERT INTO fee(id,created_at,account,amount) VALUES ('"+res.paging_token+"','"+date+"','"+res.source_account+"',"+amount+")"
-        pool.ex_sql(sql)
+        let string = res.paging_token + ' transaction finished'
+        pool.ex_sql(sql,string)
     }    
-    console.log(res.paging_token+" transaction finished")
 }
 
 exports.crawl = transaction()

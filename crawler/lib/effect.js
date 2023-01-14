@@ -14,7 +14,7 @@ async function crawl(){
         let results = await pool.ex_sql(query_first_sql)
 
         if (results[0].count === 0) {
-            pool.ex_sql(first_sql)//init memo:should add in init
+            pool.ex_sql(first_sql,"first init")//init memo:should add in init
         }
 
         query_ledger()
@@ -23,11 +23,10 @@ async function crawl(){
     }
 }
 const effectHandler = function (effResponse) {
-    console.log(effResponse.paging_token + ' effect start')    
     switch(effResponse.type_i){
         case 0:
             //account_created
-            account_sql(effResponse.account,effResponse.created_at,effResponse.starting_balance)
+            account_sql(effResponse)
           break;
         case 2:
             //account_credited
@@ -40,7 +39,7 @@ const effectHandler = function (effResponse) {
         case 11:
             //signer_removed
             if(effResponse.account === effResponse.public_key)
-                lock_sql(effResponse.account)
+                lock_sql(effResponse)
             else
                 break
             break
@@ -69,7 +68,7 @@ const effectHandler = function (effResponse) {
         default:
          break;
     }
-    console.log(effResponse.paging_token + ' effect finished')
+
 }
 function query_ledger(){
     server.effects()
@@ -80,15 +79,16 @@ function query_ledger(){
     })
 }
 
-function account_sql(key,create_date,balance){
-    let date = create_date.slice(0, 19).replace('T', ' ')
+function account_sql(res){
+    let date = res.created_at.slice(0, 19).replace('T', ' ')
     let sql
-    if(balance==2000001.0000000 || balance == 2000000.2000000){
-        sql = "INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+key+"',"+balance+",'"+date+"','CoreTeam')"
+    if(res.starting_balance==2000001.0000000 || res.starting_balance == 2000000.2000000){
+        sql = "INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
     }else{
-     sql = "INSERT INTO Account(public_key,balance,created_at) VALUES ('"+key+"',"+balance+",'"+date+"')"
+     sql = "INSERT INTO Account(public_key,balance,created_at) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"')"
     }    
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function credit_sql(res){
     let sql
@@ -97,7 +97,8 @@ function credit_sql(res){
     }else{
         sql = "UPDATE asset SET balance = balance + " + res.amount + " WHERE public_key = '"+ res.account +"' AND asset_code = '"+res.asset_code + "' AND asset_issuer = '"+res.asset_issuer +"'"
     }
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function debit_sql(res){
     let sql
@@ -106,31 +107,37 @@ function debit_sql(res){
     }else{
         sql = "UPDATE asset SET balance = balance - " + res.amount + " WHERE public_key = '"+ res.account +"' AND asset_code = '"+res.asset_code + "' AND asset_issuer = '"+res.asset_issuer +"'"
     }
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
-function lock_sql(key){
-    let sql = "UPDATE Account SET lock=1 WHERE public_key = '"+ key +"'"
-    pool.ex_sql(sql)
+function lock_sql(res){
+    let sql = "UPDATE Account SET lock=1 WHERE public_key = '"+ res.account +"'"
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function trustline_create_sql(res){
     let date = res.created_at.slice(0, 19).replace('T', ' ')
     let sql = "INSERT INTO asset(public_key,asset_code,asset_issuer,created_at) VALUES ('"+res.account+"','"+res.asset_code+"','"+res.asset_issuer+"','"+date+"')"
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function trustline_remove_sql(res){
     let date = res.created_at.slice(0, 19).replace('T', ' ')
     let sql = "UPDATE asset SET removed = 1 ,removed_at = '"+date+"' WHERE id = (SELECT MIN(id) FROM asset WHERE public_key = '"+res.account+"' AND asset_code = '"+res.asset_code+"' AND asset_issuer = '"+res.asset_issuer+"' AND removed = 0)"
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function claimable_balance_create_sql(res){
     let date = res.created_at.slice(0, 19).replace('T', ' ')
     let sql = "INSERT INTO claimant(id,created_at,amount) VALUES ('"+res.balance_id+"','"+date+"',"+res.amount+") ON DUPLICATE KEY UPDATE created_at=VALUES(created_at),amount=VALUES(amount)"
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function claimant_create_sql(res){
     let lock_time = parseInt(res.predicate.not.rel_before)
     let sql = "INSERT INTO claimant(id,account,lock_time) VALUES ('"+res.balance_id+"','"+res.account+"',"+lock_time+") ON DUPLICATE KEY UPDATE account=VALUES(account),lock_time=VALUES(lock_time)"
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 function claim_claimant(res){
     let sql;
@@ -141,6 +148,7 @@ function claim_claimant(res){
     }else{
         sql = "UPDATE claimant SET status = 1,claimed_at = '"+date+"' WHERE id='"+res.balance_id+"'"
     }
-    pool.ex_sql(sql)
+    let string = res.paging_token + ' effect finished'
+    pool.ex_sql(sql,string)
 }
 exports.crawl = crawl()
