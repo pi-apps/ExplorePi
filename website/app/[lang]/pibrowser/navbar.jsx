@@ -2,20 +2,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { useSelectedLayoutSegment } from 'next/navigation';
-import { faChartSimple, faCubes, faRankingStar, faTv, faTvAlt, faUserTag } from '@fortawesome/free-solid-svg-icons';
-
-export default function navbar({children}){
+import { useSelectedLayoutSegments, useSelectedLayoutSegment } from 'next/navigation';
+import { faChartSimple, faCubes, faTvAlt, faUserTag } from '@fortawesome/free-solid-svg-icons';
+export default function NavBar({ transcript }){
     const segmant = useSelectedLayoutSegment()
-
+    const lang = useSelectedLayoutSegments()[0]
     return(
         <>
-        <div className='w-screen h-screen overflow-hidden '>            
-                {children}
-        </div>
 
         <ul className="shadow flex fixed bottom-0 justify-center w-full font-mono bg-white">
-            <Link href="/pibrowser/statistic" className='w-1/4'>
+            <Link href={`/${lang}/pibrowser/statistic`} className='w-1/4'>
                 <li>
                     <button 
                     type="button" 
@@ -24,11 +20,11 @@ export default function navbar({children}){
                         'text-nav-gold': segmant !== "statistic"
                     })}>
                         <FontAwesomeIcon icon={faChartSimple} />
-                        <p className='space-x-0'>Statistic</p>
+                        <p className='space-x-0'>{transcript.Statistic}</p>
                     </button>
                 </li>
             </Link>
-            <Link href="/pibrowser/explorer" className='w-1/4'>            
+            <Link href={`/${lang}/pibrowser/explorer`} className='w-1/4'>            
                 <li >
                     <button 
                     type="button" 
@@ -37,12 +33,12 @@ export default function navbar({children}){
                         'text-nav-gold': segmant !== "explorer"
                     })}>
                         <FontAwesomeIcon icon={faCubes} />
-                        <p className='space-x-0'>Explorer</p>
+                        <p className='space-x-0'>{transcript.Explorer}</p>
                     </button>
                 </li>
             </Link>
 
-            <Link href="/pibrowser/stream" className='w-1/4'>            
+            <Link href={`/${lang}/pibrowser/stream`} className='w-1/4'>            
                 <li>
                     <button 
                     type="button" 
@@ -51,12 +47,12 @@ export default function navbar({children}){
                         'text-nav-gold': segmant !== "stream"
                     })}>
                         <FontAwesomeIcon icon={faTvAlt} />
-                        <p>Stream</p>
+                        <p>{transcript.Stream}</p>
                     </button>
                 </li>
             </Link>
 
-            <Link href="/pibrowser/personal" className='w-1/4'>            
+            <Link href={`/${lang}/pibrowser/personal`} className='w-1/4'>            
                 <li>
                     <button 
                     type="button" 
@@ -65,7 +61,7 @@ export default function navbar({children}){
                         'text-nav-gold': segmant !== "personal"
                     })}>
                         <FontAwesomeIcon icon={faUserTag} />
-                        <p>Personal</p>
+                        <p>{transcript.Personal}</p>
                     </button>
                 </li>
             </Link>

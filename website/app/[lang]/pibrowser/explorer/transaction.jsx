@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Transaction(){
+export default function Transaction({transcript}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [transaction,settransaction] = useState(null)
     useEffect(()=>{
@@ -20,9 +20,9 @@ export default function Transaction(){
         <table className='table-fixed w-full text-center font-mono'>
             <thead className="border-b border-slate-400 text-lg">
                 <tr>
-                    <th>Hash</th>
-                    <th>Operation</th>
-                    <th>Time</th>
+                    <th>{transcript.Hash}</th>
+                    <th>{transcript.Operation}</th>
+                    <th>{transcript.Time}</th>
                 </tr>
             </thead>
             <tbody>

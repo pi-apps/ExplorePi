@@ -4,10 +4,10 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 
 config.autoAddCss = false
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children,params }) {
 
   return (
-    <html lang="en">
+    <html lang={params.lang}>
       <head />
       <body>{children}</body>
     </html>

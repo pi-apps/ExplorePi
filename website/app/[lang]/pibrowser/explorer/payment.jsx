@@ -3,15 +3,16 @@ import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Block(){
+export default function Payment({transcript}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
-    const [block10,setblock10] = useState(null)
+    const [payment,setpayment] = useState(null)
     useEffect(()=>{
-        server.ledgers()
+        server.payments()
         .cursor('now')
         .order('desc')
+        .limit(10)
         .call().then( res => {
-            setblock10(res.records)
+            setpayment(res.records)
             console.log(res)
         })
     },[])
@@ -20,18 +21,23 @@ export default function Block(){
         <table className='table-fixed w-full text-center font-mono'>
             <thead className="border-b border-slate-400 text-lg">
                 <tr>
-                    <th>Block</th>
-                    <th>Transactions</th>
-                    <th>Time</th>
+                    <th>{transcript.From}</th>
+                    <th>{transcript.To}</th>
+                    <th>{transcript.Amount}</th>
+                    <th>{transcript.Time}</th>
                 </tr>
             </thead>
             <tbody>
-                {block10===null ?  <TableLoading/>:block10.map((data,index)=>{
+                {payment===null ?  <TableLoading/>:payment.map((data,index)=>{
                     let date = new Date(data.closed_at)
+                    let from_account = typeof data.from === 'string' ? data.from.substring(0,4) : '';
+                    let to_account = typeof data.to === 'string' ? data.to.substring(0,4) : '';
+                    if(data.type_i!=1) return
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
-                            <td>{data.sequence}</td>
-                            <td>{data.successful_transaction_count}</td>
+                            <td>{from_account}</td>
+                            <td>{to_account}</td>
+                            <td className=" text-sm">{parseFloat(data.amount)} Pi</td>
                             <td></td>
                         </tr>
                     )

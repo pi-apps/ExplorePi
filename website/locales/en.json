@@ -1,0 +1,39 @@
+{
+    "navbar":{
+        "Statistic":"Statistic",
+        "Explorer":"Explorer",
+        "Stream":"Stream",
+        "Personal":"Personal"
+    },
+    "explorer":{
+        "LatestBlocks10":"Latest 10 Blocks",
+        "LatestPayments":"Latest Payments",
+        "LatestTransactions10":"Latest 10 Transactions",
+        "Search":{
+            "placeholder":"PublicKey/Block/transaction"
+        },
+        "block":{
+            "Block":"Block",
+            "Transactions":"Transactions",
+            "Time":"Time"
+        },
+        "payment":{
+            "From":"From",
+            "To":"To",
+            "Amount":"Amount",
+            "Time":"Time"
+        },
+        "transaction":{
+            "Hash":"Hash",
+            "Operation":"Operation",
+            "Time":"Time"
+        }
+    },
+    "account":{
+        "Balance":"Balance",
+        "SubEntry":"SubEntry",
+        "LastActiveBlock":"LastActiveBlock",
+        "LockUpBalance":"LockUpBalance"
+    }
+    
+}

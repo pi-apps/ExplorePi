@@ -3,16 +3,15 @@ import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Payment(){
+export default function Block({transcript}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
-    const [payment,setpayment] = useState(null)
+    const [block10,setblock10] = useState(null)
     useEffect(()=>{
-        server.payments()
+        server.ledgers()
         .cursor('now')
         .order('desc')
-        .limit(10)
         .call().then( res => {
-            setpayment(res.records)
+            setblock10(res.records)
             console.log(res)
         })
     },[])
@@ -21,23 +20,18 @@ export default function Payment(){
         <table className='table-fixed w-full text-center font-mono'>
             <thead className="border-b border-slate-400 text-lg">
                 <tr>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Amount</th>
-                    <th>Time</th>
+                    <th>{transcript.Block}</th>
+                    <th>{transcript.Transactions}</th>
+                    <th>{transcript.Time}</th>
                 </tr>
             </thead>
             <tbody>
-                {payment===null ?  <TableLoading/>:payment.map((data,index)=>{
+                {block10===null ?  <TableLoading/>:block10.map((data,index)=>{
                     let date = new Date(data.closed_at)
-                    let from_account = typeof data.from === 'string' ? data.from.substring(0,4) : '';
-                    let to_account = typeof data.to === 'string' ? data.to.substring(0,4) : '';
-                    if(data.type_i!=1) return
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
-                            <td>{from_account}</td>
-                            <td>{to_account}</td>
-                            <td>{data.amount}</td>
+                            <td>{data.sequence}</td>
+                            <td>{data.successful_transaction_count}</td>
                             <td></td>
                         </tr>
                     )

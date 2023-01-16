@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.2.32",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
@@ -20,10 +21,12 @@
     "eslint-config-next": "13.1.1",
     "flowbite": "^1.6.2",
     "flowbite-react": "^0.3.7",
+    "negotiator": "^0.6.3",
     "next": "^13.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "stellar-sdk": "^10.4.1"
+    "stellar-sdk": "^10.4.1",
+    "tw-elements": "^1.0.0-alpha13"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
