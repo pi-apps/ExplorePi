@@ -5,13 +5,16 @@ import styles from './styles.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCoins, faCube, faLock, faUserClock } from "@fortawesome/free-solid-svg-icons"
 import { Josefin_Sans } from "@next/font/google"
+import { useSearchParams } from "next/navigation"
 
 const roboto = Josefin_Sans({
     weight: '600',
     subsets: ['latin']
   })
 
-export default function AccountDashboard({transcript,account}){
+export default function AccountDashboard({transcript}){
+    const searchaccount = useSearchParams()
+    const account = searchaccount.get('account')
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [weight,setweight] = useState(0)
     const [claimablebalance,setclaimablebalance] = useState(0.0000000)

@@ -12,7 +12,7 @@ export default function Search({transcript}){
         //check input
         if(Input.match(/^G[A-Za-z0-9]{55}/)){
             //public_key
-            router.push(`./${lang}/pibrowser/explorer/account/`+Input)
+            router.push(`./${lang}/pibrowser/explorer/account?account=`+Input)
             setInput('')
         }
         else if(Input.toLowerCase().match(/[a-z0-9]{64}/)){
