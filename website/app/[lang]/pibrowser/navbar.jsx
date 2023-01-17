@@ -2,11 +2,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import clsx from 'clsx'
-import { useSelectedLayoutSegments, useSelectedLayoutSegment } from 'next/navigation';
+import {  useSelectedLayoutSegment } from 'next/navigation';
 import { faChartSimple, faCubes, faTvAlt, faUserTag } from '@fortawesome/free-solid-svg-icons';
-export default function NavBar({ transcript }){
+export default function NavBar({ transcript,lang }){
     const segmant = useSelectedLayoutSegment()
-    const lang = useSelectedLayoutSegments()[0]
     return(
         <>
 

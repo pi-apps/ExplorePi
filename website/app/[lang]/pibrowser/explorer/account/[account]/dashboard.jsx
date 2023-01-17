@@ -1,7 +1,6 @@
 'use client'
 import { Server } from "stellar-sdk"
 import { useEffect, useState } from "react"
-import { Spinner, Tabs } from "flowbite-react"
 import styles from './styles.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCoins, faCube, faLock, faUserClock } from "@fortawesome/free-solid-svg-icons"
@@ -20,7 +19,7 @@ export default function AccountDashboard({transcript,account}){
     const [subentry,setsubentry] = useState(0)
     const [last_modify,setlast_modify] = useState(0)
     const [claimstatus,setclaimstatus] = useState(false)
-    
+    const [selected,setselected] = useState("operation")
     useEffect(()=>{
         console.log(account)
         server.accounts()
@@ -58,15 +57,15 @@ export default function AccountDashboard({transcript,account}){
     return(
         <>
         <section className=" m-4">
-            <div className="grid gap-4 grid-cols-2">
+            <div className="grid gap-4 grid-cols-2 pb-4 border-b">
                 <div className={`${styles.balance} shadow w-full h-20 rounded-xl flex items-center justify-center`}>
                     <div className="flex justify-center items-center w-full px-2">
                         <FontAwesomeIcon icon={faCoins} className={styles.balance_icon}/>
                         <div className="block">
-                            <p className={` ${styles.balance_block} leading-none ml-3 align-bottom font-mono font-bold`}>{parseFloat(balance)} 
+                            <div className={` ${styles.balance_block} leading-none ml-3 align-bottom font-mono font-bold`}>{parseFloat(balance)} 
                                 <span className=" text-purple-500"> Pi</span>
-                            </p>
-                            <p className=" leading-none align-top ml-3 text-neutral-500">{transcript.Balance}</p>
+                            </div>
+                            <div className=" leading-none align-top ml-3 text-neutral-500">{transcript.Balance}</div>
                         </div>                        
                     </div>
                 </div>
@@ -75,8 +74,8 @@ export default function AccountDashboard({transcript,account}){
                     <div className="flex justify-center items-center">
                         <FontAwesomeIcon icon={faCube} className={styles.subentry_icon}/>
                         <div className="block">
-                            <p className={`font-bold font-mono ${styles.subentry_block} leading-none ml-3 align-bottom`}>{parseInt(subentry)}</p>
-                            <p className=" leading-none align-top ml-3 text-neutral-500">{transcript.SubEntry}</p>
+                            <div className={`font-bold font-mono ${styles.subentry_block} leading-none ml-3 align-bottom`}>{parseInt(subentry)}</div>
+                            <div className=" leading-none align-top ml-3 text-neutral-500">{transcript.SubEntry}</div>
                         </div>                        
                     </div>
                 </div>
@@ -85,8 +84,8 @@ export default function AccountDashboard({transcript,account}){
                     <div className="flex justify-center items-center w-full px-2">
                         <FontAwesomeIcon icon={faUserClock} className={styles.lastactive_icon}/>
                         <div className="block">
-                            <p className={`font-bold font-mono ${styles.last_block} leading-none ml-3 align-bottom`}>{parseInt(last_modify)}</p>
-                            <p className=" leading-none align-top ml-3 text-neutral-500">{transcript.LastActiveBlock}</p>
+                            <div className={`font-bold font-mono ${styles.last_block} leading-none ml-3 align-bottom`}>{parseInt(last_modify)}</div>
+                            <div className=" leading-none align-top ml-3 text-neutral-500">{transcript.LastActiveBlock}</div>
                         </div>                        
                     </div>
                 </div>
@@ -95,32 +94,27 @@ export default function AccountDashboard({transcript,account}){
                 <div className="flex justify-center items-center w-full px-2">
                         <FontAwesomeIcon icon={faLock} className={styles.lock_icon}/>
                         <div className="block">
-                            <p className={`font-bold font-mono ${styles.lock_block} leading-none ml-3 align-bottom`}>
+                            <div className={`font-bold font-mono ${styles.lock_block} leading-none ml-3 align-bottom`}>
                                 {claimstatus ? parseFloat(claimablebalance) : <div className="spinner-border animate-spin inline-block border-4 w-4 h-4 rounded-full text-blue-300" role="status"></div>}
                                 <span className=" text-purple-500"> Pi</span>
-                            </p>
-                            <p className=" leading-none align-top ml-3 text-neutral-500">{transcript.LockUpBalance}</p>
+                            </div>
+                            <div className=" leading-none align-top ml-3 text-neutral-500">{transcript.LockUpBalance}</div>
                         </div>                        
                     </div>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-2 mt-2">
-                <div className="flex text-center flex-wrap -mb-px border-b border-gray-200">
-                    <button className="flex items-center justify-center p-4 text-sm font-medium first:ml-0 text-gray-400 rounded-t-lg">
-                        OPERATION
-                    </button>
-                    <button className="flex items-center justify-center p-4 text-sm font-medium first:ml-0 text-gray-400 rounded-t-lg">
-                        LockBalance
-                    </button>
-                    <button className="flex items-center justify-center p-4 text-sm font-medium first:ml-0 text-gray-400 rounded-t-lg">
-                        Offers
-                    </button>
-                    <button className="flex items-center justify-center p-4 text-sm font-medium first:ml-0 text-gray-400 rounded-t-lg">
-                        DATA
-                    </button>
-                </div>
-            </div>
+            <select className="form-select form-select-sm appearance-none block w-full px-2 py- font-semibold text-gray-700
+            bg-white bg-clip-padding bg-no-repeat text-center
+            border border-solid border-gray-300
+            rounded-xl transition ease-in-out mt-4
+            focus:text-gray-700 focus:border-blue-500 focus:outline-none" value={selected} onChange={e=>{setselected(e.target.value)}}>
+                <option value="operation">OPERATION</option>
+                <option value="lockbalance">LockBalance</option>
+                <option value="offers">Offers</option>
+                <option value="data">DATA</option>
+            </select>
+
 
         </section>
         </>

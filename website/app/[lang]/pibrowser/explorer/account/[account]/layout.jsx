@@ -1,4 +1,7 @@
-export default async function AccountLayout({params:{lang},children}){
+export async function generateStaticParams() {
+    return [];
+  }
+export default async function AccountLayout({children}){
     return(
         <>
         {children}
