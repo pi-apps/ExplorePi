@@ -1,9 +1,10 @@
 'use client'
+import getago from "lib/time";
 import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Transaction({transcript}){
+export default function Transaction({transcript,time}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [transaction,settransaction] = useState(null)
     useEffect(()=>{
@@ -33,7 +34,7 @@ export default function Transaction({transcript}){
                         <tr key={index} className='border-b border-slate-300 text-lg'>
                             <td>{tx_hash}</td>
                             <td>{data.operation_count}</td>
-                            <td></td>
+                            <td>{getago(data.created_at,time)}</td>
                         </tr>
                     )
                 })}

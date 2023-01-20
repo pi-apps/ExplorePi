@@ -6,6 +6,12 @@
         "Personal":"個人"
     },
     "explorer":{
+        "account":{
+            "Balance":"餘額",
+            "SubEntry":"內容物",
+            "LastActiveBlock":"最後活躍的區塊",
+            "LockUpBalance":"鎖倉餘額"
+        },
         "LatestBlocks10":"最後10個區塊",
         "LatestPayments":"最後的付款操作",
         "LatestTransactions10":"最後10筆交易",
@@ -27,12 +33,64 @@
             "Hash":"哈希",
             "Operation":"操作數",
             "Time":"時間"
+        },
+        "lockbalance":{
+            "Sponsor":"支助者",
+            "Balance":"金額",
+            "Start":"開始日期(UTC)",
+            "Until":"領取日期(UTC)"
+        },
+        "operation":{
+            "create_account":"{a} 創建擁有{amount} Pi 的 {b}",
+            "payment":"{a} 付 {amount} Pi 給 {b}",
+            "path_receive":"",
+            "path_send":"",
+            "manage_sell":"",
+            "manage_buy":"",
+            "passive_sell":"",
+            "set_options":"",
+            "change_trust":"",
+            "allow_trust":"",
+            "account_merge":"",
+            "manage_data":"",
+            "bump_sequence":"",
+            "create_claimable_balance":"{a}創建{amount} Pi給{b}",
+            "claim_claimable_balance":"{a}獲取資產",
+            "begin_sponsoring":"",
+            "end_sponsoring":"",
+            "revoke_sponsorship":"",
+            "pool_deposit":"",
+            "pool_withdraw":"",
+            "type":{
+                "create_account":"創建帳戶",
+                "payment":"支付",
+                "path_receive":"path payment receive",
+                "path_send":"",
+                "manage_sell":"",
+                "manage_buy":"",
+                "passive_sell":"",
+                "set_options":"",
+                "change_trust":"",
+                "allow_trust":"",
+                "account_merge":"",
+                "manage_data":"",
+                "bump_sequence":"",
+                "create_claimable_balance":"創建可獲取資產",
+                "begin_sponsoring":"",
+                "end_sponsoring":"",
+                "revoke_sponsorship":"",
+                "pool_deposit":"",
+                "pool_withdraw":"",
+                "claim_claimable_balance":"獲取資產"
+            }
         }
     },
-    "account":{
-        "Balance":"餘額",
-        "SubEntry":"內容物",
-        "LastActiveBlock":"最後活躍的區塊",
-        "LockUpBalance":"鎖倉餘額"
+    "time":{
+        "second":"秒",
+        "minute":"分",
+        "hour":"小時",
+        "day":"天",
+        "month":"月",
+        "year":"年"
     }
 }

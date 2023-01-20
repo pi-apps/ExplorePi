@@ -6,6 +6,12 @@
         "Personal":"Personal"
     },
     "explorer":{
+        "account":{
+            "Balance":"Balance",
+            "SubEntry":"SubEntry",
+            "LastActiveBlock":"LastActiveBlock",
+            "LockUpBalance":"LockUpBalance"
+        },
         "LatestBlocks10":"Latest 10 Blocks",
         "LatestPayments":"Latest Payments",
         "LatestTransactions10":"Latest 10 Transactions",
@@ -27,13 +33,65 @@
             "Hash":"Hash",
             "Operation":"Operation",
             "Time":"Time"
+        },
+        "lockbalance":{
+            "Sponsor":"Sponsor",
+            "Balance":"Balance",
+            "Start":"Start(UTC)",
+            "Until":"Until(UTC)"
+        },
+        "operation":{
+            "create_account":"{a} create {b} with {amount} Pi",
+            "payment":"{a} pay {amount} Pi to {b}",
+            "path_receive":"",
+            "path_send":"",
+            "manage_sell":"",
+            "manage_buy":"",
+            "passive_sell":"",
+            "set_options":"",
+            "change_trust":"",
+            "allow_trust":"",
+            "account_merge":"",
+            "manage_data":"",
+            "bump_sequence":"",
+            "create_claimable_balance":"{a} create {amount} Pi for {b}",
+            "claim_claimable_balance":"{a} claim the balance",
+            "begin_sponsoring":"",
+            "end_sponsoring":"",
+            "revoke_sponsorship":"",
+            "pool_deposit":"",
+            "pool_withdraw":"",
+            "type":{
+                "create_account":"create account",
+                "payment":"payment",
+                "path_receive":"path payment receive",
+                "path_send":"",
+                "manage_sell":"",
+                "manage_buy":"",
+                "passive_sell":"",
+                "set_options":"",
+                "change_trust":"",
+                "allow_trust":"",
+                "account_merge":"",
+                "manage_data":"",
+                "bump_sequence":"",
+                "create_claimable_balance":"create claimable balance",
+                "begin_sponsoring":"",
+                "end_sponsoring":"",
+                "revoke_sponsorship":"",
+                "pool_deposit":"",
+                "pool_withdraw":"",
+                "claim_claimable_balance":"claim claimable balance"
+            }
         }
     },
-    "account":{
-        "Balance":"Balance",
-        "SubEntry":"SubEntry",
-        "LastActiveBlock":"LastActiveBlock",
-        "LockUpBalance":"LockUpBalance"
+    "time":{
+        "second":"second",
+        "minute":"minute",
+        "hour":"hour",
+        "day":"day",
+        "month":"month",
+        "year":"year"
     }
     
 }

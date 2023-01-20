@@ -1,9 +1,10 @@
 'use client'
+import getago from "lib/time";
 import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Payment({transcript}){
+export default function Payment({transcript,time}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [payment,setpayment] = useState(null)
     useEffect(()=>{
@@ -38,7 +39,7 @@ export default function Payment({transcript}){
                             <td>{from_account}</td>
                             <td>{to_account}</td>
                             <td className=" text-sm">{parseFloat(data.amount)} Pi</td>
-                            <td></td>
+                            <td>{getago(data.created_at,time)}</td>
                         </tr>
                     )
                 })}
