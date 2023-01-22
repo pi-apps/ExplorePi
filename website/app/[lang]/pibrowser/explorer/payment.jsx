@@ -1,5 +1,6 @@
 'use client'
 import getago from "lib/time";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
@@ -7,7 +8,9 @@ import TableLoading from "./tableloading";
 export default function Payment({transcript,time}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [payment,setpayment] = useState(null)
+    const [lang,setlang] = useState()
     useEffect(()=>{
+        setlang(document.documentElement.lang)
         server.payments()
         .cursor('now')
         .order('desc')
@@ -35,10 +38,22 @@ export default function Payment({transcript,time}){
                     if(data.type_i!=1) return
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
-                            <td>{from_account}</td>
-                            <td>{to_account}</td>
-                            <td className=" text-sm">{parseFloat(data.amount)} Pi</td>
-                            <td>{getago(data.created_at,time)}</td>
+                            <td className="py-2">
+                                <Link href={`/${lang}/pibrowser/explorer/account?account=${data.from}`}>
+                                    <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
+                                    {from_account}
+                                    </span>
+                                </Link>
+                            </td>
+                            <td className="py-2">
+                                <Link href={`/${lang}/pibrowser/explorer/account?account=${data.to}`}>
+                                    <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-yellow-300 text-white rounded-full">
+                                    {to_account}
+                                    </span>
+                                </Link>
+                            </td>
+                            <td className="py-2 break-words">{parseFloat(data.amount)} Pi</td>
+                            <td className="py-2">{getago(data.created_at,time)}</td>
                         </tr>
                     )
                 })}

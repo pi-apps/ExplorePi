@@ -26,7 +26,7 @@ export default function Operation({status,account,transcript,time}){
             }else{
                 setrun(true)
                 setstream(()=>server.operations()
-                .cursor('now')
+                .cursor('1')
                 .stream({
                     onmessage: (res)=>{                       
                         setdata(predata=>([res, ...predata]))

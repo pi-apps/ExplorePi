@@ -78,17 +78,17 @@ export default function AccountDashboard({transcript,time}){
     }
 
     return(
-        <>
-        <div className="text-center mt-4 text-2xl font-semibold border-b mx-4">
-            Public Key
-        </div>
-        <div className="text-center my-1 mx-4 break-words">
-            {account}
-        </div>
-        <div className="text-center text-red-900 text-lg mb-2 border-b mx-4" onClick={handlecopy}>
-            <FontAwesomeIcon icon={faPaste}/>
-        </div>
+        <>        
         <section className=" m-4 overflow-y-scroll h-full pb-28">
+            <div className="text-center text-2xl font-semibold border-b mx-4">
+                Public Key
+            </div>
+            <div className="text-center my-1 mx-4 break-words">
+                {account}
+            </div>
+            <div className="text-center text-red-900 text-lg mb-2 border-b mx-4" onClick={handlecopy}>
+                <FontAwesomeIcon icon={faPaste}/>
+            </div>
             <div className="grid gap-4 grid-cols-2 pb-4 border-b">
                 <div className={`${styles.balance} shadow w-full h-20 rounded-xl flex items-center justify-center`}>
                     <div className="flex justify-center items-center w-full px-2">

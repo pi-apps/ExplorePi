@@ -1,5 +1,5 @@
 'use client'
-import { Server } from "stellar-sdk"
+import styles from './stream.module.css'
 import { useEffect, useState } from "react"
 import { formatTrans } from "lib/translate";
 import { Button } from "flowbite-react";
@@ -26,7 +26,7 @@ export default function StreamContent({transcript,explorer,time}){
     }
     return(
         <>
-        <section className=" bg-slate-100 px-5 shadow mx-5 w-auto rounded-lg mt-4 py-2">
+        <section className='bg-slate-100 px-5 shadow mx-5 w-auto rounded-lg mt-4 py-2'>
             <select className="form-select form-select-sm appearance-none text-center block w-full px-2 font-semibold text-gray-700
             bg-white bg-clip-padding bg-no-repeat
             border border-solid border-gray-300
@@ -52,7 +52,7 @@ export default function StreamContent({transcript,explorer,time}){
             </div>
         </section>
         <div className="mt-2 border mx-4"></div>
-        <section className="mt-2 mx-4 w-auto pb-11">
+        <section className={`${styles.content_table} mt-2 mx-4 w-auto pb-14 overflow-y-scroll`}>
             {selected==='operation' && <Operation status={start} transcript={explorer.operation} account={Input} time={time}/>}
             {selected==='payment' && <Payment status={start} transcript={explorer.payment} account={Input} time={time}/>}
         </section>
