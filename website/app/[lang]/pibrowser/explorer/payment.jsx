@@ -30,7 +30,6 @@ export default function Payment({transcript,time}){
             </thead>
             <tbody>
                 {payment===null ?  <TableLoading/>:payment.map((data,index)=>{
-                    let date = new Date(data.closed_at)
                     let from_account = typeof data.from === 'string' ? data.from.substring(0,4) : '';
                     let to_account = typeof data.to === 'string' ? data.to.substring(0,4) : '';
                     if(data.type_i!=1) return

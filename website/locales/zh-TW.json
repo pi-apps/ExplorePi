@@ -85,6 +85,11 @@
             }
         }
     },
+    "stream":{
+        "input":"公鑰({need})",
+        "Optional":"選項",
+        "Required":"必填"
+    },
     "time":{
         "second":"秒",
         "minute":"分",

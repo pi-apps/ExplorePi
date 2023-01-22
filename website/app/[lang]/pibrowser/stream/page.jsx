@@ -1,11 +1,10 @@
-'use client'
-import { Server } from "stellar-sdk"
+import StreamContent from "./stream";
 
-export default function StreamPage(){
-    const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
-
+export default async function StreamPage({params:{lang}}){
+    const transcript = await import(`locales/${lang}.json`);
     return(
         <>
+        <StreamContent transcript={transcript.stream} explorer={transcript.explorer} time={transcript.time}/>
         </>
     )
 }

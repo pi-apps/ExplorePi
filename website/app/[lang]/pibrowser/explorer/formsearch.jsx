@@ -16,11 +16,11 @@ export default function Search({transcript}){
             setInput('')
         }
         else if(Input.toLowerCase().match(/[a-z0-9]{64}/)){
-            router.push(`./${lang}/pibrowser/explorer/tx/`+Input)
+            router.push(`./${lang}/pibrowser/explorer/tx?tx=`+Input)
             setInput('')
         }
         else if(Input.match(/^\d+$/)){
-            router.push(`./${lang}/pibrowser/explorer/block/`+Input)
+            router.push(`./${lang}/pibrowser/explorer/block?block=`+Input)
             setInput('')
         }else{
             //pop warning message

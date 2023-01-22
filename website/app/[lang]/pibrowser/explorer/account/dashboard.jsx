@@ -3,7 +3,7 @@ import { Server } from "stellar-sdk"
 import { useEffect, useState } from "react"
 import styles from './styles.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCoins, faCube, faLock, faUserClock } from "@fortawesome/free-solid-svg-icons"
+import { faCoins, faCube, faLock, faPaste, faUserClock } from "@fortawesome/free-solid-svg-icons"
 import { Josefin_Sans } from "@next/font/google"
 import { useSearchParams } from "next/navigation"
 import Operation from "./operation"
@@ -72,8 +72,22 @@ export default function AccountDashboard({transcript,time}){
 
     },[account])
 
+    const handlecopy = async () =>{
+        await navigator.clipboard.writeText(account);
+
+    }
+
     return(
         <>
+        <div className="text-center mt-4 text-2xl font-semibold border-b mx-4">
+            Public Key
+        </div>
+        <div className="text-center my-1 mx-4 break-words">
+            {account}
+        </div>
+        <div className="text-center text-red-900 text-lg mb-2 border-b mx-4" onClick={handlecopy}>
+            <FontAwesomeIcon icon={faPaste}/>
+        </div>
         <section className=" m-4 overflow-y-scroll h-full pb-28">
             <div className="grid gap-4 grid-cols-2 pb-4 border-b">
                 <div className={`${styles.balance} shadow w-full h-20 rounded-xl flex items-center justify-center`}>

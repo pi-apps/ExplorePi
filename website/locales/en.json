@@ -85,6 +85,11 @@
             }
         }
     },
+    "stream":{
+        "input":"Account({need})",
+        "Optional":"Optional",
+        "Required":"Required"
+    },
     "time":{
         "second":"second",
         "minute":"minute",
