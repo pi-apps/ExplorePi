@@ -88,7 +88,12 @@
     "stream":{
         "input":"Account({need})",
         "Optional":"Optional",
-        "Required":"Required"
+        "Required":"Required",
+        "block":{
+            "Block":"Block",
+            "Tx":"Transaction",
+            "Time":"Time"
+        }
     },
     "time":{
         "second":"second",
