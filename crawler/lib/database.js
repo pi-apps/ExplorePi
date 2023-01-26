@@ -18,13 +18,14 @@ function getConnection(callback) {
         }
     )
 }
-function ex_sql(sql,string){
+function ex_sql(sql,string=null){
     return new Promise(data => {
         getConnection(function(err, connection) {
             if (err) throw err;
             connection.query(sql, function (error, results, fields) {
                 connection.release();
                 if (error) throw error;
+                if(string)
                 console.log(string)
                 data(results)
             });

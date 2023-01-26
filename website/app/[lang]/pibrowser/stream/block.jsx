@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import getago from "lib/time"
+import Link from "next/link"
 export default function Block({status,transcript,time}){
     const [run,setrun] = useState(false)
     const [data,setdata]=useState([])
     const [stream,setstream]=useState()
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const lang = document.documentElement.lang
     useEffect(()=>{
 
         if(status){
@@ -46,14 +48,18 @@ export default function Block({status,transcript,time}){
                                 data!=null && data.map((data,index)=>{
                                     return(
                                         <tr key={index} className="bg-white border-b">
-                                            <td className="px-2 py-4 text-sm font-medium text-gray-900">
-                                                {data.sequence}
+                                            <td className="py-2">
+                                                <Link href={`/${lang}/pibrowser/explorer/block?block=${data.sequence}`}>
+                                                    <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-400 text-white rounded-full">
+                                                    {data.sequence}
+                                                    </span>
+                                                </Link>
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-2 py-4 break-words">
                                             {data.successful_transaction_count}
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-2 py-4 break-words">
-                                            {getago(data.created_at,time)}
+                                            {getago(data.closed_at,time)}
                                             </td>
                                         </tr> 
                                     )

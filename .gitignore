@@ -1,3 +1,4 @@
 
 website/app/website.code-workspace
 website/.env
+crawler/lib/serviceAccountKey.json

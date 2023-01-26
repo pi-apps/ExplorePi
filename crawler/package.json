@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.3",
+    "firebase-admin": "^11.5.0",
     "mysql": "^2.18.1",
     "stellar-sdk": "^10.4.1"
   }

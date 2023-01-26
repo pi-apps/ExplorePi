@@ -1,5 +1,5 @@
 'use client'
-import { formatTrans } from "lib/translate"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import getago from "lib/time"
@@ -8,6 +8,7 @@ export default function Payment({status,account,transcript,time}){
     const [data,setdata]=useState([])
     const [stream,setstream]=useState()
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const lang = document.documentElement.lang
     useEffect(()=>{
 
         if(status){
@@ -68,10 +69,18 @@ export default function Payment({status,account,transcript,time}){
                                     return(
                                         <tr key={index} className="bg-white border-b">
                                             <td className="px-2 py-4 text-sm font-medium text-gray-900">
-                                                {from_account}
+                                                <Link href={`/${lang}/pibrowser/explorer/account?account=${data.from}`}>
+                                                    <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
+                                                    {from_account}
+                                                    </span>
+                                                </Link>
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-2 py-4 break-words">
-                                                {to_account}
+                                                <Link href={`/${lang}/pibrowser/explorer/account?account=${data.to}`}>
+                                                    <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
+                                                    {to_account}
+                                                    </span>
+                                                </Link>                                                
                                             </td>
                                             <td className="text-sm text-gray-900 font-light px-2 py-4 break-words">
                                             {parseFloat(data.amount)} Pi

@@ -41,10 +41,12 @@ nodejs + mysql
 First, install the package by:
 
 ```
-npm i crawlpi or clone the project
+clone the project
 ```
 Then, init MySQL by database.sql<br>
 Change `.env.example` to `.env` and input the database config
+
+ADD Firebase admin secret key in lib with name `serviceAccountKey.json`
 
 
 

@@ -3,11 +3,13 @@ import { formatTrans } from "lib/translate"
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import getago from "lib/time"
+import Link from "next/link"
 export default function Operation({status,account,transcript,time}){
     const [run,setrun] = useState(false)
     const [data,setdata]=useState([])
     const [stream,setstream]=useState()
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const lang = document.documentElement.lang
     useEffect(()=>{
 
         if(status){
@@ -68,7 +70,7 @@ export default function Operation({status,account,transcript,time}){
                             {
                             
                                 data!=null &&　data.map((data,index)=>{
-                                    return(categoryoperation(data,transcript,time,index))
+                                    return(categoryoperation(data,transcript,time,index,lang))
                                 })
                             }
                         </tbody>
@@ -79,7 +81,7 @@ export default function Operation({status,account,transcript,time}){
         </>
     )
 }
-function categoryoperation(data,transcript,time,index){
+function categoryoperation(data,transcript,time,index,lang){
     let detail,value,type
     
     switch (data.type) {
@@ -122,7 +124,13 @@ function categoryoperation(data,transcript,time,index){
     }
     return (
         <tr key={index} className="bg-white border-b">
-        <td className="px-2 py-4 text-sm font-medium text-gray-900">{data.source_account.substring(0,4)}</td>
+        <td className="px-2 py-4 text-sm font-medium text-gray-900">
+            <Link href={`/${lang}/pibrowser/explorer/account?account=${data.source_account}`}>
+                <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
+                {data.source_account.substring(0,4)}
+                </span>
+            </Link>
+        </td>
         <td className="text-sm text-gray-900 font-light px-2 py-4 break-words">
             {type}
         </td>

@@ -4,11 +4,21 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import {  useSelectedLayoutSegment } from 'next/navigation';
 import { faChartSimple, faCubes, faTvAlt, faUserTag } from '@fortawesome/free-solid-svg-icons';
+import Script from 'next/script';
 export default function NavBar({ transcript,lang }){
     const segmant = useSelectedLayoutSegment()
+    const scopes = ['username', 'payments'];
+    function onIncompletePaymentFound(payment) {
+    };
+    const handleScript = ()=>{
+        Pi.init({ version:'2.0', sandbox: process.env.NEXT_PUBLIC_SANDBOX==='true'})
+        Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
+            console.log(auth);
+          })
+      }
     return(
         <>
-
+        <Script src="https://sdk.minepi.com/pi-sdk.js" onLoad={handleScript}/>
         <ul className="shadow flex fixed bottom-0 justify-center w-full font-mono bg-white">
             <Link href={`/${lang}/pibrowser/statistic`} className='w-1/4'>
                 <li>
