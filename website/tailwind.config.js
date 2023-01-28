@@ -19,6 +19,7 @@ module.exports = {
       },
       height: {
         'explorer': 'calc(100% - 8rem)',
+        'stream': 'calc(100% - 4rem)',
       }
     },
   },

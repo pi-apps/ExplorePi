@@ -7,11 +7,11 @@ import { faChartSimple, faCubes, faTvAlt, faUserTag } from '@fortawesome/free-so
 import Script from 'next/script';
 export default function NavBar({ transcript,lang }){
     const segmant = useSelectedLayoutSegment()
-    const scopes = ['username', 'payments'];
+    const scopes = ['username', 'payments','wallet_address'];
     function onIncompletePaymentFound(payment) {
     };
     const handleScript = ()=>{
-        Pi.init({ version:'2.0', sandbox: process.env.NEXT_PUBLIC_SANDBOX==='true'})
+        Pi.init({ version:'2.0', sandbox: true})
         Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
             console.log(auth);
           })

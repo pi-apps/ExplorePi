@@ -32,5 +32,7 @@ function ex_sql(sql,string=null){
         });
     });
 }
-
-module.exports = { getConnection,ex_sql };
+const disConnection = ()=>{
+    DataConnection.end()
+}
+module.exports = { getConnection,ex_sql,disConnection };
