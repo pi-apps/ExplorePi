@@ -40,8 +40,10 @@ export default function Block({data}){
                 <button type="button" className="rounded-r inline-block px-6 py-2.5 bg-yellow-400 text-white font-medium text-xs leading-tight uppercase hover:bg-yellow-600 focus:bg-yellow-600 focus:outline-none focus:ring-0 active:bg-yellow-700 transition duration-150 ease-in-out" onClick={()=>setrange('all')}>All</button>
             </div>
         </div>
+        <div className="h-40">
         <ResponsiveLine
             {...commonProperties}
+            
             data={[
                 {
                     id: 'closed time',
@@ -74,6 +76,7 @@ export default function Block({data}){
             useMesh={true}
             enableSlices={false}
         />
+        </div>
         <div className="text-transparent mb-2 bg-border bg-border-size bg-no-repeat bg-left-bottom text">
         end block
         </div>
