@@ -10,7 +10,7 @@ export default function Claimant({data}){
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
-            Block Closed Time
+            Migrate Frequency
         </div>
         <div className=" h-72">
         <ResponsiveLine
