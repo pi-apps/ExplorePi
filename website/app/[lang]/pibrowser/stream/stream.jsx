@@ -5,6 +5,8 @@ import { formatTrans } from "lib/translate";
 import { Button } from "flowbite-react";
 import Operation from "./operation";
 import Payment from "./payment";
+import Block from './block';
+import Transaction from './transaction';
 export default function StreamContent({transcript,explorer,time}){
     const [selected,setselected] = useState('operation')
     const [Input,setInput] = useState('')
@@ -37,7 +39,6 @@ export default function StreamContent({transcript,explorer,time}){
                 <option value="block">BLOCK</option>
                 <option value="tx">TRANSACTION</option>
                 <option value="payment">PAYMENT</option>
-                <option value="account">ACCOUNT</option>
             </select>
             {selected!=='block' &&<input 
                 onChange={(e)=>setInput(e.target.value)}
@@ -54,6 +55,8 @@ export default function StreamContent({transcript,explorer,time}){
         <div className="mt-2 border mx-4"></div>
         <section className={`${styles.content_table} mt-2 mx-4 w-auto pb-14 overflow-y-scroll`}>
             {selected==='operation' && <Operation status={start} transcript={explorer.operation} account={Input} time={time}/>}
+            {selected==='block'&&<Block status={start} transcript={transcript.block} time={time}/>}
+            {selected==='tx'&&<Transaction status={start} transcript={explorer.transaction} time={time} account={Input}/>}
             {selected==='payment' && <Payment status={start} transcript={explorer.payment} account={Input} time={time}/>}
         </section>
         </>

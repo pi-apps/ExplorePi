@@ -88,7 +88,12 @@
     "stream":{
         "input":"公鑰({need})",
         "Optional":"選項",
-        "Required":"必填"
+        "Required":"必填",
+        "block":{
+            "Block":"區塊",
+            "Tx":"交易",
+            "Time":"時間"
+        }
     },
     "time":{
         "second":"秒",
