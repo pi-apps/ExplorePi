@@ -3,3 +3,4 @@ website/app/website.code-workspace
 website/.env
 crawler/lib/serviceAccountKey.json
 website/serviceAccountKey.json
+crawler/node_modules/
