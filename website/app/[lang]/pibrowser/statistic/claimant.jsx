@@ -38,11 +38,6 @@ export default function Claimant({data}){
                 type: 'linear',
                 stacked: false,
             }}
-            axisLeft={
-                {
-                   
-                }
-            }
             axisBottom={{
                 format: '%b %d',
                 tickValues: 5,

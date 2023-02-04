@@ -1,13 +1,7 @@
 require('dotenv').config()
 const pool = require('./lib/database');
 const {db} = require('./lib/firestore')
-const schedule  = require('node-schedule')
 
-var taskFreq = '* * /6 * * *'
-
-var sche = schedule.scheduleJob(taskFreq, () => {
-    statistic()
-})
 async function getTop10(){
     let result = await pool.ex_sql(`SELECT account,(balance-totalfee.total) as balance FROM piexplorer.Account 
     INNER JOIN (SELECT sum(amount) as total,account FROM piexplorer.fee group by account order by total desc) as totalfee ON  Account.public_key = totalfee.account
@@ -73,3 +67,4 @@ async function statistic(){
         timestamp: Date.now()
         });
 }
+setInterval(statistic,21600000)
