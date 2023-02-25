@@ -15,7 +15,7 @@ export default function Operation({time,transcript}){
 
     useEffect(()=>{
         setaccount(searchaccount.get('account'))
-    })
+    },[searchaccount])
     useEffect(()=>{
         if(!account)return
         setload(null)

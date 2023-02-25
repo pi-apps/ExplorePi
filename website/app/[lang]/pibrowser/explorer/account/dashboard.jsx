@@ -31,7 +31,7 @@ export default function AccountDashboard({transcript,time}){
 
     useEffect(()=>{
         setaccount(searchaccount.get('account'))
-    })
+    },[searchaccount])
     useEffect(()=>{
         if(!account)return
         setbalance(0)
