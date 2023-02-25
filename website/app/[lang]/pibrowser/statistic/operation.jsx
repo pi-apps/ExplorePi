@@ -1,75 +1,82 @@
 'use client'
 import { useEffect, useState } from "react"
-import { ResponsivePie  } from "@nivo/pie"
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-luxon';
+import { Doughnut } from "react-chartjs-2"
 
 export default function Distribute({data}){
     if(!data) return
-    const [tidydata,settidydata] = useState([])
+    const option = {
+        maintainAspectRatio : false,
+        plugins:{
+            legend:{
+                position:'left'
+            }
+        }
+    }
+    const [tidydata,settidydata] = useState(null)
+    const [label,setlabel] = useState([])
+    const [dataset,setdataset] = useState([])
     useEffect(()=>{
-        settidydata([])
         data.opdistribute.map(data=>{
-            let format
+            setdataset(predata=>[...predata,data.total])
             switch (data.op) {
-                case 0:
-                    format={
-                        id:'create_account',
-                        label:'create_account',
-                        value:data.total
-                    }
+                case 0:                    
+                    setlabel(predata=>[...predata,'create_account'])
                     break;
                 case 1:
-                    format={
-                        id:'payment',
-                        label:'payment',
-                        value:data.total
-                    }
+                    setlabel(predata=>[...predata,'payment'])
                     break;
                 case 14:
-                    format={
-                        id:'create_claimant',
-                        label:'create_claimant',
-                        value:data.total
-                    }
+                    setlabel(predata=>[...predata,'create_claimant'])
                     break;
                 case 15:
-                    format={
-                        id:'claim_claimable_balance',
-                        label:'claim_claimable_balance',
-                        value:data.total
-                    }
+                    setlabel(predata=>[...predata,'claim_claimable_balance'])
                     break;
                 default:
-                    format={
-                        id:data.op,
-                        label:data.op,
-                        value:data.total
-                    }
+                    setlabel(predata=>[...predata,data.op])
                     break;
-            }
-            settidydata(predata=>[...predata,format])
+            }            
         })
     },[data])
-
+    useEffect(()=>{
+        if(!label) return
+        if(!dataset) return
+        settidydata({
+            labels:label,
+            datasets: [
+                {
+                label:'Total',
+                data: dataset,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                ],
+                borderWidth: 1,
+                },
+            ],
+        })
+    },[label,dataset])
+    if(!tidydata) return
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
             Total Operation Distribute
         </div>
         <div className="h-40">
-        <ResponsivePie
-        margin= {{ top: 20, right: 20, bottom: 60, left: 40 }}
-        data={tidydata}
-        innerRadius={0.6}
-        padAngle={0.5}
-        cornerRadius={5}
-        arcLinkLabelsColor={{
-            from: 'color',
-        }}
-        arcLinkLabelsThickness={3}
-        arcLinkLabelsTextColor={{
-            from: 'color',
-            modifiers: [['darker', 1.2]],
-        }}/>
+        <Doughnut data={tidydata} options={option} />
         </div>
         </>
     )

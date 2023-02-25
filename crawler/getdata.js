@@ -15,6 +15,11 @@ async function getblocktime(){
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
+async function getblocktimeMonth(){
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,avg(spend) as y,sum(operation) as op FROM piexplorer.block group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
+    result = await JSON.parse(JSON.stringify(result))
+    return result
+}
 async function getTop10payment(){
     let result = await pool.ex_sql(`SELECT count(*) as count,account FROM piexplorer.operation where type_i=1 group by account order by count desc LIMIT 0, 10;`)
     result = await JSON.parse(JSON.stringify(result))
@@ -45,6 +50,21 @@ async function getclaimanthistory(){
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
+async function getclaimedMonth(){
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM piexplorer.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
+    result = await JSON.parse(JSON.stringify(result))
+    return result
+}
+async function getclaimedbackMonth(){
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM piexplorer.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
+    result = await JSON.parse(JSON.stringify(result))
+    return result
+}
+async function getclaimanthistoryMonth(){
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,count(*) as y FROM piexplorer.claimant group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
+    result = await JSON.parse(JSON.stringify(result))
+    return result
+}
 async function statistic(){
     let top10 = await getTop10()
     let blocktime = await getblocktime() 
@@ -54,15 +74,23 @@ async function statistic(){
     let claimed = await getclaimed()
     let claimedback = await getclaimedback()
     let createclaimant = await getclaimanthistory()
+    let claimedMonth = await getclaimedMonth()
+    let claimedbackMonth = await getclaimedbackMonth()
+    let createclaimantMonth = await getclaimanthistoryMonth()
+    let blocktimeMonth = await getblocktimeMonth()
     const docRef = db.collection('statistic').doc('data');
     await docRef.set({
         top10: top10,
         blocktime:blocktime,
+        blocktimeMonth:blocktimeMonth,
         top10payment:top10payment,
         top10fee:top10fee,
         opdistribute:opdistribute,
         claimed:claimed,
         claimedback:claimedback,
+        claimedMonth:claimedMonth,
+        claimedbackMonth:claimedbackMonth,
+        createclaimantMonth:createclaimantMonth,
         createclaimant:createclaimant,
         timestamp: Date.now()
         });

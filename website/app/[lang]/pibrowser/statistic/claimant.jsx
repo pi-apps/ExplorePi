@@ -1,58 +1,220 @@
 'use client'
-import { ResponsiveLine } from "@nivo/line"
+import { useEffect, useState } from "react"
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-luxon';
+import { Line } from "react-chartjs-2"
 
-
-const commonProperties = {
-    margin: { top: 20, right: 50, bottom: 60, left: 50 }
-}
 export default function Claimant({data}){
     if(!data) return
+    const [option,setoption] = useState(null)
+    const [range,setrange] = useState('all')
+    const [datas,setdatas] = useState(null)
+    useEffect(()=>{
+      if(!range) return
+      if(range==='all')
+      {
+        setoption({
+            maintainAspectRatio : false,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            stacked: false,
+            elements:{
+                point:{
+                    radius:1,
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time'
+                },
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: {
+                  drawOnChartArea: false,
+                },
+              },
+            },
+          })
+        setdatas(
+            {
+                datasets: [
+                  {
+                    label: 'Unlock',
+                    data: data.claimedMonth,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    yAxisID: 'y1',
+                  },
+                  {
+                    label: 'Migrate Operation',
+                    data: data.createclaimantMonth,
+                    borderColor: 'rgb(53, 162, 235)',
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    yAxisID: 'y',
+                  },
+                  {
+                    label: 'CT Claimed Back',
+                    data: data.claimedbackMonth,
+                    borderColor: 'rgb(148, 126, 176)',
+                    backgroundColor: 'rgba(148, 126, 176, 0.5)',
+                    yAxisID: 'y1',
+                  },
+                ],
+              }
+        )
+      }
+      
+      else if(range==='m')
+      {
+        setoption({
+            maintainAspectRatio : false,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            stacked: false,
+            elements:{
+                point:{
+                    radius:1,
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    min: Date.now()-2629800000,
+                    max: Date.now()
+                },
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: {
+                  drawOnChartArea: false,
+                },
+              },
+            },
+          })
+        setdatas(
+            {
+                datasets: [
+                  {
+                    label: 'Unlock',
+                    data: data.claimed,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    yAxisID: 'y1',
+                  },
+                  {
+                    label: 'lock',
+                    data: data.createclaimant,
+                    borderColor: 'rgb(53, 162, 235)',
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    yAxisID: 'y',
+                  },
+                  {
+                    label: 'CT Claimed Back',
+                    data: data.claimedback,
+                    borderColor: 'rgb(148, 126, 176)',
+                    backgroundColor: 'rgba(148, 126, 176, 0.5)',
+                    yAxisID: 'y1',
+                  },
+                ],
+              }
+        )
+      }
+      else if(range==='y')
+      {
+        setoption({
+            maintainAspectRatio : false,
+            interaction: {
+              mode: 'index',
+              intersect: false,
+            },
+            stacked: false,
+            elements:{
+                point:{
+                    radius:1,
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    min: Date.now()-31556952000,
+                    max: Date.now()
+                },
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: {
+                  drawOnChartArea: false,
+                },
+              },
+            },
+          })
+        setdatas(
+            {
+                datasets: [
+                  {
+                    label: 'Unlock',
+                    data: data.claimedMonth,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    yAxisID: 'y1',
+                  },
+                  {
+                    label: 'lock',
+                    data: data.createclaimantMonth,
+                    borderColor: 'rgb(53, 162, 235)',
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    yAxisID: 'y',
+                  },
+                  {
+                    label: 'CT Claimed Back',
+                    data: data.claimedbackMonth,
+                    borderColor: 'rgb(148, 126, 176)',
+                    backgroundColor: 'rgba(148, 126, 176, 0.5)',
+                    yAxisID: 'y1',
+                  },
+                ],
+              }
+        )
+      }
+    },[data,range])
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
             Migrate Frequency
         </div>
-        <div className=" h-72">
-        <ResponsiveLine
-            {...commonProperties}
-            
-            data={[
-                {
-                    id: 'create_claimant',
-                    data: data.createclaimant,
-                },{
-                    id: 'claimed frequency',
-                    data:data.claimed
-                },{
-                    id: 'CT claimback',
-                    data:data.claimedback
-                }
-            ]}
-            xScale={{
-                type: 'time',
-                format: '%Y-%m-%d',
-                precision: 'day',
-            }}
-            xFormat="time:%Y-%m-%d"
-            yScale={{
-                type: 'linear',
-                stacked: false,
-            }}
-            axisBottom={{
-                format: '%b %d',
-                tickValues: 5,
-                
-            }}
-            enablePoints={false}
-            pointBorderWidth={1}
-            pointBorderColor={{
-                from: 'color',
-                modifiers: [['darker', 0.3]],
-            }}
-            useMesh={true}
-            enableSlices={false}
-        />
+        <div className="flex items-center justify-center mb-3">
+            <div className="inline-flex shadow-md hover:shadow-lg focus:shadow-lg" role="group">
+                <button type="button" className="rounded-l inline-block px-6 py-2.5 bg-yellow-400 text-white font-medium text-xs leading-tight uppercase hover:bg-yellow-600 focus:bg-yellow-600 focus:outline-none focus:ring-0 active:bg-yellow-700 transition duration-150 ease-in-out" onClick={()=>setrange('m')}>Month</button>
+                <button type="button" className="inline-block px-6 py-2.5 bg-yellow-400 text-white font-medium text-xs leading-tight uppercase hover:bg-yellow-600 focus:bg-yellow-600 focus:outline-none focus:ring-0 active:bg-yellow-700 transition duration-150 ease-in-out" onClick={()=>setrange('y')}>Year</button>
+                <button type="button" className="rounded-r inline-block px-6 py-2.5 bg-yellow-400 text-white font-medium text-xs leading-tight uppercase hover:bg-yellow-600 focus:bg-yellow-600 focus:outline-none focus:ring-0 active:bg-yellow-700 transition duration-150 ease-in-out" onClick={()=>setrange('all')}>All</button>
+            </div>
         </div>
+        <div className="h-48">
+        {datas && <Line options={option} data={datas} />}
+        </div>        
         <div className="text-transparent mb-2 bg-border bg-border-size bg-no-repeat bg-left-bottom text">
         end block
         </div>

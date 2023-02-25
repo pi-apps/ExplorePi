@@ -1,37 +1,87 @@
 'use client'
 import { useEffect, useState } from "react"
-import { ResponsiveLine } from "@nivo/line"
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-luxon';
+import { Line } from "react-chartjs-2"
 
+  export const options = {
+    maintainAspectRatio : false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    stacked: false,
+    elements:{
+        point:{
+            radius:1,
+        }
+    },
+    scales: {
+        x: {
+            type: 'time'
+        },
+      y: {
+        type: 'linear',
+        display: true,
+        position: 'left',
+      },
+      y1: {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        grid: {
+          drawOnChartArea: false,
+        },
+      },
+    },
+  };
 
-const commonProperties = {
-    margin: { top: 20, right: 20, bottom: 60, left: 40 }
-}
 export default function Block({data}){
     if(!data) return
     const [filter,setfilter] = useState([])
-    const [tidydata,settidydata] = useState([])
-    const [range,setrange] = useState(null)
+    const [range,setrange] = useState('all')
+    const [datas,setdatas] = useState(null)
     useEffect(()=>{
-        setfilter([])
-        data.blocktime.map(data=>{
-            if(data.y>10)
-            data.y=null
-            settidydata(predata=>[...predata,data])
-        })
-    },[data])
+      if(!range) return
+      if(range==='all')
+      setfilter(data.blocktimeMonth)
+      else if(range==='m')
+      setfilter(data.blocktime.slice(-31))
+      else if(range==='y')
+      setfilter(data.blocktimeMonth.slice(-12))
+    },[data,range])
+
     useEffect(()=>{
-        if(!range) return
-        if(range==='all')
-        setfilter(tidydata)
-        else if(range==='m')
-        setfilter(tidydata.slice(-31))
-        else if(range==='y')
-        setfilter(tidydata.slice(-365))
-    },[range])
+        if(!filter) return
+        setdatas(
+            {
+                datasets: [
+                  {
+                    label: 'AverageClosedTime',
+                    data: filter,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    yAxisID: 'y',
+                  },
+                  {
+                    label: 'TotalOperation',
+                    data: filter,
+                    borderColor: 'rgb(53, 162, 235)',
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                    yAxisID: 'y1',
+                    parsing: {
+                        yAxisKey: 'op'
+                      }
+                  },
+                ],
+              }
+        )
+    },[filter])
+    
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
-            Block Closed Time
+            Block Performance
         </div>
         <div className="flex items-center justify-center mb-3">
             <div className="inline-flex shadow-md hover:shadow-lg focus:shadow-lg" role="group">
@@ -40,42 +90,8 @@ export default function Block({data}){
                 <button type="button" className="rounded-r inline-block px-6 py-2.5 bg-yellow-400 text-white font-medium text-xs leading-tight uppercase hover:bg-yellow-600 focus:bg-yellow-600 focus:outline-none focus:ring-0 active:bg-yellow-700 transition duration-150 ease-in-out" onClick={()=>setrange('all')}>All</button>
             </div>
         </div>
-        <div className="h-40">
-        <ResponsiveLine
-            {...commonProperties}
-            
-            data={[
-                {
-                    id: 'closed time',
-                    data: filter,
-                }
-            ]}
-            xScale={{
-                type: 'time',
-                format: '%Y-%m-%d',
-                precision: 'day',
-            }}
-            xFormat="time:%Y-%m-%d"
-            yScale={{
-                type: 'linear',
-                stacked: false,
-                min:5,
-                max:6.6
-            }}
-            axisBottom={{
-                format: '%b %d',
-                tickValues: 5,
-                
-            }}
-            enablePoints={false}
-            pointBorderWidth={1}
-            pointBorderColor={{
-                from: 'color',
-                modifiers: [['darker', 0.3]],
-            }}
-            useMesh={true}
-            enableSlices={false}
-        />
+        <div className="h-48">
+          {datas && <Line options={options} data={datas} />}
         </div>
         <div className="text-transparent mb-2 bg-border bg-border-size bg-no-repeat bg-left-bottom text">
         end block
