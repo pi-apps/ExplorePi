@@ -11,7 +11,10 @@ export default function NavBar({ transcript,lang }){
     function onIncompletePaymentFound(payment) {
     };
     const handleScript = ()=>{
+        if(process.env['NEXT_PUBLIC_SANDBOX']=='true')
         Pi.init({ version:'2.0', sandbox: true})
+        else
+        Pi.init({ version:'2.0' })
         Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
             console.log(auth);
           })
