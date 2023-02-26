@@ -1,19 +1,13 @@
 'use client'
-import { useSearchParams } from "next/navigation"
 import { Button } from "flowbite-react";
 import { useState,useEffect } from "react";
 import { Server } from "stellar-sdk"
 
-export default function LockBalance({transcript}){
+export default function LockBalance({transcript,account}){
     const [load,setload] = useState(null)
     const [data,setdata] = useState(null)
-    const searchaccount = useSearchParams()
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
-    const [account,setaccount] = useState(undefined)
-    console.log(transcript)
-    useEffect(()=>{
-        setaccount(searchaccount.get('account'))
-    },[searchaccount])
+
     useEffect(()=>{
         if(!account)return
         setload(null)

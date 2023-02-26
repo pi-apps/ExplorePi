@@ -1,6 +1,11 @@
 import Block from "./block";
 import Payment from "./payment";
 import Transaction from "./transaction";
+import { translate } from "translate-config";
+export async function generateStaticParams() {
+  return translate.locales.map(locale => ({lang:locale}));
+}
+
 export default async function ExplorerPage({params:{lang}}){
     const transcript = await import(`locales/${lang}.json`);
     return(

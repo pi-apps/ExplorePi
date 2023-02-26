@@ -35,7 +35,7 @@ export default function Transaction({transcript,time}){
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
                             <td className="py-2">
-                                <Link href={`/${lang}/pibrowser/explorer/tx?tx=${data.hash}`}>
+                                <Link href={`/${lang}/pibrowser/explorer/tx/${data.hash}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-400 text-white rounded-full">
                                     {tx_hash}
                                     </span>

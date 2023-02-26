@@ -3,19 +3,13 @@ import { Server } from "stellar-sdk"
 import getago from "lib/time";
 import { useEffect, useState } from "react"
 import { formatTrans } from "lib/translate";
-import { useSearchParams } from "next/navigation"
 import { Button } from "flowbite-react";
 
-export default function Operation({time,transcript}){
-    const searchaccount = useSearchParams()
+export default function Operation({time,transcript,account}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [load,setload] = useState(null)
     const [data,setdata] = useState(null)
-    const [account,setaccount] = useState(undefined)
 
-    useEffect(()=>{
-        setaccount(searchaccount.get('account'))
-    },[searchaccount])
     useEffect(()=>{
         if(!account)return
         setload(null)

@@ -39,14 +39,14 @@ export default function Payment({transcript,time}){
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
                             <td className="py-2">
-                                <Link href={`/${lang}/pibrowser/explorer/account?account=${data.from}`}>
+                                <Link href={`/${lang}/pibrowser/explorer/account/${data.from}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                                     {from_account}
                                     </span>
                                 </Link>
                             </td>
                             <td className="py-2">
-                                <Link href={`/${lang}/pibrowser/explorer/account?account=${data.to}`}>
+                                <Link href={`/${lang}/pibrowser/explorer/account/${data.to}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-yellow-300 text-white rounded-full">
                                     {to_account}
                                     </span>

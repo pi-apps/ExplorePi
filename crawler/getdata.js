@@ -65,6 +65,17 @@ async function getclaimanthistoryMonth(){
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
+
+async function getlockupperiod(){
+    let result = await pool.ex_sql(`SELECT count(case when a.period=1209600 then 1 else null end) as no_lock, count(case when a.period>1209600 and a.period<=2419200 then 1 else null end) as twoweek, count(case when a.period>2419200 and a.period<=18187200 then 1 else null end) as sixmonths, count(case when a.period>18187200 and a.period<=33976800 then 1 else null end) as oneyear, count(case when a.period>33976800 then 1 else null end) as threeyear from(SELECT account,max(lock_time) as period FROM piexplorer.claimant group by account) as a`)
+    result = await JSON.parse(JSON.stringify(result))
+    return result
+}
+async function getmetric(){
+    let result = await pool.ex_sql(`SELECT a.a as TotalAccount,b.a as TotalPi,c.a as TotalClaim,b.a-c.a as TotalLock from(SELECT count(*) as a FROM piexplorer.Account)as a,(SELECT sum(amount) as a FROM piexplorer.claimant where status<>2) as b,(SELECT sum(amount) as a FROM piexplorer.claimant where status=1)as c`)
+    result = await JSON.parse(JSON.stringify(result))
+    return result[0]
+}
 async function statistic(){
     let top10 = await getTop10()
     let blocktime = await getblocktime() 
@@ -78,6 +89,8 @@ async function statistic(){
     let claimedbackMonth = await getclaimedbackMonth()
     let createclaimantMonth = await getclaimanthistoryMonth()
     let blocktimeMonth = await getblocktimeMonth()
+    let lockuptime = await getlockupperiod()
+    let metric = await getmetric()
     const docRef = db.collection('statistic').doc('data');
     await docRef.set({
         top10: top10,
@@ -92,6 +105,8 @@ async function statistic(){
         claimedbackMonth:claimedbackMonth,
         createclaimantMonth:createclaimantMonth,
         createclaimant:createclaimant,
+        lockuptime:lockuptime,
+        metric:metric,
         timestamp: Date.now()
         });
 }

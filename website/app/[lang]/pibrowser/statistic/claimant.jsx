@@ -16,7 +16,7 @@ export default function Claimant({data}){
         setoption({
             maintainAspectRatio : false,
             interaction: {
-              mode: 'index',
+              mode: 'x',
               intersect: false,
             },
             stacked: false,
@@ -78,7 +78,7 @@ export default function Claimant({data}){
         setoption({
             maintainAspectRatio : false,
             interaction: {
-              mode: 'index',
+              mode: 'x',
               intersect: false,
             },
             stacked: false,
@@ -97,6 +97,9 @@ export default function Claimant({data}){
                 type: 'linear',
                 display: true,
                 position: 'left',
+                grid: {
+                    drawOnChartArea: false,
+                  },
               },
               y1: {
                 type: 'linear',
@@ -141,7 +144,7 @@ export default function Claimant({data}){
         setoption({
             maintainAspectRatio : false,
             interaction: {
-              mode: 'index',
+              mode: 'x',
               intersect: false,
             },
             stacked: false,

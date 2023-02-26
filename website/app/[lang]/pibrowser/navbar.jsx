@@ -19,12 +19,12 @@ export default function NavBar({ transcript,lang }){
     return(
         <>
         <Script src="https://sdk.minepi.com/pi-sdk.js" onLoad={handleScript}/>
-        <ul className="shadow flex fixed bottom-0 justify-center w-full font-mono bg-white">
+        <ul className="shadow flex fixed bottom-0 justify-center w-full font-mono overflow-hidden bg-white">
             <Link href={`/${lang}/pibrowser/statistic`} className='w-1/4'>
                 <li>
                     <button 
                     type="button" 
-                    className={clsx('shadow block py-1 font-semibold text-center w-full',{
+                    className={clsx('whitespace-nowrap shadow block py-1 font-semibold text-center w-full overflow-hidden',{
                         'text-nav-purple': segmant === "statistic",
                         'text-nav-gold': segmant !== "statistic"
                     })}>
@@ -37,7 +37,7 @@ export default function NavBar({ transcript,lang }){
                 <li >
                     <button 
                     type="button" 
-                    className={clsx('shadow block py-1 font-semibold text-center w-full',{
+                    className={clsx('whitespace-nowrap shadow block py-1 font-semibold text-center w-full overflow-hidden',{
                         'text-nav-purple': segmant === "explorer",
                         'text-nav-gold': segmant !== "explorer"
                     })}>
@@ -51,7 +51,7 @@ export default function NavBar({ transcript,lang }){
                 <li>
                     <button 
                     type="button" 
-                    className={clsx('shadow block py-1 font-semibold text-center w-full',{
+                    className={clsx('shadow block py-1 whitespace-nowrap font-semibold text-center w-full overflow-hidden',{
                         'text-nav-purple': segmant === "stream",
                         'text-nav-gold': segmant !== "stream"
                     })}>
@@ -65,7 +65,7 @@ export default function NavBar({ transcript,lang }){
                 <li>
                     <button 
                     type="button" 
-                    className={clsx('shadow block py-1 font-semibold text-center w-full',{
+                    className={clsx('whitespace-nowrap shadow block py-1 font-semibold text-center w-full overflow-hidden',{
                         'text-nav-purple': segmant === "personal",
                         'text-nav-gold': segmant !== "personal"
                     })}>

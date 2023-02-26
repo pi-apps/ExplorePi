@@ -3,23 +3,16 @@ import { Server } from "stellar-sdk"
 import { useEffect, useState } from "react"
 import styles from './styles.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCoins, faCube, faLock, faPaste, faUserClock } from "@fortawesome/free-solid-svg-icons"
-import { Josefin_Sans } from "@next/font/google"
-import { useSearchParams } from "next/navigation"
+import { faCoins, faCube, faLock, faPaste, faShareFromSquare, faUserClock } from "@fortawesome/free-solid-svg-icons"
 import Operation from "./operation"
 import LockBalance from "./lockbalance"
 import Signer from "./signer"
 import Data from "./data"
 import Offer from "./offer"
+import { toast, ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
-const roboto = Josefin_Sans({
-    weight: '600',
-    subsets: ['latin']
-  })
-
-export default function AccountDashboard({transcript,time}){
-    const searchaccount = useSearchParams()
-    const [account,setaccount] = useState(undefined)    
+export default function AccountDashboard({transcript,time,account}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [weight,setweight] = useState(0)
     const [claimablebalance,setclaimablebalance] = useState(0.0000000)
@@ -29,9 +22,6 @@ export default function AccountDashboard({transcript,time}){
     const [claimstatus,setclaimstatus] = useState(false)
     const [selected,setselected] = useState("operation")
 
-    useEffect(()=>{
-        setaccount(searchaccount.get('account'))
-    },[searchaccount])
     useEffect(()=>{
         if(!account)return
         setbalance(0)
@@ -74,11 +64,14 @@ export default function AccountDashboard({transcript,time}){
 
     const handlecopy = async () =>{
         await navigator.clipboard.writeText(account);
-
+        toast.success('Copied!')
     }
-
+    const handleshare = async () =>{
+        window.Pi.openShareDialog('Share This Account', 'pi://'+process.env['NEXT_PUBLIC_DOMAIN']+'/pibrowser/explorer/account/'+account)
+    }
     return(
-        <>        
+        <>
+        <ToastContainer position="top-center" autoClose={1500} closeButton={false}/>
         <section className=" m-4 overflow-y-scroll h-full pb-28">
             <div className="text-center text-2xl font-semibold border-b mx-4">
                 Public Key
@@ -86,9 +79,13 @@ export default function AccountDashboard({transcript,time}){
             <div className="text-center my-1 mx-4 break-words">
                 {account}
             </div>
-            <div className="text-center text-red-900 text-lg mb-2 border-b mx-4" onClick={handlecopy}>
-                <FontAwesomeIcon icon={faPaste}/>
+            
+            <div className="flex justify-around pb-2 text-red-900 text-lg mb-2 border-b mx-4" >
+                
+                <FontAwesomeIcon icon={faPaste} onClick={handlecopy}/>
+                <FontAwesomeIcon  icon={faShareFromSquare} onClick={handleshare}/>
             </div>
+            
             <div className="grid gap-4 grid-cols-2 pb-4 border-b">
                 <div className={`${styles.balance} shadow w-full h-20 rounded-xl flex items-center justify-center`}>
                     <div className="flex justify-center items-center w-full px-2">
@@ -147,8 +144,8 @@ export default function AccountDashboard({transcript,time}){
                 <option value="data">Data</option>
                 <option value="signers">Signers</option>
             </select>
-            {selected=='operation' && <Operation time={time} transcript={transcript.operation}/>}
-            {selected=='lockbalance' && <LockBalance transcript={transcript.lockbalance}/>}
+            {selected=='operation' && <Operation time={time} transcript={transcript.operation} account={account}/>}
+            {selected=='lockbalance' && <LockBalance transcript={transcript.lockbalance} account={account}/>}
             {selected=='offers' && <Offer/>}
             {selected=='data' && <Data/>}
             {selected=='signers' && <Signer/>}

@@ -4,7 +4,7 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-luxon';
 import { Doughnut } from "react-chartjs-2"
 
-export default function Distribute({data}){
+export default function LockTime({data}){
     if(!data) return
     const option = {
         maintainAspectRatio : false,
@@ -15,38 +15,24 @@ export default function Distribute({data}){
         }
     }
     const [tidydata,settidydata] = useState(null)
-    const [label,setlabel] = useState([])
     const [dataset,setdataset] = useState([])
     useEffect(()=>{
-        data.opdistribute.map(data=>{
-            setdataset(predata=>[...predata,data.total])
-            switch (data.op) {
-                case 0:                    
-                    setlabel(predata=>[...predata,'create_account'])
-                    break;
-                case 1:
-                    setlabel(predata=>[...predata,'payment'])
-                    break;
-                case 14:
-                    setlabel(predata=>[...predata,'create_claimant'])
-                    break;
-                case 15:
-                    setlabel(predata=>[...predata,'claim_claimable_balance'])
-                    break;
-                default:
-                    setlabel(predata=>[...predata,data.op])
-                    break;
-            }            
-        })
+        setdataset([
+            data.lockuptime[0].no_lock,
+            data.lockuptime[0].twoweek,
+            data.lockuptime[0].sixmonths,
+            data.lockuptime[0].oneyear,
+            data.lockuptime[0].threeyear
+        ])
+        
     },[data])
     useEffect(()=>{
-        if(!label) return
         if(!dataset) return
         settidydata({
-            labels:label,
+            labels:['No Lock','Two weeks','Six Month','One Year','Three Years'],
             datasets: [
                 {
-                label:'Total',
+                label:'Pioneers',
                 data: dataset,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -68,18 +54,15 @@ export default function Distribute({data}){
                 },
             ],
         })
-    },[label,dataset])
+    },[dataset])
     if(!tidydata) return
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
-            Total Operation Distribute
+            LockUP Period
         </div>
         <div className="h-40">
         <Doughnut data={tidydata} options={option} />
-        </div>
-        <div className="text-transparent mb-2 bg-border bg-border-size bg-no-repeat bg-left-bottom text">
-        end block
         </div>
         </>
     )
