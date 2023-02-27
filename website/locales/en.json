@@ -32,7 +32,8 @@
         "transaction":{
             "Hash":"Hash",
             "Operation":"Operation",
-            "Time":"Time"
+            "Time":"Time",
+            "Account":"Account"
         },
         "lockbalance":{
             "Sponsor":"Sponsor",

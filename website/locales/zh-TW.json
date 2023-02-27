@@ -32,7 +32,8 @@
         "transaction":{
             "Hash":"哈希",
             "Operation":"操作數",
-            "Time":"時間"
+            "Time":"時間",
+            "Account":"帳戶"
         },
         "lockbalance":{
             "Sponsor":"支助者",
