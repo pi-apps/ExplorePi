@@ -10,7 +10,7 @@ export default async function ExplorerPage({params:{lang}}){
     const transcript = await import(`locales/${lang}.json`);
     return(
         <>
-        <section className="h-explorer m-5 bg-slate-100 rounded-xl p-4 overflow-y-scroll shadow-xl">
+        <section className="h-explorer m-5 bg-slate-100 rounded-xl p-4 overflow-y-scroll shadow-xl text-black">
             <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
             {transcript.explorer.LatestBlocks10}
             </div>
