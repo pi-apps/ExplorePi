@@ -53,16 +53,16 @@ export default function Operation({status,account,transcript,time}){
                         <thead className="border-b bg-gray-50 w-full">
                             <tr>
                             <th scope="col" className="text-sm font-medium text-gray-900 py-4">
-                                Source
+                                {transcript.source}
                             </th>
                             <th scope="col" className="text-sm font-medium text-gray-900 py-4">
-                                Operation
+                                {transcript.operation}
                             </th>
                             <th scope="col" className="text-sm font-medium text-gray-900 py-4">
-                                Detail
+                                {transcript.detail}
                             </th>
                             <th scope="col" className="text-sm font-medium text-gray-900 py-4">
-                                Time
+                                {transcript.time}
                             </th>
                             </tr>
                         </thead>

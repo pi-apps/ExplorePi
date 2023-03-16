@@ -12,7 +12,7 @@ const rowdie = Rowdies({
     subsets: ['latin'],
     weight:'700'
 })
-export default function StartButton({children}){
+export default function StartButton({children,transcript}){
     const [start, setstart] = useState(false)
     const handleClick = () =>{
         setstart(true)
@@ -23,17 +23,17 @@ export default function StartButton({children}){
             <div className="flex justify-center items-center h-full">
                 <div className="block w-full ">
                     <div className={`${rowdie.className} text-center text-3xl mb-8`}>
-                        Streaming
+                        {transcript.title}
                     </div>
                     <div className="font-mono text-center text">
                         <div className="text-xl underline">
-                            What is Streaming?
+                            {transcript.q1}
                         </div>
                         <div className={`text-md ${hind.className} mx-4 text-lg mb-3`}>
-                            Stream is a feature on Stellar Horizon. Horizon provides a streaming mechanism for receiving events in near real time.
+                            {transcript.answer}
                         </div>
                     </div>
-                    <Button onClick={handleClick} gradientDuoTone="purpleToBlue" className="w-52 m-auto" pill={true}>Start</Button>
+                    <Button onClick={handleClick} gradientDuoTone="purpleToBlue" className="w-52 m-auto" pill={true}>{transcript.button}</Button>
                 </div>
             </div>
             </>

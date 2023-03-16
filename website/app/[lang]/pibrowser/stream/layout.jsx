@@ -4,7 +4,7 @@ export default async function StreamLayout({children,params:{lang}}){
     const transcript = await import(`locales/${lang}.json`);
     return (
         <>
-        <StartButton transcript={transcript.stream}>
+        <StartButton transcript={transcript.stream.start}>
             {children}
         </StartButton>
         </>

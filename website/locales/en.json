@@ -21,7 +21,16 @@
         "block":{
             "Block":"Block",
             "Transactions":"Transactions",
-            "Time":"Time"
+            "Time":"Time",
+            "Hash":"Hash",
+            "Pre":"Pre Hash",
+            "Operation":"Operation",
+            "Transaction":"Transaction",
+            "BaseFee":"Base Fee",
+            "BaseReserve":"Base Reserve",
+            "FeePool":"Fee Pool",
+            "TotalPi":"Total Pi",
+            "Protocol":"Protocol"
         },
         "payment":{
             "From":"From",
@@ -33,7 +42,15 @@
             "Hash":"Hash",
             "Operation":"Operation",
             "Time":"Time",
-            "Account":"Account"
+            "Account":"Account",
+            "Transaction":"Transaction",
+            "Block":"Block",
+            "Fee":"Fee",
+            "Memo":"",
+            "op":"Operation",
+            "Success":"Success",
+            "Failed":"Failed",
+            "None":"None"
         },
         "lockbalance":{
             "Sponsor":"Sponsor",
@@ -83,10 +100,24 @@
                 "pool_deposit":"",
                 "pool_withdraw":"",
                 "claim_claimable_balance":"claim claimable balance"
-            }
+            },
+            "source":"Source",
+            "operation":"Operation",
+            "detail":"Detail",
+            "time":"Time",
+            "no":"There has no Operation",
+            "account":"Account"
         }
     },
     "stream":{
+        "start":{
+            "title":"Streaming",
+            "q1":"What is Streaming?",
+            "answer":"Stream is a feature on Stellar Horizon. Horizon provides a streaming mechanism for receiving events in near real time.",
+            "button":"Start"
+        },
+        "but_start":"Start",
+        "but_stop":"Stop",
         "input":"Account({need})",
         "Optional":"Optional",
         "Required":"Required",
@@ -94,6 +125,15 @@
             "Block":"Block",
             "Tx":"Transaction",
             "Time":"Time"
+        },
+        "op":{
+            "title":"OPERATION"
+        },
+        "tx":{
+            "title":"TRANSACTION"
+        },
+        "pay":{
+            "title":"PAYMENT"
         }
     },
     "time":{
@@ -103,6 +143,82 @@
         "day":"day",
         "month":"month",
         "year":"year"
+    },
+    "statistic":{
+        "Metrics":{
+            "title":"METRICS",
+            "TotalAccount":"Total Account",
+            "TotalPioneer":"Total Pioneer",
+            "MigratedPi":"Migrated Pi",
+            "PioneerHold":"Pioneer Hold",
+            "PiLocked":"Pi Locked"
+        },
+        "TOP10":{
+            "title":"TOP 10",
+            "AccountBalance":"Account Balance",
+            "AccountFee":"Account Fee",
+            "AccountPayment":"Account Payment",
+            "account":"Account",
+            "amount":"Amount",
+            "PayForFee":"PayForFee",
+            "Frequency":"Frequency"
+        },
+        "Migrate":{
+            "title":"Migrate Frequency",
+            "Month":"Month",
+            "Year":"Year",
+            "ALL":"ALL",
+            "Unlock":"Unlock",
+            "lock":"Lock",
+            "Migrateop":"Migrate Operation",
+            "CTclaim":"CT Claimed Back"
+        },
+        "Block":{
+            "title":"Block Performance",
+            "closed":"AverageClosedTime",
+            "op":"Total Operation",
+            "Month":"Month",
+            "Year":"Year",
+            "ALL":"ALL"
+        },
+        "Operation":{
+            "title":"Total Operation Distribute",
+            "Total":"Total",
+            "type":{
+                "create_account":"create account",
+                "payment":"payment",
+                "path_receive":"path payment receive",
+                "path_send":"path payment send",
+                "manage_sell":"manage sell offer",
+                "manage_buy":"manage buy offer",
+                "passive_sell":"passive sell offer",
+                "set_options":"set option",
+                "change_trust":"change trust",
+                "allow_trust":"allow trust",
+                "account_merge":"account merge",
+                "manage_data":"manage data",
+                "bump_sequence":"bump sequence",
+                "create_claimable_balance":"create claimable balance",
+                "begin_sponsoring":"",
+                "end_sponsoring":"",
+                "revoke_sponsorship":"",
+                "pool_deposit":"",
+                "pool_withdraw":"",
+                "claim_claimable_balance":"claim claimable balance"
+            }
+        },
+        "LockUP":{
+            "title":"LockUP Period",
+            "No":"No Lock",
+            "two_week":"Two Weeks",
+            "six_month":"Six Months",
+            "oneyear":"One Year",
+            "threeyears":"Three Years",
+            "Pioneers":"Pioneers"
+        }
+        
+        
+        
     }
     
 }

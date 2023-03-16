@@ -4,7 +4,7 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-luxon';
 import { Doughnut } from "react-chartjs-2"
 
-export default function Distribute({data}){
+export default function Distribute({data,transcript}){
     if(!data) return
     const option = {
         maintainAspectRatio : false,
@@ -18,20 +18,22 @@ export default function Distribute({data}){
     const [label,setlabel] = useState([])
     const [dataset,setdataset] = useState([])
     useEffect(()=>{
+        setdataset([])
+        setlabel([])
         data.opdistribute.map(data=>{
             setdataset(predata=>[...predata,data.total])
             switch (data.op) {
                 case 0:                    
-                    setlabel(predata=>[...predata,'create_account'])
+                    setlabel(predata=>[...predata,transcript.type.create_account])
                     break;
                 case 1:
-                    setlabel(predata=>[...predata,'payment'])
+                    setlabel(predata=>[...predata,transcript.type.payment])
                     break;
                 case 14:
-                    setlabel(predata=>[...predata,'create_claimant'])
+                    setlabel(predata=>[...predata,transcript.type.create_claimable_balance])
                     break;
                 case 15:
-                    setlabel(predata=>[...predata,'claim_claimable_balance'])
+                    setlabel(predata=>[...predata,transcript.type.claim_claimable_balance])
                     break;
                 default:
                     setlabel(predata=>[...predata,data.op])
@@ -46,7 +48,7 @@ export default function Distribute({data}){
             labels:label,
             datasets: [
                 {
-                label:'Total',
+                label:transcript.Total,
                 data: dataset,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -73,7 +75,7 @@ export default function Distribute({data}){
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
-            Total Operation Distribute
+            {transcript.title}
         </div>
         <div className="h-40">
         <Doughnut data={tidydata} options={option} />

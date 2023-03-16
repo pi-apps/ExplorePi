@@ -4,18 +4,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion } from "flowbite-react";
 import Link from "next/link";
 
-export default function Top10({data,lang}){
+export default function Top10({data,lang,transcript}){
     if(!data || !lang) return
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
-            TOP 10
+            {transcript.title}
         </div>
         
         <Accordion alwaysOpen collapseAll>
             <Accordion.Panel>
                 <Accordion.Title>
-                Account Balance
+                {transcript.AccountBalance}
                 </Accordion.Title>
                 <Accordion.Content>
                 <div className="block w-full">
@@ -24,8 +24,8 @@ export default function Top10({data,lang}){
                             <thead className="border-b bg-gray-50 w-full">
                                 <tr>
                                 <th scope="col" className="text-sm font-medium text-gray-900 py-4">No.</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">Account</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">Amount</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">{transcript.account}</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">{transcript.amount}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,7 +62,7 @@ export default function Top10({data,lang}){
 
             <Accordion.Panel>
                 <Accordion.Title>
-                Account Fee
+                {transcript.AccountFee}
                 </Accordion.Title>
                 <Accordion.Content>
 
@@ -72,8 +72,8 @@ export default function Top10({data,lang}){
                             <thead className="border-b bg-gray-50 w-full">
                                 <tr>
                                 <th scope="col" className="text-sm font-medium text-gray-900 py-4">No.</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">Account</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">PayForFee</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">{transcript.account}</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">{transcript.PayForFee}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -111,7 +111,7 @@ export default function Top10({data,lang}){
 
             <Accordion.Panel>
                 <Accordion.Title>
-                Account Payment
+                {transcript.AccountPayment}
                 </Accordion.Title>
                 <Accordion.Content>
 
@@ -121,8 +121,8 @@ export default function Top10({data,lang}){
                             <thead className="border-b bg-gray-50 w-full">
                                 <tr>
                                 <th scope="col" className="text-sm font-medium text-gray-900 py-4">No.</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">Account</th>
-                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">Frequency</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">{transcript.account}</th>
+                                    <th scope="col" className="text-sm font-medium text-gray-900 py-4">{transcript.Frequency}</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -11,7 +11,7 @@ export default async function TxPage({params:{lang,tx_hash}}){
         <section className=" m-4 overflow-y-scroll h-full pb-28">
             <section className="my-2">
                 <div className="text-center text-2xl font-mono font-semibold border-b mx-4">
-                    Transaction 
+                    {transcript.explorer.transaction.Transaction} 
                     <div className=" break-words">
                         {tx_hash}
                     </div>
@@ -19,13 +19,13 @@ export default async function TxPage({params:{lang,tx_hash}}){
                 </div>
                 
                 <div className="text-center pb-2 text-purple-500 text-lg my-2 border-b mx-4" >
-                    <Dashboard tx_hash={tx_hash}/>                 
+                    <Dashboard tx_hash={tx_hash} transcript={transcript.explorer.transaction}/>                 
                 </div>
             </section>
 
             <section className="mx-2">
                 <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
-                    Operation
+                {transcript.explorer.transaction.op}
                 </div>
             <Operation tx_hash={tx_hash} transcript={transcript.explorer.operation}/>
             </section>

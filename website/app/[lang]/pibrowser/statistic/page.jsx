@@ -19,6 +19,7 @@ export async function generateStaticParams() {
 }
 
 export default async function StatisticPage({params:{lang}}){
+    const transcript = await import(`locales/${lang}.json`);
     const db = admin.firestore();
     const data = await db.collection('statistic').doc('data').get()
     let dataobj = data.data()
@@ -65,14 +66,14 @@ export default async function StatisticPage({params:{lang}}){
             
             <div className={roboto_Mono.className+' w-full'}>
             <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
-            METRICS
+            {transcript.statistic.Metrics.title}
             </div>
                 <div className=" rounded-md overflow-hidden shadow-lg mb-4">
                     <table className="w-full text-center table-fixed">
                         <tbody>
                             <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                                 <td className=" py-2 font-medium">
-                                    Total Account
+                                    {transcript.statistic.Metrics.TotalAccount}
                                 </td>
                                 <td className=" px-3 py-2">
                                     {Number.parseInt(dataobj.metric.TotalAccount).toLocaleString("en-US")}
@@ -80,7 +81,7 @@ export default async function StatisticPage({params:{lang}}){
                             </tr>
                             <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                                 <td className=" py-2 font-medium">
-                                    Total Pioneer
+                                    {transcript.statistic.Metrics.TotalPioneer}
                                 </td>
                                 <td className=" px-3 py-2">
                                     {totalpioneer}
@@ -88,7 +89,7 @@ export default async function StatisticPage({params:{lang}}){
                             </tr>
                             <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                                 <td className="  py-2 font-medium">
-                                    Migrated Pi
+                                {transcript.statistic.Metrics.MigratedPi}
                                 </td>
                                 <td className=" px-3 py-2 text-xs">
                                     {Number.parseFloat(dataobj.metric.TotalPi).toLocaleString("en-US",{maximumFractionDigits:7})} Pi
@@ -96,7 +97,7 @@ export default async function StatisticPage({params:{lang}}){
                             </tr>
                             <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                                 <td className="  py-2 font-medium">
-                                    Pioneer Hold
+                                {transcript.statistic.Metrics.PioneerHold}
                                 </td>
                                 <td className=" px-3 py-2 text-xs">
                                     {Number.parseFloat(dataobj.metric.TotalClaim).toLocaleString("en-US",{maximumFractionDigits:7})} Pi
@@ -104,7 +105,7 @@ export default async function StatisticPage({params:{lang}}){
                             </tr>
                             <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                                 <td className="  py-2 font-medium">
-                                    Pi Locked
+                                {transcript.statistic.Metrics.PiLocked}
                                 </td>
                                 <td className=" px-3 py-2 text-xs">
                                     {Number.parseFloat(dataobj.metric.TotalLock).toLocaleString("en-US",{maximumFractionDigits:7})} Pi
@@ -115,19 +116,19 @@ export default async function StatisticPage({params:{lang}}){
                 </div>
             </div>
 
-            <Top10 data={dataobj} lang={lang}/>
+            <Top10 data={dataobj} lang={lang} transcript={transcript.statistic.TOP10}/>
 
             <div className="w-full">
-                <Claimant data={dataobj}/>
+                <Claimant data={dataobj} transcript={transcript.statistic.Migrate}/>
             </div>
             <div className="w-full">
-                <Block data={dataobj}/>
+                <Block data={dataobj} transcript={transcript.statistic.Block}/>
             </div>
             <div className="w-full">
-                <Distribute data={dataobj}/>
+                <Distribute data={dataobj} transcript={transcript.statistic.Operation}/>
             </div>
             <div className="w-full">
-                <LockTime data={dataobj}/>
+                <LockTime data={dataobj} transcript={transcript.statistic.LockUP}/>
             </div>
         </div>        
         </>

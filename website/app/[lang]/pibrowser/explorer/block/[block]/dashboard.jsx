@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import Link from "next/link"
-export default function Dashboard({block}){
+export default function Dashboard({block,transcript}){
     const [lang,setlang] = useState()
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [data,setdata] = useState(null)
@@ -24,7 +24,7 @@ export default function Dashboard({block}){
                 <tbody>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Hash
+                            {transcript.Hash}
                         </td>
                         <td className=" px-3 py-1 font-bold">
                             {data&&
@@ -35,7 +35,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Pre Hash
+                            {transcript.Pre}
                         </td>
                         <td className=" px-3 py-1">
                             {data &&
@@ -49,7 +49,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Operation
+                            {transcript.Operation}
                         </td>
                         <td className=" px-3 py-1">
                         {data&&
@@ -60,7 +60,7 @@ export default function Dashboard({block}){
 
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Transaction
+                            {transcript.Transaction}
                         </td>
                         <td className=" px-3 py-1">
                         {data&&
@@ -74,7 +74,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Base Fee
+                            {transcript.BaseFee}
                         </td>
                         <td className=" px-3 py-1">
                         {data&&
@@ -88,7 +88,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Base Reserve
+                            {transcript.BaseReserve}
                         </td>
                         <td className=" px-3 py-1">
                             {data&&
@@ -102,7 +102,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Fee Pool
+                            {transcript.FeePool}
                         </td>
                         <td className=" px-3 py-1">
                         {data&&
@@ -116,7 +116,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Total Pi
+                            {transcript.TotalPi}
                         </td>
                         <td className=" px-3 py-1">
                             {data&&
@@ -130,7 +130,7 @@ export default function Dashboard({block}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Protocol
+                            {transcript.Protocol}
                         </td>
                         <td className=" px-3 py-1">
                             {data&&

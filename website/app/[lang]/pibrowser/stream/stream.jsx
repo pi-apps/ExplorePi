@@ -35,10 +35,10 @@ export default function StreamContent({transcript,explorer,time}){
             rounded-xl transition ease-in-out mt-2 mb-3
             focus:text-gray-700 focus:border-blue-500 focus:outline-none" value={selected}            
             onChange={handleselect} disabled={start}>
-                <option value="operation">OPERATION</option>
-                <option value="block">BLOCK</option>
-                <option value="tx">TRANSACTION</option>
-                <option value="payment">PAYMENT</option>
+                <option value="operation">{transcript.op.title}</option>
+                <option value="block">{transcript.block.Block}</option>
+                <option value="tx">{transcript.tx.title}</option>
+                <option value="payment">{transcript.pay.title}</option>
             </select>
             {selected!=='block' &&<input 
                 onChange={(e)=>setInput(e.target.value)}
@@ -47,8 +47,8 @@ export default function StreamContent({transcript,explorer,time}){
                 aria-label="Account option" 
                 placeholder={formatTrans(transcript.input,{need:placeholder})}/>}
             <div className="flex justify-center mt-1">
-                {start===false && <Button size="lg" gradientDuoTone='cyanToBlue' className="font-mono font-extrabold text-xl" onClick={handleStart}>Start</Button>}
-                {start === true && <Button size="lg" gradientDuoTone='pinkToOrange' className="font-mono font-extrabold text-xl" onClick={handleStart}>Stop</Button>}
+                {start===false && <Button size="lg" gradientDuoTone='cyanToBlue' className="font-mono font-extrabold text-xl" onClick={handleStart}>{transcript.but_start}</Button>}
+                {start === true && <Button size="lg" gradientDuoTone='pinkToOrange' className="font-mono font-extrabold text-xl" onClick={handleStart}>{transcript.but_stop}</Button>}
                 
             </div>
         </section>

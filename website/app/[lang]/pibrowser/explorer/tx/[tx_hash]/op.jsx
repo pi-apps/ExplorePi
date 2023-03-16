@@ -33,7 +33,7 @@ export default function Operation({tx_hash,transcript}){
     return(
         <>
         <div className="text-center">
-            There has no Operation
+            {transcript.no}
         </div>
         </>
     )
@@ -43,9 +43,9 @@ export default function Operation({tx_hash,transcript}){
             <table className="w-full text-center table-fixed font-mono">
                 <thead className="border-b border-slate-400 text-lg">
                     <tr>
-                        <th>Account</th>
-                        <th>Type</th>
-                        <th>Detail</th>
+                        <th>{transcript.account}</th>
+                        <th>{transcript.operation}</th>
+                        <th>{transcript.detail}</th>
                     </tr>
                 </thead>
                 <tbody>

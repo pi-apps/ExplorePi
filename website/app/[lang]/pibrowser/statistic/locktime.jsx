@@ -4,7 +4,7 @@ import Chart from 'chart.js/auto';
 import 'chartjs-adapter-luxon';
 import { Doughnut } from "react-chartjs-2"
 
-export default function LockTime({data}){
+export default function LockTime({data,transcript}){
     if(!data) return
     const option = {
         maintainAspectRatio : false,
@@ -29,10 +29,10 @@ export default function LockTime({data}){
     useEffect(()=>{
         if(!dataset) return
         settidydata({
-            labels:['No Lock','Two weeks','Six Month','One Year','Three Years'],
+            labels:[transcript.No,transcript.two_week,transcript.six_month,transcript.oneyear,transcript.threeyears],
             datasets: [
                 {
-                label:'Pioneers',
+                label:transcript.Pioneers,
                 data: dataset,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -59,7 +59,7 @@ export default function LockTime({data}){
     return(
         <>
         <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom ">
-            LockUP Period
+            {transcript.title}
         </div>
         <div className="h-40">
         <Doughnut data={tidydata} options={option} />

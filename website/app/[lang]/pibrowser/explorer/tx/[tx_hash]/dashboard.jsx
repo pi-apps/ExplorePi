@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import Link from "next/link"
-export default function Dashboard({tx_hash}){
+export default function Dashboard({tx_hash,transcript}){
     const [lang,setlang] = useState()
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [data,setdata] = useState(null)
@@ -25,7 +25,7 @@ export default function Dashboard({tx_hash}){
                 <tbody>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Block
+                            {transcript.Block}
                         </td>
                         <td className=" px-3 py-1">
                             {data &&
@@ -39,7 +39,7 @@ export default function Dashboard({tx_hash}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Hash
+                            {transcript.Hash}
                         </td>
                         <td className=" px-3 py-1 font-bold">
                             {data&&
@@ -51,7 +51,7 @@ export default function Dashboard({tx_hash}){
                     
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Operation
+                            {transcript.Operation}
                         </td>
                         <td className=" px-3 py-1">
                         {data&&
@@ -61,7 +61,7 @@ export default function Dashboard({tx_hash}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Account
+                            {transcript.Account}
                         </td>
                         <td className=" px-3 py-1">
                             {data &&
@@ -75,7 +75,7 @@ export default function Dashboard({tx_hash}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Fee
+                            {transcript.Fee}
                         </td>
                         <td className=" px-3 py-1">
                         {data&&
@@ -89,13 +89,13 @@ export default function Dashboard({tx_hash}){
                     </tr>
                     <tr className="border-b border-[#F7E4BE] bg-[#FBF2DE] text-neutral-800">
                         <td className=" py-1 font-medium">
-                            Memo
+                            {transcript.Memo}
                         </td>
                         <td className=" px-3 py-1">
                             {data&&
                         <>
                         <span className="font-bold">
-                            {data.memo ? data.memo:<>None</>}
+                            {data.memo ? data.memo:<>{transcript.None}</>}
 
                         </span>
                         </>
@@ -107,14 +107,14 @@ export default function Dashboard({tx_hash}){
                         {data&&data.successful&&
                         <>
                         <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-400 text-white rounded-full">
-                            Success
+                            {transcript.Success}
                         </span>
                         </>
                         }
                         {data&&!data.successful&&
                         <>
                         <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600 text-white rounded-full">
-                            Failed
+                            {transcript.Failed}
                         </span>
                         </>
                         }
