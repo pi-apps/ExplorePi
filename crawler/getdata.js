@@ -76,6 +76,24 @@ async function getmetric(){
     result = await JSON.parse(JSON.stringify(result))
     return result[0]
 }
+async function getdailymetric(){
+    let active = await pool.ex_sql(`select count(a.account) as dailyactive from(SELECT account FROM piexplorer.operation where created_at > now() - interval 24 hour group by account) as a`)
+    active = await JSON.parse(JSON.stringify(active))
+    let fee = await pool.ex_sql(`SELECT sum(amount) as a FROM piexplorer.fee where created_at > now() - interval 24 hour`)
+    fee = await JSON.parse(JSON.stringify(fee))
+    let pay = await pool.ex_sql(`SELECT count(*) as dailypayment,sum(amount) as dailypipay FROM piexplorer.operation where created_at > now() - interval 24 hour and type_i=1`)
+    pay = await JSON.parse(JSON.stringify(pay))
+    let op = await pool.ex_sql(`SELECT count(*) as a FROM piexplorer.operation where created_at > now() - interval 24 hour`)
+    op = await JSON.parse(JSON.stringify(op))
+    let result ={
+        active:active[0].dailyactive,
+        fee:fee[0].a,
+        pay:pay[0].dailypayment,
+        payamount:pay[0].dailypipay,
+        op:op[0].a
+    }
+    return result
+}
 async function statistic(){
     let top10 = await getTop10()
     let blocktime = await getblocktime() 
@@ -91,6 +109,7 @@ async function statistic(){
     let blocktimeMonth = await getblocktimeMonth()
     let lockuptime = await getlockupperiod()
     let metric = await getmetric()
+    let daily = await getdailymetric()
     const docRef = db.collection('statistic').doc('data');
     await docRef.set({
         top10: top10,
@@ -107,6 +126,7 @@ async function statistic(){
         createclaimant:createclaimant,
         lockuptime:lockuptime,
         metric:metric,
+        daily:daily,
         timestamp: Date.now()
         });
 }
