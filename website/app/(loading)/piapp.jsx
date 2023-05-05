@@ -5,7 +5,7 @@ import { useEffect } from "react"
 export default function Piapp({lang}){
     const router = useRouter()
     useEffect(()=>{
-        window.setTimeout(( () => router.push(`./explorer`) ), 10000)
+        window.setTimeout(( () => router.push(`./explorer`) ), 5000)
     })
       
     return(
