@@ -21,11 +21,8 @@ export function middleware(req){
     if(req.nextUrl.pathname.startsWith('/_next')) return
 
     const path = req.nextUrl.pathname
-
-    if(ua.toLowerCase().includes("pibrowser") && device.type === 'mobile' && path=='/'){
-        let locale = getLocale(req)
-        return NextResponse.redirect(new URL(`/${locale}/pibrowser/explorer`, req.url))        
-    }
+    if(path=='/') 
+    return NextResponse.next()
 
     const checkismissing = translate.locales.every(
         locale => !path.startsWith(`/${locale}/`) && path !== `/${locale}`
@@ -33,17 +30,11 @@ export function middleware(req){
 
     if (checkismissing) {
         let locale = getLocale(req)
-        if(ua.toLowerCase().includes("pibrowser") && device.type === 'mobile'){
-            let locale = getLocale(req)
-            return NextResponse.redirect(new URL(`/${locale}/pibrowser/${path}`, req.url))        
-        }else{
-            return NextResponse.redirect(new URL(`/${locale}/${path}`, req.url))
-        }       
-        
+        return NextResponse.redirect(new URL(`/${locale}/${path}`, req.url))        
       }
 }
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|policy.html).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|policy.html|en|zh-TW|zh-CN).*)',
   ],
 }
