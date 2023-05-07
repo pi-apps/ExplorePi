@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-export default function Search({transcript}){
+export default function Search({lang,transcript}){
     const router = useRouter()
     const [Input,setInput] = useState('')
 

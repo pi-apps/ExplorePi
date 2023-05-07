@@ -16,7 +16,6 @@ function getLocale (req){
 }
 
 export function middleware(req){
-    console.log("middle")
     const {ua,device} = userAgent(req)
 
     if(req.nextUrl.pathname.startsWith('/_next')) return

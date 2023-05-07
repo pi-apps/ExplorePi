@@ -6,7 +6,7 @@ export default async function ExplorerLayout({children,params: { lang }}){
         <>
         <div className='w-screen h-screen overflow-hidden bg-white'>
             <div className=' h-screen overflow-y-hidden overflow-x-hidden pb-14'>
-                <Search transcript={transcript.explorer.Search}/>         
+                <Search lang={lang} transcript={transcript.explorer.Search}/>         
                 {children}
             </div>
         </div>

@@ -2,12 +2,11 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-export default function Search({transcript}){
+export default function Search({lang,transcript}){
     const router = useRouter()
     const [Input,setInput] = useState('')
 
     const handleSearch = (e) =>{
-        const lang = document.documentElement.lang
         e.preventDefault()
         //check input
         if(Input.match(/^G[A-Za-z0-9]{55}/)){
