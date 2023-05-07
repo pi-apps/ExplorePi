@@ -2,12 +2,10 @@
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import Link from "next/link"
-export default function Dashboard({tx_hash,transcript}){
-    const [lang,setlang] = useState()
+export default function Dashboard({tx_hash,transcript,lang}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [data,setdata] = useState(null)
     useEffect(()=>{
-        setlang(document.documentElement.lang)
         server.transactions()
         .transaction(tx_hash)
         .call().then( res => {

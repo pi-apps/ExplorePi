@@ -67,7 +67,7 @@ export default function AccountDashboard({transcript,time,account}){
         toast.success('Copied!')
     }
     const handleshare = async () =>{
-        window.Pi.openShareDialog('Share This Account', 'pi://'+process.env['NEXT_PUBLIC_DOMAIN']+'/'+document.documentElement.lang+'/account/'+account)
+        window.Pi.openShareDialog('Share This Account', 'pi://'+process.env['NEXT_PUBLIC_DOMAIN']+'/account/'+account)
     }
     return(
         <>

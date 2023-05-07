@@ -15,11 +15,11 @@ export default async function TxPage({params:{lang,tx_hash}}){
                     <div className=" break-words">
                         {tx_hash}
                     </div>
-                    <Share tx_hash={tx_hash}/>
+                    <Share lang={lang} tx_hash={tx_hash}/>
                 </div>
                 
                 <div className="text-center pb-2 text-purple-500 text-lg my-2 border-b mx-4" >
-                    <Dashboard tx_hash={tx_hash} transcript={transcript.explorer.transaction}/>                 
+                    <Dashboard lang={lang} tx_hash={tx_hash} transcript={transcript.explorer.transaction}/>                 
                 </div>
             </section>
 
