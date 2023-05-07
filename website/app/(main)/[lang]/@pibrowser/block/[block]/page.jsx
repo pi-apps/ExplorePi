@@ -11,11 +11,11 @@ export default async function BlockPage({params:{lang,block}}){
             <section className="my-2">
                 <div className="text-center text-2xl font-mono font-semibold border-b mx-4">
                     {transcript.explorer.block.Block} {block}
-                    <Share block={block}/>
+                    <Share block={block} lang={lang}/>
                 </div>
                 
                 <div className="text-center pb-2 text-purple-500 text-lg my-2 border-b mx-4" >
-                    <Dashboard block={block} transcript={transcript.explorer.block}/>                 
+                    <Dashboard lang={lang} block={block} transcript={transcript.explorer.block}/>                 
                 </div>
             </section>
 
@@ -23,7 +23,7 @@ export default async function BlockPage({params:{lang,block}}){
                 <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
                 {transcript.explorer.block.Transaction}
                 </div>
-                <Transaction block={block} transcript={transcript.explorer.transaction}/>
+                <Transaction lang={lang} block={block} transcript={transcript.explorer.transaction}/>
             </section>
         </section>
         </>

@@ -5,7 +5,7 @@ import { faShareFromSquare } from "@fortawesome/free-solid-svg-icons";
 export default function Share({tx_hash}){
 
     const handleshare = () =>{
-        window.Pi.openShareDialog('Share This Transaction', 'pi://'+process.env['NEXT_PUBLIC_DOMAIN']+'/explorer/tx/'+tx_hash)
+        window.Pi.openShareDialog('Share This Transaction', 'pi://'+process.env['NEXT_PUBLIC_DOMAIN']+'/tx/'+tx_hash)
     }
     return(
         <>  

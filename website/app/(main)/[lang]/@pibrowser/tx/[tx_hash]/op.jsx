@@ -3,12 +3,10 @@ import { useEffect, useState } from "react"
 import { formatTrans } from "lib/translate"
 import { Server } from "stellar-sdk"
 import Link from "next/link"
-export default function Operation({tx_hash,transcript}){
-    const [lang,setlang] = useState()
+export default function Operation({lang,tx_hash,transcript}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [data,setdata] = useState(null)
     useEffect(()=>{
-        setlang(document.documentElement.lang)
         server.operations()
         .forTransaction(tx_hash)
         .call().then( res => {
@@ -104,7 +102,7 @@ function categoryoperation(data,transcript,index,lang){
     return (
         <tr key={index} className="bg-white border-b">
         <td className="py-2 text-md font-medium text-gray-900">
-            <Link href={`./${lang}/explorer/account/${data.source_account}`}>
+            <Link href={`./${lang}/account/${data.source_account}`}>
                 <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                 {data.source_account.substring(0,4)}
                 </span>

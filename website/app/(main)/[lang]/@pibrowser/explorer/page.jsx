@@ -14,15 +14,15 @@ export default async function ExplorerPage({params:{lang}}){
             <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
             {transcript.explorer.LatestBlocks10}
             </div>
-            <Block transcript={transcript.explorer.block} time={transcript.time}/>
+            <Block transcript={transcript.explorer.block} time={transcript.time} lang={lang}/>
             <div className="text-center mt-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
             {transcript.explorer.LatestPayments}
             </div>
-            <Payment transcript={transcript.explorer.payment} time={transcript.time}/>
+            <Payment transcript={transcript.explorer.payment} time={transcript.time} lang={lang}/>
             <div className="text-center mt-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
             {transcript.explorer.LatestTransactions10}
             </div>
-            <Transaction transcript={transcript.explorer.transaction} time={transcript.time}/>
+            <Transaction transcript={transcript.explorer.transaction} time={transcript.time} lang={lang}/>
         </section>
         </>
     )

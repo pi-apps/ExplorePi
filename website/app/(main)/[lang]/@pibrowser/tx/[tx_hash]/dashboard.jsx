@@ -14,7 +14,6 @@ export default function Dashboard({tx_hash,transcript}){
             setdata(res)
         })
     },[tx_hash])
-    
     return(
         <>
         <div className="font-semibold mb-1 underline">
@@ -29,7 +28,7 @@ export default function Dashboard({tx_hash,transcript}){
                         </td>
                         <td className=" px-3 py-1">
                             {data &&
-                                <Link href={`./${lang}/explorer/block/${data.ledger}`}>
+                                <Link href={`./${lang}/block/${data.ledger_attr}`}>
                                             <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-400 text-white rounded-full">
                                             {data.ledger_attr}
                                             </span>
@@ -65,7 +64,7 @@ export default function Dashboard({tx_hash,transcript}){
                         </td>
                         <td className=" px-3 py-1">
                             {data &&
-                                <Link href={`./${lang}/explorer/account/${data.source_account}`}>
+                                <Link href={`./${lang}/account/${data.source_account}`}>
                                             <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-400 text-white rounded-full">
                                             {data.source_account.substring(0,4)}
                                             </span>

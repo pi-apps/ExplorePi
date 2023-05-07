@@ -2,12 +2,10 @@
 import { useEffect, useState } from "react"
 import { Server } from "stellar-sdk"
 import Link from "next/link"
-export default function Dashboard({block,transcript}){
-    const [lang,setlang] = useState()
+export default function Dashboard({lang,block,transcript}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [data,setdata] = useState(null)
     useEffect(()=>{
-        setlang(document.documentElement.lang)
         server.ledgers()
         .ledger(block)
         .call().then( res => {
@@ -39,7 +37,7 @@ export default function Dashboard({block,transcript}){
                         </td>
                         <td className=" px-3 py-1">
                             {data &&
-                                <Link href={`./${lang}/explorer/block/${data.sequence-1}`}>
+                                <Link href={`./${lang}/block/${data.sequence-1}`}>
                                             <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-400 text-white rounded-full">
                                             {data.prev_hash.substring(0,8)}...
                                             </span>

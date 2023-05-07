@@ -65,7 +65,7 @@ export default function Transaction({status,account,transcript,time}){
                                     return(
                                         <tr key={index} className="bg-white border-b">
                                             <td className="px-2 py-4 text-sm font-medium text-gray-900">
-                                            <Link href={`./${lang}/explorer/tx/${data.hash}`}>
+                                            <Link href={`./${lang}/tx/${data.hash}`}>
                                                 <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-400 text-white rounded-full">
                                                 {tx_hash}
                                                 </span>

@@ -5,12 +5,10 @@ import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 import Link from "next/link";
 
-export default function Transaction({transcript,time}){
+export default function Transaction({transcript,time,lang}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [transaction,settransaction] = useState(null)
-    const [lang,setlang] = useState()
     useEffect(()=>{
-        setlang(document.documentElement.lang)
         server.transactions()
         .cursor('now')
         .order('desc')
@@ -35,7 +33,7 @@ export default function Transaction({transcript,time}){
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
                             <td className="py-2">
-                                <Link href={`./${lang}/explorer/tx/${data.hash}`}>
+                                <Link href={`./${lang}/tx/${data.hash}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-400 text-white rounded-full">
                                     {tx_hash}
                                     </span>

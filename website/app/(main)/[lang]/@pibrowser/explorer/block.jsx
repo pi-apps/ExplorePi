@@ -5,12 +5,10 @@ import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Block({transcript,time}){
+export default function Block({lang,transcript,time}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [block10,setblock10] = useState(null)
-    const [lang,setlang] = useState()
     useEffect(()=>{
-        setlang(document.documentElement.lang)
         server.ledgers()
         .cursor('now')
         .order('desc')
@@ -35,7 +33,7 @@ export default function Block({transcript,time}){
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
                             <td className="py-2">
-                                <Link href={`./${lang}/explorer/block/${data.sequence}`}>
+                                <Link href={`./${lang}/block/${data.sequence}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-400 text-white rounded-full">
                                     {data.sequence}
                                     </span>

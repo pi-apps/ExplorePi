@@ -27,7 +27,7 @@ export default async function TxPage({params:{lang,tx_hash}}){
                 <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
                 {transcript.explorer.transaction.op}
                 </div>
-            <Operation tx_hash={tx_hash} transcript={transcript.explorer.operation}/>
+            <Operation lang={lang} tx_hash={tx_hash} transcript={transcript.explorer.operation}/>
             </section>
         </section>
         </>

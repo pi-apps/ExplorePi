@@ -5,12 +5,10 @@ import { useEffect, useState } from "react";
 import { Server } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
-export default function Payment({transcript,time}){
+export default function Payment({transcript,time,lang}){
     const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [payment,setpayment] = useState(null)
-    const [lang,setlang] = useState()
     useEffect(()=>{
-        setlang(document.documentElement.lang)
         server.payments()
         .cursor('now')
         .order('desc')
@@ -39,14 +37,14 @@ export default function Payment({transcript,time}){
                     return(
                         <tr key={index} className='border-b border-slate-300 text-lg'>
                             <td className="py-2">
-                                <Link href={`./${lang}/explorer/account/${data.from}`}>
+                                <Link href={`./${lang}/account/${data.from}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                                     {from_account}
                                     </span>
                                 </Link>
                             </td>
                             <td className="py-2">
-                                <Link href={`./${lang}/explorer/account/${data.to}`}>
+                                <Link href={`./${lang}/account/${data.to}`}>
                                     <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-yellow-300 text-white rounded-full">
                                     {to_account}
                                     </span>
