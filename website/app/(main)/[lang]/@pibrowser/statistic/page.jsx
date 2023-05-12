@@ -5,7 +5,7 @@ import Distribute from "./operation"
 import Claimant from "./claimant";
 import { translate } from "translate-config";
 import LockTime from "./locktime";
-import { Roboto_Mono } from "@next/font/google";
+import { Roboto_Mono } from "next/font/google";
 export const revalidate =  1800
 
 

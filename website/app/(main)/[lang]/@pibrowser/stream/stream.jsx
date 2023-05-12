@@ -7,7 +7,7 @@ import Operation from "./operation";
 import Payment from "./payment";
 import Block from './block';
 import Transaction from './transaction';
-export default function StreamContent({transcript,explorer,time}){
+export default function StreamContent({transcript,explorer,time,lang}){
     const [selected,setselected] = useState('operation')
     const [Input,setInput] = useState('')
     const [placeholder,setplaceholder] = useState(transcript.Optional)
@@ -54,10 +54,10 @@ export default function StreamContent({transcript,explorer,time}){
         </section>
         <div className="mt-2 border mx-4"></div>
         <section className={`${styles.content_table} mt-2 mx-4 w-auto pb-14 overflow-y-scroll`}>
-            {selected==='operation' && <Operation status={start} transcript={explorer.operation} account={Input} time={time}/>}
-            {selected==='block'&&<Block status={start} transcript={transcript.block} time={time}/>}
-            {selected==='tx'&&<Transaction status={start} transcript={explorer.transaction} time={time} account={Input}/>}
-            {selected==='payment' && <Payment status={start} transcript={explorer.payment} account={Input} time={time}/>}
+            {selected==='operation' && <Operation lang={lang} status={start} transcript={explorer.operation} account={Input} time={time}/>}
+            {selected==='block'&&<Block lang={lang} status={start} transcript={transcript.block} time={time}/>}
+            {selected==='tx'&&<Transaction lang={lang} status={start} transcript={explorer.transaction} time={time} account={Input}/>}
+            {selected==='payment' && <Payment lang={lang} status={start} transcript={explorer.payment} account={Input} time={time}/>}
         </section>
         </>
     )

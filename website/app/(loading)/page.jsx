@@ -1,8 +1,7 @@
 
-import { Inter } from '@next/font/google'
 import Piapp from './piapp'
 import styles from './Loading.module.css'
-const inter = Inter({ subsets: ['latin'] })
+
 
 export default function Home() {
 

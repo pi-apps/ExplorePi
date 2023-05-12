@@ -1,8 +1,8 @@
 'use client'
 import { Button } from "flowbite-react"
 import { useState } from "react"
-import { Rowdies } from "@next/font/google"
-import { Hind_Siliguri } from "@next/font/google"
+import { Rowdies } from "next/font/google"
+import { Hind_Siliguri } from "next/font/google"
 
 const hind = Hind_Siliguri({
     subsets: ['latin'],

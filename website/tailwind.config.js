@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         'nav-purple':'#8A2BE2',
         'nav-gold':'#F7B52C',
+        'search-bar':'rgb(255,255,255,.1)',
       },
       backgroundImage:{
         'border':'linear-gradient(to left, #743ad5, #d53a9d);',

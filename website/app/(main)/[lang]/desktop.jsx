@@ -1,15 +1,15 @@
-import Navbar from "./component/navbar";
+import Searchbar from "./component/searchbar";
 import SideBar from "./component/sidebar";
-
-export default function DesktopLayout({children}){
+import './style.css'
+export default function DesktopLayout({children,lang}){
     return(
         <>
-        <div className=" w-screen h-screen">
-            <SideBar/>
-            <div className="relative md:ml-64 bg-blueGray-100">
-                <Navbar/>
+        <div className="w-screen h-screen overflow-hidden desktop-bg">
+            <SideBar lang={lang}/>
+            <div className="relative md:ml-64 h-screen">
+                <Searchbar lang={lang}/>
                 
-                <div className="px-4 md:px-10 mx-auto w-full -m-24">
+                <div className="w-full h-full pb-[58px] overflow-scroll">
                 {children}
                 
                 </div>
