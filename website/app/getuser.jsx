@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import Home from "./loading"
+import { useEffect, useState, createContext } from "react"
+import Script from "next/script"
 
-export default function GetUser({pibrowser,desktop,lang}){
-    const [pi,setpi]= useState(undefined)
+export const BrowserContext = createContext()
+
+export default function GetUser({children}){
+    const [pimode,setpi]= useState(undefined)
     const [counter, setCounter] = useState(0);
     useEffect(()=>{
         setpi(window.navigator.userAgent.toLowerCase().includes("pibrowser"))
@@ -13,14 +15,24 @@ export default function GetUser({pibrowser,desktop,lang}){
         counter == 0 && setTimeout(() => setCounter(counter + 1), 1000);
         console.log(counter)
       }, [counter]);
-    
-    if(pi){
-        return(pibrowser)
-    }else if(pi===undefined){
-        return(
-            <Home/>
-        )
-    }else{
-        return(desktop)
+
+    const [auth,setauth] = useState(null)
+    const piinit = () =>{
+        const scopes = ['payments','username'];
+        function onIncompletePaymentFound(payment) { /* ... */ };
+        Pi.init({ version: "2.0",sandbox:true })
+        Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
+            setauth(auth)
+          }).catch(function(error) {
+            console.error(error);
+          });
     }
+    return(
+        <>
+            <Script src="https://sdk.minepi.com/pi-sdk.js" onReady={piinit}/>
+            <BrowserContext.Provider value={pimode}>
+                {children}
+            </BrowserContext.Provider>
+        </>
+    )
 }

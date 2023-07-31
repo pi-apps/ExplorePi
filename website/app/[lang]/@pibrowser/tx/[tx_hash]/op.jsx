@@ -102,7 +102,7 @@ function categoryoperation(data,transcript,index,lang){
     return (
         <tr key={index} className="bg-white border-b">
         <td className="py-2 text-md font-medium text-gray-900">
-            <Link href={`./${lang}/account/${data.source_account}`}>
+            <Link href={`/${lang}/account/${data.source_account}`}>
                 <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                 {data.source_account.substring(0,4)}
                 </span>
