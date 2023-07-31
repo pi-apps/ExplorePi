@@ -30,7 +30,7 @@ export default function GetUser({children}){
     return(
         <>
             <Script src="https://sdk.minepi.com/pi-sdk.js" onReady={piinit}/>
-            <BrowserContext.Provider value={pimode}>
+            <BrowserContext.Provider value={{pimode:pimode}}>
                 {children}
             </BrowserContext.Provider>
         </>
