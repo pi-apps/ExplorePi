@@ -1,6 +1,8 @@
 'use client'
-import { useEffect, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import Home from "../loading"
+
+export const BrowserContext = createContext()
 
 export default function GetUser({pibrowser,desktop,params:{lang}}){
     const [pi,setpi]= useState(undefined)
@@ -13,13 +15,12 @@ export default function GetUser({pibrowser,desktop,params:{lang}}){
         console.log(counter)
       }, [counter]);
     
-    if(pi){
-        return(pibrowser)
-    }else if(pi===undefined){
-        return(
-            <Home/>
-        )
-    }else{
-        return(desktop)
-    }
+    return(
+        <>
+            <BrowserContext.Provider value={pi}>
+                {pi === undefined && <Home/>}
+                {pi !== undefined && pi ? pibrowser : desktop} 
+            </BrowserContext.Provider>
+        </>
+    )
 }

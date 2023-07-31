@@ -7,14 +7,5 @@ config.autoAddCss = false
 
 export default function RootLayout({ children,params,desktop,pibrowser }) {
   
-  return (
-    <html lang={params.lang}>
-      <Head />
-      
-      <body>
-
-        {children}
-      </body>
-    </html>
-  )
+  return children
 }
