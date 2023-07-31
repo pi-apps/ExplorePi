@@ -6,7 +6,7 @@ import GetUser from './getuser'
 
 config.autoAddCss = false
 
-export default function RootLayout({ children,params,desktop,pibrowser }) {
+export default function RootLayout({ children,params }) {
   
   return (
     <html lang={params.lang}>
