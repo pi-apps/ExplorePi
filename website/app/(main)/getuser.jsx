@@ -1,22 +1,29 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import DesktopLayout from "./desktop"
+import Home from "./page"
 
 export default function GetUser({pibrowser,desktop,lang}){
-    const [pi,setpi]= useState(false)
+    const [pi,setpi]= useState(undefined)
+    const [counter, setCounter] = useState(0);
     useEffect(()=>{
         setpi(window.navigator.userAgent.toLowerCase().includes("pibrowser"))
     })
+    useEffect(() => {
+        counter == 0 && setTimeout(() => setCounter(counter + 1), 1000);
+        console.log(counter)
+      }, [counter]);
     
     if(pi){
         return(pibrowser)
+    }else if(pi===undefined){
+        return(
+            <Home/>
+        )
     }else{
         return(
             <>
-                <DesktopLayout lang={lang}>
                 {desktop}
-                </DesktopLayout>
             </>
         )
     }

@@ -8,9 +8,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  swcMinify: true,
-  experimental: {
-    appDir: true,
-  },
+  swcMinify: true
 }
 module.exports = withBundleAnalyzer(nextConfig);
