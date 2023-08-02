@@ -5,6 +5,7 @@ import Payment from "./payment";
 import Transaction from "./transaction";
 
 export default async function ExplorerPage({params:{lang}}){
+    const transcript = await import(`locales/${lang}.json`);
     return(
         <>
         <div className="p-5 pb-16 w-full">
@@ -16,7 +17,7 @@ export default async function ExplorerPage({params:{lang}}){
                         </Link>
                     </div>
                     <hr className="my-2 h-px border-t-0 bg-transparent bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25"></hr>
-                    <Block lang={lang} status={true}/>
+                    <Block lang={lang} status={true} time={transcript.time}/>
                 </div>
                 <div className="mt-2 xl:mt-0 w-11/12 xl:basis-5/12 bg-white rounded-lg shadow-md p-4">
                     <div className="w-full text-center">
