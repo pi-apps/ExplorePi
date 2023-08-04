@@ -21,7 +21,7 @@ export default function getago(date,transcript){
 
     return(
         <>
-            <TimeAgo formatter={timeAgoFormatter} date={date}/>
+            <TimeAgo formatter={timeAgoFormatter} date={date} />
         </>
     )
 }
