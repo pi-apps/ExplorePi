@@ -26,7 +26,6 @@ const effectHandler = function (effResponse) {
     switch(effResponse.type_i){
         case 0:
             //account_created
-            account_sql(effResponse)
           break;
         case 2:
             //account_credited
@@ -79,17 +78,6 @@ function query_ledger(){
     })
 }
 
-function account_sql(res){
-    let date = res.created_at.slice(0, 19).replace('T', ' ')
-    let sql
-    if(res.starting_balance==2000001.0000000 || res.starting_balance == 2000000.2000000){
-        sql = "INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
-    }else{
-     sql = "INSERT INTO Account(public_key,balance,created_at) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"')"
-    }    
-    let string = res.paging_token + ' effect finished'
-    pool.ex_sql(sql,string)
-}
 function credit_sql(res){
     let sql
     if(res.asset_type=='native'){
@@ -135,7 +123,11 @@ function claimable_balance_create_sql(res){
 }
 function claimant_create_sql(res){
     let lock_time = parseInt(res.predicate.not.rel_before)
-    let sql = "INSERT INTO claimant(id,account,lock_time) VALUES ('"+res.balance_id+"','"+res.account+"',"+lock_time+") ON DUPLICATE KEY UPDATE account=VALUES(account),lock_time=VALUES(lock_time)"
+    let date = new Date(res.created_at)
+    let unlock_time = date.getSeconds() + lock_time
+    date.setSeconds(unlock_time)
+    unlock_time = date.toISOString().slice(0, 19).replace('T', ' ')
+    let sql = "INSERT INTO claimant(id,account,lock_time,unlock_time) VALUES ('"+res.balance_id+"','"+res.account+"',"+lock_time+",'"+unlock_time+"') ON DUPLICATE KEY UPDATE account=VALUES(account),lock_time=VALUES(lock_time),unlock_time=VALUES(unlock_time)"
     let string = res.paging_token + ' effect finished'
     pool.ex_sql(sql,string)
 }

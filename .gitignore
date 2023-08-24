@@ -4,3 +4,4 @@ website/.env
 crawler/lib/serviceAccountKey.json
 website/serviceAccountKey.json
 crawler/node_modules/
+crawler/console-log.txt

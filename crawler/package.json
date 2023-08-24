@@ -15,7 +15,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "firebase-admin": "^11.5.0",
-    "mysql": "^2.18.1",
+    "mysql2": "^3.6.0",
     "stellar-sdk": "^10.4.1"
   }
 }
