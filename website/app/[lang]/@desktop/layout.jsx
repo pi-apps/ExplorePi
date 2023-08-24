@@ -9,10 +9,8 @@ export default async function Layout({params: { lang },children}){
             <div className="relative md:ml-64 h-screen">
                 <Searchbar lang={lang}/>
                 
-                <div className="w-full h-full pb-[58px] overflow-scroll">
-                {children}
-                
-                </div>
+                {children}                
+
             </div>
         </div>
     </>)
