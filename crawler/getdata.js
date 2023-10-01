@@ -3,87 +3,87 @@ const pool = require('./lib/database');
 const {db} = require('./lib/firestore')
 
 async function getTop10(){
-    let result = await pool.ex_sql(`SELECT account,(balance-totalfee.total) as balance FROM piexplorer.Account 
-    INNER JOIN (SELECT sum(amount) as total,account FROM piexplorer.fee group by account order by total desc) as totalfee ON  Account.public_key = totalfee.account
+    let result = await pool.ex_sql(`SELECT account,(balance-totalfee.total) as balance FROM explorepi.Account 
+    INNER JOIN (SELECT sum(amount) as total,account FROM explorepi.fee group by account order by total desc) as totalfee ON  Account.public_key = totalfee.account
     where Role <> 'CoreTeam' OR Role is null
     order by balance desc LIMIT 0, 10`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getblocktime(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as x,avg(spend) as y,sum(operation) as op FROM piexplorer.block group by DATE_FORMAT(created_at, '%Y-%m-%d') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as x,avg(spend) as y,sum(operation) as op FROM explorepi.block group by DATE_FORMAT(created_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getblocktimeMonth(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,avg(spend) as y,sum(operation) as op FROM piexplorer.block group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,avg(spend) as y,sum(operation) as op FROM explorepi.block group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getTop10payment(){
-    let result = await pool.ex_sql(`SELECT count(*) as count,account FROM piexplorer.operation where type_i=1 group by account order by count desc LIMIT 0, 10;`)
+    let result = await pool.ex_sql(`SELECT count(*) as count,account FROM explorepi.operation where type_i=1 group by account order by count desc LIMIT 0, 10;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getTop10fee(){
-    let result = await pool.ex_sql(`SELECT sum(amount) as total,account FROM piexplorer.fee group by account order by total desc LIMIT 0, 10;`)
+    let result = await pool.ex_sql(`SELECT sum(amount) as total,account FROM explorepi.fee group by account order by total desc LIMIT 0, 10;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getopdistribute(){
-    let result = await pool.ex_sql(`SELECT count(*) as total,type_i as op FROM piexplorer.operation group by type_i;`)
+    let result = await pool.ex_sql(`SELECT count(*) as total,type_i as op FROM explorepi.operation group by type_i;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getclaimed(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m-%d') as x,count(*) as y FROM piexplorer.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m-%d') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m-%d') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getclaimedback(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m-%d') as x,count(*) as y FROM piexplorer.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m-%d') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m-%d') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getclaimanthistory(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as x,count(*) as y FROM piexplorer.claimant group by DATE_FORMAT(created_at, '%Y-%m-%d') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as x,count(*) as y FROM explorepi.claimant group by DATE_FORMAT(created_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getclaimedMonth(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM piexplorer.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getclaimedbackMonth(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM piexplorer.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getclaimanthistoryMonth(){
-    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,count(*) as y FROM piexplorer.claimant group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
+    let result = await pool.ex_sql(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,count(*) as y FROM explorepi.claimant group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 
 async function getlockupperiod(){
-    let result = await pool.ex_sql(`SELECT count(case when a.period=1209600 then 1 else null end) as no_lock, count(case when a.period>1209600 and a.period<=2419200 then 1 else null end) as twoweek, count(case when a.period>2419200 and a.period<=18187200 then 1 else null end) as sixmonths, count(case when a.period>18187200 and a.period<=33976800 then 1 else null end) as oneyear, count(case when a.period>33976800 then 1 else null end) as threeyear from(SELECT account,max(lock_time) as period FROM piexplorer.claimant group by account) as a`)
+    let result = await pool.ex_sql(`SELECT count(case when a.period=1209600 then 1 else null end) as no_lock, count(case when a.period>1209600 and a.period<=2419200 then 1 else null end) as twoweek, count(case when a.period>2419200 and a.period<=18187200 then 1 else null end) as sixmonths, count(case when a.period>18187200 and a.period<=33976800 then 1 else null end) as oneyear, count(case when a.period>33976800 then 1 else null end) as threeyear from(SELECT account,max(lock_time) as period FROM explorepi.claimant group by account) as a`)
     result = await JSON.parse(JSON.stringify(result))
     return result
 }
 async function getmetric(){
-    let result = await pool.ex_sql(`SELECT a.a as TotalAccount,b.a as TotalPi,c.a as TotalClaim,b.a-c.a as TotalLock from(SELECT count(*) as a FROM piexplorer.Account)as a,(SELECT sum(amount) as a FROM piexplorer.claimant where status<>2) as b,(SELECT sum(amount) as a FROM piexplorer.claimant where status=1)as c`)
+    let result = await pool.ex_sql(`SELECT a.a as TotalAccount,b.a as TotalPi,c.a as TotalClaim,b.a-c.a as TotalLock from(SELECT count(*) as a FROM explorepi.Account)as a,(SELECT sum(amount) as a FROM explorepi.claimant where status<>2) as b,(SELECT sum(amount) as a FROM explorepi.claimant where status=1)as c`)
     result = await JSON.parse(JSON.stringify(result))
     return result[0]
 }
 async function getdailymetric(){
-    let active = await pool.ex_sql(`select count(a.account) as dailyactive from(SELECT account FROM piexplorer.operation where created_at > now() - interval 24 hour group by account) as a`)
+    let active = await pool.ex_sql(`select count(a.account) as dailyactive from(SELECT account FROM explorepi.operation where created_at > now() - interval 24 hour group by account) as a`)
     active = await JSON.parse(JSON.stringify(active))
-    let fee = await pool.ex_sql(`SELECT sum(amount) as a FROM piexplorer.fee where created_at > now() - interval 24 hour`)
+    let fee = await pool.ex_sql(`SELECT sum(amount) as a FROM explorepi.fee where created_at > now() - interval 24 hour`)
     fee = await JSON.parse(JSON.stringify(fee))
-    let pay = await pool.ex_sql(`SELECT count(*) as dailypayment,sum(amount) as dailypipay FROM piexplorer.operation where created_at > now() - interval 24 hour and type_i=1`)
+    let pay = await pool.ex_sql(`SELECT count(*) as dailypayment,sum(amount) as dailypipay FROM explorepi.operation where created_at > now() - interval 24 hour and type_i=1`)
     pay = await JSON.parse(JSON.stringify(pay))
-    let op = await pool.ex_sql(`SELECT count(*) as a FROM piexplorer.operation where created_at > now() - interval 24 hour`)
+    let op = await pool.ex_sql(`SELECT count(*) as a FROM explorepi.operation where created_at > now() - interval 24 hour`)
     op = await JSON.parse(JSON.stringify(op))
     let result ={
         active:active[0].dailyactive,
@@ -130,4 +130,8 @@ async function statistic(){
         timestamp: Date.now()
         });
 }
-setInterval(statistic,21600000)
+const schedule = require('node-schedule');
+
+const job = schedule.scheduleJob('0 * * * *', function(){
+    statistic()
+});

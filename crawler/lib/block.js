@@ -7,7 +7,8 @@ const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['LEDGER_CURSOR'];
 
 //First cursor is 8589934592(paging_token) 
-let pre_time = "2020-12-31T22:47:31Z" 
+let pre_time = "2020-12-31T22:47:31Z"
+let lastprocess
 function block(){
     try{
         server.ledgers()
@@ -22,6 +23,8 @@ function block(){
 }
 
 function lgHandler(res){
+    lastprocess=res.paging_token
+    console.log('Last : ' +lastprocess)
     let close = new Date(res.closed_at)
     let pre_close = new Date(pre_time)
     // @ts-ignore

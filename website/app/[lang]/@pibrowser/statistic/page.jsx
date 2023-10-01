@@ -1,3 +1,4 @@
+import 'server-only'
 import admin from "lib/database";
 import Block from "./block"
 import Top10 from "./top10"

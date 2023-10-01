@@ -1,10 +1,10 @@
 var mysql = require('mysql2');
 const DataConnection = mysql.createPool({
     connectionLimit : 100,
-    host     : 'ls-914880a4f6a8babf7f4b1c97b2673ca8ee322cd8.csqahcuj4wfc.us-east-2.rds.amazonaws.com',
+    host     : process.env["DB_HOST"],
     user     : process.env["DB_USERNAME"],
-    password : ':fezUD[8~(_Rp4fs#WUo6L0,x-`eFs2f',
-    database : 'explorepi',
+    password : process.env["DB_PASSWORD"],
+    database : process.env["DB_DATABASE"],
     waitForConnections: true,
     idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
     queueLimit: 0,
