@@ -6,7 +6,7 @@ const horizon = process.env['HORIZON_URL']
 const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['OP_CURSOR'];
 //First cursor is 60129546240(paging_token) 
-
+let lastprocess
 function operation(){
     try{
         server.operations()
@@ -42,6 +42,8 @@ function operation(){
 23:pool_withdraw
 */
 function opHandler(res){
+    lastprocess=res.paging_token
+    console.log('Last : ' +lastprocess)
     if(res.transaction_successful){
         let sql
         let date = res.created_at.slice(0, 19).replace('T', ' ')

@@ -8,7 +8,7 @@ let lastCursor=process.env['EFFECT_CURSOR'];
 let first_account = process.env['FIRST_ACCOUNT']
 let first_sql = "INSERT INTO Account(public_key,balance,Role) VALUES ('"+first_account+"',100000000000,'CoreTeam')"
 let query_first_sql = "SELECT COUNT(*) as count FROM Account WHERE public_key = '"+first_account+"' and Role = 'CoreTeam'"
-
+let lastprocess
 async function crawl(){
     try{
         let results = await pool.ex_sql(query_first_sql)
@@ -23,6 +23,8 @@ async function crawl(){
     }
 }
 const effectHandler = function (effResponse) {
+    lastprocess=effResponse.paging_token
+    console.log('Last : ' +lastprocess)
     switch(effResponse.type_i){
         case 0:
             //account_created

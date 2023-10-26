@@ -6,7 +6,7 @@ const horizon = process.env['HORIZON_URL']
 const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['TX_CURSOR'];
 //First cursor is 60129546240(paging_token) 
-
+let lastprocess
 function transaction(){
     try{
         server.transactions()
@@ -21,6 +21,8 @@ function transaction(){
 }
 
 function txHandler(res){
+    lastprocess=res.paging_token
+    console.log('Last : ' +lastprocess)
     if(res.successful){
         let date = res.created_at.slice(0, 19).replace('T', ' ')
         let amount = (parseInt(res.fee_charged)/10000000)

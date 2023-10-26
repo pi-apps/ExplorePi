@@ -6,10 +6,10 @@ import { BrowserContext } from "app/getuser"
 export default function GetUser({pibrowser,desktop,params:{lang}}){
 
     const pimode = useContext(BrowserContext)
-    console.log(pimode.pimode)
+    console.log('test '+pimode.pimode)
     return(
         <>
-            {pimode.pimode ? pibrowser : desktop} 
+            {pimode.pimode===0 ?  desktop : pibrowser} 
         </>
     )
 }
