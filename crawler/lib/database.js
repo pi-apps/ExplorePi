@@ -12,17 +12,17 @@ const DataConnection = mysql.createPool({
     keepAliveInitialDelay: 0,
     // @ts-ignore
     port: process.env["DB_PORT"]
-});
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: process.env["DB_USERNAME"],
-    password : process.env["DB_PASSWORD"],
-    database : process.env["DB_DATABASE"],
-  });
-  
+});  
 
 const query = async (sql,string=null) => {
+    const connection = mysql.createConnection({
+        host: process.env["DB_HOST"],
+        user: process.env["DB_USERNAME"],
+        password : process.env["DB_PASSWORD"],
+        database : process.env["DB_DATABASE"],
+      });
     const result = await connection.promise().query(sql);
+    connection.end();
     return result[0]
 }
 function getConnection(callback) {

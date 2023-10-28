@@ -54,24 +54,26 @@ function opHandler(res){
         let date = res.created_at.slice(0, 19).replace('T', ' ')
         switch (res.type_i) {
             case 0:
+                sql = "INSERT INTO operation(id,type_i,account,created_at) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"')"
+                let sqecial_sql
                 if(res.funder == 'GABT7EMPGNCQSZM22DIYC4FNKHUVJTXITUF6Y5HNIWPU4GA7BHT4GC5G'){
-                    sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','Pioneer')"
+                    sqecial_sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','Pioneer')"
                 }else{
-                    sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
+                    sqecial_sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
                 }
+                worker+=1
+                pool.ex_sql(sqecial_sql,'addition finish').then(
+                    worker-=1
+                )
                 break;
             case 1:
-                //payment
                 sql = "INSERT INTO operation(id,type_i,account,created_at,amount) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"',"+res.amount+")"
+                //payment
                 break;
-            default:                
+            default:
+                sql = "INSERT INTO operation(id,type_i,account,created_at) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"')"
                 break;
-        }
-         worker+=1
-         pool.ex_sql(sql,'addition finish').then(
-            worker-=1
-        )
-        sql = "INSERT INTO operation(id,type_i,account,created_at) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"')"
+        }        
         let string = res.paging_token + ' operation finished'
          worker+=1
          pool.ex_sql(sql,string).then(

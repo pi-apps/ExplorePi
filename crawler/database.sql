@@ -56,7 +56,7 @@ CREATE TABLE `operation` (
   `id` varchar(50) NOT NULL,
   `type_i` tinyint NOT NULL,
   `account` varchar(56) DEFAULT NULL,
-  `amount` decimal(19,7) DEFAULT NULL,
+  `amount` decimal(19,7) DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
