@@ -7,7 +7,7 @@ import Claimant from "./claimant";
 import { translate } from "translate-config";
 import LockTime from "./locktime";
 import { Roboto_Mono } from "next/font/google";
-export const revalidate =  1800
+export const revalidate =  86400
 
 
 const roboto_Mono = Roboto_Mono({

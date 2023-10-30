@@ -9,22 +9,28 @@ let lastCursor=process.env['LEDGER_CURSOR'];
 //First cursor is 8589934592(paging_token) 
 let pre_time = "2020-12-31T22:47:31Z"
 let lastprocess
+let streamer,worker
+
 function block(){
     try{
-        server.ledgers()
+        worker = 0
+        streamer = server.ledgers()
         // @ts-ignore
         .cursor(lastCursor)
         .stream({
             onmessage: lgHandler
         })
+
+        console.log('Block start')
     }catch(e){
         console.log(e)
     }
+    return
 }
 
 function lgHandler(res){
     lastprocess=res.paging_token
-    console.log('Last : ' +lastprocess)
+    //console.log('Last : ' +lastprocess)
     let close = new Date(res.closed_at)
     let pre_close = new Date(pre_time)
     // @ts-ignore
@@ -41,7 +47,24 @@ function lgHandler(res){
     date+"',"+
     spend_time+")"
     let string = res.paging_token+" block finished"
-    pool.ex_sql(sql,string)
+    worker+=1
+    pool.ex_sql(sql,string).then(
+        worker-=1
+    )
 }
 
-exports.crawl = block()
+function blockclose(){
+    return new Promise((resolve, reject) => {
+        if(worker == 0){
+            resolve(lastprocess);
+        }else{
+            setTimeout(blockclose,1000)
+        }
+      });
+}
+
+function blockstreamclose(){
+    streamer();
+}
+
+module.exports = {blockclose,blockstreamclose,block};

@@ -12,7 +12,19 @@ const DataConnection = mysql.createPool({
     keepAliveInitialDelay: 0,
     // @ts-ignore
     port: process.env["DB_PORT"]
-});
+});  
+
+const query = async (sql,string=null) => {
+    const connection = mysql.createConnection({
+        host: process.env["DB_HOST"],
+        user: process.env["DB_USERNAME"],
+        password : process.env["DB_PASSWORD"],
+        database : process.env["DB_DATABASE"],
+      });
+    const result = await connection.promise().query(sql);
+    connection.end();
+    return result[0]
+}
 function getConnection(callback) {
     DataConnection.getConnection(function(err, connection) {
         if (err) {
@@ -31,7 +43,7 @@ function ex_sql(sql,string=null){
                 connection.release();
                 if (error) throw error;
                 if(string)
-                console.log(string)
+                //console.log(string)
                 data(results)
             });
         });
@@ -40,4 +52,4 @@ function ex_sql(sql,string=null){
 const disConnection = ()=>{
     DataConnection.end()
 }
-module.exports = { getConnection,ex_sql,disConnection };
+module.exports = { getConnection,ex_sql,disConnection,query };

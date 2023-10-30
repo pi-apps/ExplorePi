@@ -7,17 +7,22 @@ const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['OP_CURSOR'];
 //First cursor is 60129546240(paging_token) 
 let lastprocess
+let streamer,worker
+
 function operation(){
     try{
-        server.operations()
+        worker = 0
+        streamer =server.operations()
         // @ts-ignore
         .cursor(lastCursor)
         .stream({
             onmessage: opHandler
         })
+        console.log('op start')
     }catch(e){
         console.log(e)
     }
+    
 }
 /* type_i
 0:create_account
@@ -43,30 +48,49 @@ function operation(){
 */
 function opHandler(res){
     lastprocess=res.paging_token
-    console.log('Last : ' +lastprocess)
+    //console.log('Last : ' +lastprocess)
     if(res.transaction_successful){
         let sql
         let date = res.created_at.slice(0, 19).replace('T', ' ')
         switch (res.type_i) {
             case 0:
+                sql = "INSERT INTO operation(id,type_i,account,created_at) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"')"
+                let sqecial_sql
                 if(res.funder == 'GABT7EMPGNCQSZM22DIYC4FNKHUVJTXITUF6Y5HNIWPU4GA7BHT4GC5G'){
-                    sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','Pioneer')"
+                    sqecial_sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','Pioneer')"
                 }else{
-                    sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
+                    sqecial_sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
                 }
+                worker+=1
+                pool.ex_sql(sqecial_sql,'addition finish').then(
+                    worker-=1
+                )
                 break;
             case 1:
-                //payment
                 sql = "INSERT INTO operation(id,type_i,account,created_at,amount) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"',"+res.amount+")"
+                //payment
                 break;
             default:
                 sql = "INSERT INTO operation(id,type_i,account,created_at) VALUES ('"+res.paging_token+"',"+res.type_i+",'"+res.source_account+"','"+date+"')"
                 break;
-        }
-        
+        }        
         let string = res.paging_token + ' operation finished'
-         pool.ex_sql(sql,string)
+         worker+=1
+         pool.ex_sql(sql,string).then(
+            worker-=1
+        )
     }    
 }
-
-exports.crawl = operation()
+function operationclose(){
+    return new Promise((resolve, reject) => {
+        if(worker == 0){
+            resolve(lastprocess);
+        }else{
+            setTimeout(operationclose,1000)
+        }
+      });
+}
+function opstreamclose(){
+    streamer();
+}
+module.exports = {operationclose,opstreamclose,operation};
