@@ -39,7 +39,7 @@ export default function Top10({data,lang,transcript}){
                                                 {index===0 ? <td className="px-2 py-4 text-sm font-medium text-yellow-300"><FontAwesomeIcon icon={faCrown}/></td>:<td className="px-2 py-4 text-sm font-medium text-yellow-500">{index+1}</td>}
 
                                                 <td className="px-2 py-4 text-sm font-medium text-gray-900">
-                                                    <Link href={`./${lang}/account/${data.account}`}>
+                                                    <Link href={`/${lang}/account/${data.account}`}>
                                                         <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                                                         {account}
                                                         </span>
@@ -87,7 +87,7 @@ export default function Top10({data,lang,transcript}){
                                                 {index===0 ? <td className="px-2 py-4 text-sm font-medium text-yellow-300"><FontAwesomeIcon icon={faCrown}/></td>:<td className="px-2 py-4 text-sm font-medium text-yellow-500">{index+1}</td>}
 
                                                 <td className="px-2 py-4 text-sm font-medium text-gray-900">
-                                                    <Link href={`./${lang}/account/${data.account}`}>
+                                                    <Link href={`/${lang}/account/${data.account}`}>
                                                         <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                                                         {account}
                                                         </span>
@@ -136,7 +136,7 @@ export default function Top10({data,lang,transcript}){
                                                 {index===0 ? <td className="px-2 py-4 text-sm font-medium text-yellow-300"><FontAwesomeIcon icon={faCrown}/></td>:<td className="px-2 py-4 text-sm font-medium text-yellow-500">{index+1}</td>}
 
                                                 <td className="px-2 py-4 text-sm font-medium text-gray-900">
-                                                    <Link href={`./${lang}/account/${data.account}`}>
+                                                    <Link href={`/${lang}/account/${data.account}`}>
                                                         <span className=" inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-purple-400 text-white rounded-full">
                                                         {account}
                                                         </span>
