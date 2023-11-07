@@ -20,7 +20,7 @@ export default function GetUser({children}){
         
         const scopes = ['payments','username'];
         function onIncompletePaymentFound(payment) { /* ... */ };
-        Pi.init({ version: "2.0",sandbox:true }).catch(
+        Pi.init({ version: "2.0",sandbox:false }).catch(
             browsercode()
         )
         Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
