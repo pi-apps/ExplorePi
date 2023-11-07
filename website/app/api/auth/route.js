@@ -15,7 +15,6 @@ export async function GET(requset) {
     const data = await pi.json()
     const username = await data.username
     const token = await admin.auth().createCustomToken(username)
-    console.log(token)
     return new Response(token, {
         status: 200
       })

@@ -1,18 +1,17 @@
 'use client'
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
-
-import {  useContext } from "react"
-import { BrowserContext } from "app/getuser"
+import Home from "./loadingpi"
 
 export default function Piapp({lang}){
     const router = useRouter()
-    const pimode = useContext(BrowserContext)
-    if(pimode!==null)
-    router.push('./explorer')
+    useEffect(()=>{
+        setTimeout(()=> router.push('./explorer'),5000)
+        
+    },[])
     return(
         <>
-        
+        <Home/>
         </>
     )
 }
