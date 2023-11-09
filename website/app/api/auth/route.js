@@ -15,6 +15,20 @@ export async function GET(requset) {
     const data = await pi.json()
     const username = await data.username
     const token = await admin.auth().createCustomToken(username)
+    const db = admin.firestore();
+    const ref = db.collection('user').doc(data.username);
+    const snapshot = await ref.get();
+    if(!snapshot.exists){
+      let lastcheck = Date.now() - 86400000
+      console.log(lastcheck)
+      ref.set({
+        'lastcheck' : lastcheck,
+        'watchlist' : [],
+        'public_key' : null,
+        'nodelist':[],
+        'point':20,        
+      })
+    }
     return new Response(token, {
         status: 200
       })
