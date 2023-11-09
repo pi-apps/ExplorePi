@@ -5,7 +5,7 @@
       ],
       "target": {
         "namespace": "android_app",
-        "package_name": "net.explorepi.pi.network.explorepi",
+        "package_name": "explorepi.info.explorepi",
         "sha256_cert_fingerprints": [
           "7C:15:86:5D:71:DC:73:85:38:9C:3A:90:B4:84:B3:08:33:42:0E:19:E6:31:B3:64:95:7C:3F:ED:23:B1:84:E4"
         ]
