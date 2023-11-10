@@ -1,0 +1,43 @@
+.balance{
+    background-image: linear-gradient(to top, #96fbc4 0%, #f9f586 100%);
+}
+.subentry{
+    background-image: linear-gradient(to bottom, #ffecd2 0%, #fcb69f 100%);   
+}
+.lock{
+    background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+}
+.lastactive{
+    background-image: linear-gradient(to bottom, #f6f3ff -20%, #cd9cf2 100%);
+}
+.balance_block{
+    font-size: large;
+    color: #694e05;
+}
+.subentry_block{
+    color: rgba(87, 133, 66, 0.918);
+}
+.last_block{
+    color: rgba(235, 86, 118, 0.918);
+    font-size: large;
+}
+.lock_block{
+    color: rgba(11, 154, 236, 0.918);
+    font-size: large;
+}
+.balance_icon{
+    color: goldenrod;
+    font-size: large;
+}
+.subentry_icon{
+    color: rgb(45, 48, 230);
+    font-size: large;
+}
+.lastactive_icon{
+    color: rgb(117, 7, 241);
+    font-size: large;
+}
+.lock_icon{
+    color: rgb(31, 9, 14);
+    font-size: large;
+}
