@@ -7,7 +7,7 @@ const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['LEDGER_CURSOR'];
 
 //First cursor is 8589934592(paging_token) 
-let pre_time = "2020-12-31T22:47:31Z"
+let pre_time = process.env['pre_time']//"2020-12-31T22:47:31Z"
 let lastprocess
 let streamer,worker
 
