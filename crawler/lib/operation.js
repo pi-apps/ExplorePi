@@ -62,7 +62,9 @@ function opHandler(res){
                     sqecial_sql ="INSERT INTO Account(public_key,balance,created_at,Role) VALUES ('"+res.account+"',"+res.starting_balance+",'"+date+"','CoreTeam')"
                 }
                 worker+=1
+                // @ts-ignore
                 pool.ex_sql(sqecial_sql,'addition finish').then(
+                    // @ts-ignore
                     worker-=1
                 )
                 break;
@@ -76,12 +78,15 @@ function opHandler(res){
         }        
         let string = res.paging_token + ' operation finished'
          worker+=1
+         // @ts-ignore
          pool.ex_sql(sql,string).then(
+            // @ts-ignore
             worker-=1
         )
     }    
 }
 function operationclose(){
+    // @ts-ignore
     return new Promise((resolve, reject) => {
         if(worker == 0){
             resolve(lastprocess);

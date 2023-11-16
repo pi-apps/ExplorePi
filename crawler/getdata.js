@@ -5,79 +5,80 @@ const schedule = require('node-schedule');
 const readline = require('node:readline');
 const { stdin: input, stdout: output } = require('node:process');
 
+const docRef = db.collection('statistic').doc('data');
+
 async function getTop10(){
     let result = await pool.query(`SELECT account,(balance-totalfee.total) as balance FROM explorepi.Account 
     INNER JOIN (SELECT sum(amount) as total,account FROM explorepi.fee group by account order by total desc) as totalfee ON  Account.public_key = totalfee.account
     where Role <> 'CoreTeam' OR Role is null
     order by balance desc LIMIT 0, 10`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'top10':result})
 }
 async function getblocktime(){
     let result = await pool.query(`SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as x,avg(spend) as y,sum(operation) as op FROM explorepi.block group by DATE_FORMAT(created_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'blocktime':result})
 }
 async function getblocktimeMonth(){
     let result = await pool.query(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,avg(spend) as y,sum(operation) as op FROM explorepi.block group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'blocktimeMonth':result})
 }
 async function getTop10payment(){
     let result = await pool.query(`SELECT count(*) as count,account FROM explorepi.operation where type_i=1 group by account order by count desc LIMIT 0, 10;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'top10payment':result})
 }
 async function getTop10fee(){
     let result = await pool.query(`SELECT sum(amount) as total,account FROM explorepi.fee group by account order by total desc LIMIT 0, 10;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'top10fee':result})
 }
 async function getopdistribute(){
     let result = await pool.query(`SELECT count(*) as total,type_i as op FROM explorepi.operation group by type_i;`)
-    result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'opdistribute':result})
 }
 async function getclaimed(){
     let result = await pool.query(`SELECT DATE_FORMAT(claimed_at, '%Y-%m-%d') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'claimed':result})
 }
 async function getclaimedback(){
     let result = await pool.query(`SELECT DATE_FORMAT(claimed_at, '%Y-%m-%d') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'claimedback':result})
 }
 async function getclaimanthistory(){
     let result = await pool.query(`SELECT DATE_FORMAT(created_at, '%Y-%m-%d') as x,count(*) as y FROM explorepi.claimant group by DATE_FORMAT(created_at, '%Y-%m-%d') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'createclaimant':result})
 }
 async function getclaimedMonth(){
     let result = await pool.query(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=1 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'claimedMonth':result})
 }
 async function getclaimedbackMonth(){
     let result = await pool.query(`SELECT DATE_FORMAT(claimed_at, '%Y-%m') as x,count(*) as y FROM explorepi.claimant where claimed_at is not null and status=2 group by DATE_FORMAT(claimed_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'claimedbackMonth':result})
 }
 async function getclaimanthistoryMonth(){
     let result = await pool.query(`SELECT DATE_FORMAT(created_at, '%Y-%m') as x,count(*) as y FROM explorepi.claimant group by DATE_FORMAT(created_at, '%Y-%m') order by x asc;`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'createclaimantMonth':result})
 }
 
 async function getlockupperiod(){
     let result = await pool.query(`SELECT count(case when a.period=1209600 then 1 else null end) as no_lock, count(case when a.period>1209600 and a.period<=2419200 then 1 else null end) as twoweek, count(case when a.period>2419200 and a.period<=18187200 then 1 else null end) as sixmonths, count(case when a.period>18187200 and a.period<=33976800 then 1 else null end) as oneyear, count(case when a.period>33976800 then 1 else null end) as threeyear from(SELECT account,max(lock_time) as period FROM explorepi.claimant group by account) as a`)
     result = await JSON.parse(JSON.stringify(result))
-    return result
+    docRef.update({'lockuptime':result})
 }
 async function getmetric(){
     let result = await pool.query(`SELECT a.a as TotalAccount,b.a as TotalPi,c.a as TotalClaim,b.a-c.a as TotalLock from(SELECT count(*) as a FROM explorepi.Account)as a,(SELECT sum(amount) as a FROM explorepi.claimant where status<>2) as b,(SELECT sum(amount) as a FROM explorepi.claimant where status=1)as c`)
     result = await JSON.parse(JSON.stringify(result))
-    return result[0]
+    docRef.update({'metric':result[0]})
 }
 async function getdailymetric(){
     let active = await pool.query(`select count(a.account) as dailyactive from(SELECT account FROM explorepi.operation where created_at > now() - interval 24 hour group by account) as a`)
@@ -95,48 +96,55 @@ async function getdailymetric(){
         payamount:pay[0].dailypipay,
         op:op[0].a
     }
-    return result
+    docRef.update({'daily':result})
+}
+async function getunlocknotclaimed(){
+    let result = await pool.query(`SELECT sum(amount) as a FROM explorepi.claimant where unlock_time < now() and status = 0`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'unlocknotclaimed':result[0].a})
+}
+async function getavailablepi(){
+    let result = await pool.query(`SELECT sum(balance) as a FROM explorepi.Account;`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'availablepi':result[0].a})
+}
+async function getfutureunlock(){
+    let result = await pool.query(`SELECT DATE_FORMAT(unlock_time, '%Y-%m-%d') as x,count(*) as y,sum(amount) as amount FROM explorepi.claimant where unlock_time > now() group by DATE_FORMAT(unlock_time, '%Y-%m-%d') order by x asc`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'futureUnlock':result})
+}
+async function getfutureunlock(){
+    let result = await pool.query(`SELECT DATE_FORMAT(unlock_time, '%Y-%m') as x,count(*) as y,sum(amount) as amount FROM explorepi.claimant where unlock_time > now() group by DATE_FORMAT(unlock_time, '%Y-%m') order by x asc`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'futureUnlock':result})
 }
 async function statistic(){
-    let top10 = await getTop10()
-    let blocktime = await getblocktime() 
-    let top10payment = await getTop10payment()
-    let top10fee = await getTop10fee()
-    let opdistribute = await getopdistribute()
-    let claimed = await getclaimed()
-    let claimedback = await getclaimedback()
-    let createclaimant = await getclaimanthistory()
-    let claimedMonth = await getclaimedMonth()
-    let claimedbackMonth = await getclaimedbackMonth()
-    let createclaimantMonth = await getclaimanthistoryMonth()
-    let blocktimeMonth = await getblocktimeMonth()
-    let lockuptime = await getlockupperiod()
-    let metric = await getmetric()
-    let daily = await getdailymetric()
-    const docRef = db.collection('statistic').doc('data');
-    await docRef.set({
-        top10: top10,
-        blocktime:blocktime,
-        blocktimeMonth:blocktimeMonth,
-        top10payment:top10payment,
-        top10fee:top10fee,
-        opdistribute:opdistribute,
-        claimed:claimed,
-        claimedback:claimedback,
-        claimedMonth:claimedMonth,
-        claimedbackMonth:claimedbackMonth,
-        createclaimantMonth:createclaimantMonth,
-        createclaimant:createclaimant,
-        lockuptime:lockuptime,
-        metric:metric,
-        daily:daily,
+    getTop10()
+    getblocktime() 
+    getTop10payment()
+    getTop10fee()
+    getopdistribute()
+    getclaimed()
+    getclaimedback()
+    getclaimanthistory()
+    getclaimedMonth()
+    getclaimedbackMonth()
+    getclaimanthistoryMonth()
+    getblocktimeMonth()
+    getlockupperiod()
+    getmetric()
+    getdailymetric()
+    getunlocknotclaimed()
+    getavailablepi()
+    getfutureunlock()
+    docRef.update({
         timestamp: Date.now()
         });
 }
 
 const start = () => {
     console.log('Getdata start')
-    const job = schedule.scheduleJob('0 0 * * *', function(){
+    const job = schedule.scheduleJob('0 * * * *', function(){
         statistic()
     });
 

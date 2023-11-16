@@ -5,6 +5,7 @@ initializeApp({
   credential: cert({
     projectId: process.env["FIRESTOREID"],
     clientEmail: process.env["FIRESTORE_EMAIL"],
+    // @ts-ignore
     privateKey: process.env["FIRESTORE_KEY"].replace(/\\n/g, '\n'),
   })
 });

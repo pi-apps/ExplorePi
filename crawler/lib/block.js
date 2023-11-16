@@ -7,7 +7,7 @@ const server = new StellarSdk.Server(horizon);
 let lastCursor=process.env['LEDGER_CURSOR'];
 
 //First cursor is 8589934592(paging_token) 
-let pre_time = "2020-12-31T22:47:31Z"
+let pre_time =  process.env['pre_time'];
 let lastprocess
 let streamer,worker
 
@@ -32,6 +32,7 @@ function lgHandler(res){
     lastprocess=res.paging_token
     //console.log('Last : ' +lastprocess)
     let close = new Date(res.closed_at)
+    // @ts-ignore
     let pre_close = new Date(pre_time)
     // @ts-ignore
     let spend_time = (close - pre_close)/1000
@@ -48,12 +49,15 @@ function lgHandler(res){
     spend_time+")"
     let string = res.paging_token+" block finished"
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
 
 function blockclose(){
+    // @ts-ignore
     return new Promise((resolve, reject) => {
         if(worker == 0){
             resolve(lastprocess);

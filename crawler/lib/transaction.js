@@ -33,12 +33,15 @@ function txHandler(res){
         let sql = "INSERT INTO fee(id,created_at,account,amount) VALUES ('"+res.paging_token+"','"+date+"','"+res.source_account+"',"+amount+")"
         let string = res.paging_token + ' transaction finished'
         worker+=1
+        // @ts-ignore
         pool.ex_sql(sql,string).then(
+            // @ts-ignore
             worker-=1
         )
     }    
 }
 function txclose(){
+    // @ts-ignore
     return new Promise((resolve, reject) => {
         if(worker == 0){
             resolve(lastprocess);

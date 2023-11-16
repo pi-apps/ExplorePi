@@ -35,7 +35,9 @@ function credit_sql(res){
     }
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -48,7 +50,9 @@ function debit_sql(res){
     }
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -56,7 +60,9 @@ function removed_account(res){
     let sql = "DELETE FROM account WHERE public_key= '"+ res.account +"'"
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -64,7 +70,9 @@ function lock_sql(res){
     let sql = "UPDATE Account SET lock=1 WHERE public_key = '"+ res.account +"'"
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -73,7 +81,9 @@ function trustline_create_sql(res){
     let sql = "INSERT INTO asset(public_key,asset_code,asset_issuer,created_at) VALUES ('"+res.account+"','"+res.asset_code+"','"+res.asset_issuer+"','"+date+"')"
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -82,7 +92,9 @@ function trustline_remove_sql(res){
     let sql = "UPDATE asset SET removed = 1 ,removed_at = '"+date+"' WHERE id = (SELECT MIN(id) FROM asset WHERE public_key = '"+res.account+"' AND asset_code = '"+res.asset_code+"' AND asset_issuer = '"+res.asset_issuer+"' AND removed = 0)"
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -91,7 +103,9 @@ function claimable_balance_create_sql(res){
     let sql = "INSERT INTO claimant(id,created_at,amount) VALUES ('"+res.balance_id+"','"+date+"',"+res.amount+") ON DUPLICATE KEY UPDATE created_at=VALUES(created_at),amount=VALUES(amount)"
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -100,11 +114,14 @@ function claimant_create_sql(res){
     let date = new Date(res.created_at)
     let unlock_time = date.getSeconds() + lock_time
     date.setSeconds(unlock_time)
+    // @ts-ignore
     unlock_time = date.toISOString().slice(0, 19).replace('T', ' ')
     let sql = "INSERT INTO claimant(id,account,lock_time,unlock_time) VALUES ('"+res.balance_id+"','"+res.account+"',"+lock_time+",'"+unlock_time+"') ON DUPLICATE KEY UPDATE account=VALUES(account),lock_time=VALUES(lock_time),unlock_time=VALUES(unlock_time)"
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -119,7 +136,9 @@ function claim_claimant(res){
     }
     let string = res.paging_token + ' effect finished'
     worker+=1
+    // @ts-ignore
     pool.ex_sql(sql,string).then(
+        // @ts-ignore
         worker-=1
     )
 }
@@ -180,6 +199,7 @@ const effectHandler = function (effResponse) {
 }
 
 function effectclose() {
+    // @ts-ignore
     return new Promise((resolve, reject) => {
     if(worker == 0){
         resolve(lastprocess);
