@@ -113,6 +113,11 @@ async function getfutureunlock(){
     result = await JSON.parse(JSON.stringify(result))
     docRef.update({'futureUnlock':result})
 }
+async function getfutureunlockMonth(){
+    let result = await pool.query(`SELECT DATE_FORMAT(unlock_time, '%Y-%m') as x,count(*) as y,sum(amount) as amount FROM explorepi.claimant where unlock_time > now() group by DATE_FORMAT(unlock_time, '%Y-%m') order by x asc`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'futureUnlockMonth':result})
+}
 async function statistic(){
     getTop10()
     getblocktime() 
@@ -132,6 +137,7 @@ async function statistic(){
     getunlocknotclaimed()
     getavailablepi()
     getfutureunlock()
+    getfutureunlockMonth()
     docRef.update({
         timestamp: Date.now()
         });
