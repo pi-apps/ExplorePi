@@ -15,7 +15,7 @@ export default function PersonalPage(){
             }
         )
         let token = await res.text()
-        window.Pi.openUrlInSystemBrowser('https://explorepi.info/login?token='+token)
+        window.Pi.openUrlInSystemBrowser('explorepi://explorepi.info/login?token='+token)
         
     }
     if(pimode.pimode.user.username == '0205miss')
