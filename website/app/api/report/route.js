@@ -1,6 +1,6 @@
 import admin from "lib/database";
 
-export async function POST() {
+export async function POST(request) {
     const res = await request.json()
     const db = admin.firestore();
     const ref = db.collection('report').doc(res.account);
