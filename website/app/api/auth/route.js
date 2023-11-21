@@ -24,7 +24,7 @@ export async function GET(requset) {
       ref.set({
         'lastcheck' : lastcheck,
         'watchlist' : [],
-        'public_key' : null,
+        'public_key' : '',
         'nodelist':[],
         'point':20,        
       })
