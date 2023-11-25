@@ -8,6 +8,7 @@ export const BrowserContext = createContext()
 
 export default function GetUser({children}){
     const [pimode,setpimode] = useState(null)
+    const [piglobal,setpiglobal] = useState(null)
     const PiError = () =>{
         setpimode(0)
     }
@@ -20,11 +21,13 @@ export default function GetUser({children}){
         
         const scopes = ['payments','username'];
         function onIncompletePaymentFound(payment) { /* ... */ };
-        Pi.init({ version: "2.0",sandbox:false }).catch(
+        Pi.init({ version: "2.0",sandbox:process.env['NEXT_PUBLIC_SANDBOX']=='true'?true:false }).catch(
             browsercode()
         )
+        console.log(Pi);
+        setpiglobal(Pi)
         Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
-            console.log(auth);
+            
             setpimode(auth)
           }).catch(function(error) {
             console.error('error');
@@ -33,7 +36,7 @@ export default function GetUser({children}){
     return(
         <>
             <Script src="https://sdk.minepi.com/pi-sdk.js" onLoad={piinit} onError={PiError}/>
-            <BrowserContext.Provider value={{pimode:pimode}}>
+            <BrowserContext.Provider value={{pimode:pimode,pi:piglobal}}>
             {children}
             </BrowserContext.Provider>            
         </>

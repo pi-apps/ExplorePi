@@ -1,19 +1,21 @@
 'use client'
-import {  useContext } from "react"
-import { BrowserContext } from "app/getuser"
+import {  useEffect, useState } from "react"
 import Home from "app/loadingpi"
 
 
 export default function GetUser({pibrowser,desktop,params:{lang}}){
+    const [device,setdevice] = useState(null)
+    useEffect(()=>{
+        if(window.navigator.userAgent.toLowerCase().includes('pibrowser')){
+            setdevice('pibrowser')
+        }else{
+            setdevice('desktop')
+        }
+    },[])
 
-    const pimode = useContext(BrowserContext)
-    console.log('test3 '+pimode.pimode)
-    if(pimode.pimode==null)
-    return <Home/>
-    
     return(
         <>
-            {pimode.pimode===0 ?  desktop : pibrowser} 
+            {device == null ? <Home/> : device=='pibrowser' ?  pibrowser : desktop} 
         </>
     )
 }
