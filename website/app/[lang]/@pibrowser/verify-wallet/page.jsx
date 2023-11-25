@@ -53,7 +53,7 @@ export default function Page({params:{lang}}){
                       body: JSON.stringify({pid: paymentId,txid:txid})
                     }
                   )
-                  window.Pi.openUrlInSystemBrowser('explorepi://explorepi.info')
+                  window.Pi.openUrlInSystemBrowser('explorepi://explorepi.info?page=2')
                 },
                 onCancel: function(paymentId) { /* ... */ },
                 onError: function(error, payment) { /* ... */ },
