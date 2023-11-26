@@ -5,6 +5,7 @@ export async function POST(request) {
     const db = admin.firestore();
     const ref = db.collection('user').doc(res.username);
     const doc = await ref.get();
+    console.log(`${res.username}+${doc.token}+${res.token}+${res.ip}`)
     if(doc.token == res.token){
         await ref.update(
             {
