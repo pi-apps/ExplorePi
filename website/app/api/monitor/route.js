@@ -8,7 +8,7 @@ export async function POST(request) {
     if(doc.data().token == res.token){
         await ref.update(
             {
-                nodelist:FieldValue.arrayUnion(res.ip)
+                nodelist:admin.firestore.FieldValue.arrayUnion(res.ip)
             }
         )
         const check = await db.collection('monitor').doc(res.ip).get();
