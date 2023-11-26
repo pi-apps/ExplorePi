@@ -8,7 +8,7 @@ export async function POST(request) {
     let obj = {}
     const ref2 = db.collection('user').doc(res.username);
     const doc = await ref2.get();
-    if(doc.token == res.token){
+    if(doc.data().token == res.token){
         obj[username] = {
             'reason':res.reason,
             'time': Date.now()
