@@ -1,6 +1,6 @@
 var mysql = require('mysql2');
 const DataConnection = mysql.createPool({
-    connectionLimit : 100,
+    connectionLimit : 20,
     host     : process.env["DB_HOST"],
     user     : process.env["DB_USERNAME"],
     password : process.env["DB_PASSWORD"],
