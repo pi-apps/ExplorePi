@@ -11,7 +11,10 @@ export default function NewsPage({firstlogin='visible'}) {
 const closemodal = () =>{
     setvis('hidden')
 }
-
+const authcheck =async () =>{
+  window.Pi.openUrlInSystemBrowser('https://play.google.com/store/apps/details?id=net.explorepi.pi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1')
+  
+}
   return (
     <>
       <section className={vis + " fixed w-screen h-screen z-50"}>
@@ -50,7 +53,7 @@ const closemodal = () =>{
                 <li>More Statistic</li>
               </menu>
               <div className="px-10">
-                <a href="https://play.google.com/store/apps/details?id=net.explorepi.pi&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
+                <a onClick={authcheck}>
                   <img
                     alt="Get it on Google Play"
                     src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"

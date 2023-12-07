@@ -118,7 +118,11 @@ async function getfutureunlockMonth(){
     result = await JSON.parse(JSON.stringify(result))
     docRef.update({'futureUnlockMonth':result})
 }
-
+async function getoneyearunclaimed(){
+    let result = await pool.query(`SELECT sum(amount) as a FROM explorepi.claimant where status = 0 and unlock_time< date_sub(now(),INTERVAL 1 YEAR)`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'oneyearunclaimed':result[0].a})
+}
 
 
 async function statistic(){
@@ -141,6 +145,7 @@ async function statistic(){
     getavailablepi()
     getfutureunlock()
     getfutureunlockMonth()
+    getoneyearunclaimed()
     docRef.update({
         timestamp: Date.now()
         });
