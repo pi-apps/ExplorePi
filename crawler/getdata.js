@@ -76,7 +76,7 @@ async function getlockupperiod(){
     docRef.update({'lockuptime':result})
 }
 async function getmetric(){
-    let result = await pool.query(`SELECT a.a as TotalAccount,b.a as TotalPi,c.a as TotalClaim,b.a-c.a as TotalLock from(SELECT count(*) as a FROM explorepi.Account)as a,(SELECT sum(amount) as a FROM explorepi.claimant where status<>2) as b,(SELECT sum(amount) as a FROM explorepi.claimant where status=1)as c`)
+    let result = await pool.query(`SELECT a.a as TotalAccount,b.a as TotalPi,c.a as TotalClaim,b.a-c.a as TotalLock,d.a as TotalPioneer from(SELECT count(*) as a FROM explorepi.Account)as a,(SELECT sum(amount) as a FROM explorepi.claimant where status<>2) as b,(SELECT sum(amount) as a FROM explorepi.claimant where status=1)as c,(SELECT count(distinct account) as a FROM explorepi.claimant)as d`)
     result = await JSON.parse(JSON.stringify(result))
     docRef.update({'metric':result[0]})
 }
@@ -104,7 +104,7 @@ async function getunlocknotclaimed(){
     docRef.update({'unlocknotclaimed':result[0].a})
 }
 async function getavailablepi(){
-    let result = await pool.query(`SELECT sum(balance) as a FROM explorepi.Account;`)
+    let result = await pool.query(`SELECT (a.a - b.a) AS a FROM (SELECT SUM(balance) AS a FROM explorepi.Account )AS a,(SELECT SUM(amount) AS a FROM explorepi.fee AS b)AS b`)
     result = await JSON.parse(JSON.stringify(result))
     docRef.update({'availablepi':result[0].a})
 }
@@ -118,6 +118,13 @@ async function getfutureunlockMonth(){
     result = await JSON.parse(JSON.stringify(result))
     docRef.update({'futureUnlockMonth':result})
 }
+async function getoneyearunclaimed(){
+    let result = await pool.query(`SELECT sum(amount) as a FROM explorepi.claimant where status = 0 and unlock_time< date_sub(now(),INTERVAL 1 YEAR)`)
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'oneyearunclaimed':result[0].a})
+}
+
+
 async function statistic(){
     getTop10()
     getblocktime() 
@@ -138,6 +145,7 @@ async function statistic(){
     getavailablepi()
     getfutureunlock()
     getfutureunlockMonth()
+    getoneyearunclaimed()
     docRef.update({
         timestamp: Date.now()
         });

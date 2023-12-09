@@ -1,7 +1,7 @@
 import admin from "lib/database";
 import { headers } from 'next/headers'
 
-export async function GET(requset) {
+export async function GET() {
     const headersList = headers()
     const client_t = headersList.get('Authorization')
     
@@ -24,7 +24,7 @@ export async function GET(requset) {
       ref.set({
         'lastcheck' : lastcheck,
         'watchlist' : [],
-        'public_key' : null,
+        'public_key' : '',
         'nodelist':[],
         'point':20,        
       })
