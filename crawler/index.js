@@ -55,9 +55,8 @@ const start = async () => {
       // TODO: Log the answer in a database
       if (answer === 'q'){
         stop()
-      }
-      rl.close();
-      
+        rl.close();
+      }      
     });
 }
 
