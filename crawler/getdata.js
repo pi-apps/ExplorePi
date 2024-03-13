@@ -1,3 +1,4 @@
+// @ts-nocheck
 require('dotenv').config()
 const pool = require('./lib/database');
 const {db} = require('./lib/firestore')
@@ -123,29 +124,34 @@ async function getoneyearunclaimed(){
     result = await JSON.parse(JSON.stringify(result))
     docRef.update({'oneyearunclaimed':result[0].a})
 }
-
+async function getholderrank(){
+    let result = await pool.query("select case when balance >= 0 and balance <= 1 then '0-1' when balance > 1 and balance <= 10 then '1-10' when balance > 10 and balance <= 100 then '10-100' when balance > 100 and balance <= 500 then '100-500' when balance > 500 and balance <= 1000 then '500-1,000' when balance > 1000 and balance <= 5000 then '1,000-5,000' when balance > 5000 and balance <= 10000 then '5,000-10,000' when balance > 10000 and balance <= 100000 then '10,000-100,000' when balance > 100000 and balance <= 1000000 then '100,000-1,000,000' else '>1,000,000' end as 'range', count(*) as `result` from Account where Role = 'Pioneer' group by `range` order by `range`")
+    result = await JSON.parse(JSON.stringify(result))
+    docRef.update({'rank':result})
+}
 
 async function statistic(){
-    getTop10()
-    getblocktime() 
-    getTop10payment()
-    getTop10fee()
-    getopdistribute()
-    getclaimed()
-    getclaimedback()
-    getclaimanthistory()
-    getclaimedMonth()
-    getclaimedbackMonth()
-    getclaimanthistoryMonth()
-    getblocktimeMonth()
-    getlockupperiod()
-    getmetric()
-    getdailymetric()
-    getunlocknotclaimed()
-    getavailablepi()
-    getfutureunlock()
-    getfutureunlockMonth()
-    getoneyearunclaimed()
+    await getTop10()
+    await getblocktime() 
+    await getTop10payment()
+    await getTop10fee()
+    await getopdistribute()
+    await getclaimed()
+    await getclaimedback()
+    await getclaimanthistory()
+    await getclaimedMonth()
+    await getclaimedbackMonth()
+    await getclaimanthistoryMonth()
+    await getblocktimeMonth()
+    await getlockupperiod()
+    await getmetric()
+    await getdailymetric()
+    await getunlocknotclaimed()
+    await getavailablepi()
+    await getfutureunlock()
+    await getfutureunlockMonth()
+    await getoneyearunclaimed()
+    await getholderrank()
     docRef.update({
         timestamp: Date.now()
         });
@@ -153,6 +159,7 @@ async function statistic(){
 
 const start = () => {
     console.log('Getdata start')
+    statistic()
     const job = schedule.scheduleJob('0 * * * *', function(){
         statistic()
     });

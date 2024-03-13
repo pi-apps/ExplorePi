@@ -6,12 +6,11 @@ import Home from "./loadingpi"
 export default function Piapp({lang}){
     const router = useRouter()
     useEffect(()=>{
-        setTimeout(()=> router.push('./explorer'),5000)
+        router.push('./explorer')
         
     },[])
     return(
         <>
-        <Home/>
         </>
     )
 }

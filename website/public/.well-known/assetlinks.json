@@ -13,5 +13,17 @@
         "6F:2B:B5:FB:CA:19:D6:6B:4E:D6:C6:C0:C7:12:8F:44:C0:F8:4C:B2:53:9D:77:C2:BF:D2:B8:AB:4C:B2:96:B6"
       ]
     }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "explorepi.info",
+      "sha256_cert_fingerprints": [
+        "E1:67:C5:EC:C1:3F:23:94:4C:1A:6E:C2:29:F9:F2:F6:F0:97:53:41:CA:5E:42:B3:84:65:7E:93:93:E3:86:B6"
+      ]
+    }
   }
 ]

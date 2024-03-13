@@ -2,11 +2,11 @@
 import getago from "lib/time";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Server } from "stellar-sdk";
+import { Horizon } from "stellar-sdk";
 import TableLoading from "./tableloading";
 
 export default function Block({lang,transcript,time}){
-    const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const server = new Horizon.Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [block10,setblock10] = useState(null)
     useEffect(()=>{
         server.ledgers()

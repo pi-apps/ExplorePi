@@ -1,5 +1,5 @@
 'use client'
-import { Server } from "stellar-sdk"
+import { Horizon } from "stellar-sdk"
 import { useEffect, useState } from "react"
 import styles from './styles.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -13,7 +13,7 @@ import { toast, ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function AccountDashboard({transcript,time,account}){
-    const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const server = new Horizon.Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [weight,setweight] = useState(0)
     const [claimablebalance,setclaimablebalance] = useState(0.0000000)
     const [balance,setbalance] = useState(0)
