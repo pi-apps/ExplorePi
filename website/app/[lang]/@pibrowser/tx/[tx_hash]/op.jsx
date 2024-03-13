@@ -1,10 +1,10 @@
 'use client'
 import { useEffect, useState } from "react"
 import { formatTrans } from "lib/translate"
-import { Server } from "stellar-sdk"
+import { Horizon } from "stellar-sdk"
 import Link from "next/link"
 export default function Operation({lang,tx_hash,transcript}){
-    const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const server = new Horizon.Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [data,setdata] = useState(null)
     useEffect(()=>{
         server.operations()

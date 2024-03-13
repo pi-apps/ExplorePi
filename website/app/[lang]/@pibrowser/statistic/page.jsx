@@ -125,7 +125,9 @@ export default async function StatisticPage({params:{lang}}){
             <div className="w-full">
                 <Block data={dataobj} transcript={transcript.statistic.Block}/>
             </div>
-
+            <div className="w-full">
+                <LockTime data={dataobj} transcript={transcript.statistic.LockUP}/>
+            </div>
 
         </div>        
         </>

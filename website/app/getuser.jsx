@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, createContext } from "react"
+import { useState, createContext, useEffect } from "react"
 import Script from "next/script"
+import Home from "./loadingpi"
 
 
 export const BrowserContext = createContext()
@@ -9,20 +10,21 @@ export const BrowserContext = createContext()
 export default function GetUser({children}){
     const [pimode,setpimode] = useState(null)
     const [piglobal,setpiglobal] = useState(null)
-    const PiError = () =>{
-        setpimode(0)
-    }
-    const browsercode = () =>{
-        if(pimode===0)return
-        setpimode(0)
-        return
-    }
+    useEffect(() => {
+        if (
+          window.location.ancestorOrigins[0] == "https://sandbox.minepi.com" ||
+          window.location.ancestorOrigins[0] == "https://app-cdn.minepi.com"
+        ) {
+            setpimode(true);
+        } else {
+            setpimode(false);
+        }
+      }, []);
     const piinit = () =>{
         
         const scopes = ['payments','username'];
         function onIncompletePaymentFound(payment) { /* ... */ };
         Pi.init({ version: "2.0",sandbox:process.env['NEXT_PUBLIC_SANDBOX']=='true'?true:false }).catch(
-            browsercode()
         )
         console.log(Pi);
         setpiglobal(Pi)
@@ -33,12 +35,24 @@ export default function GetUser({children}){
             console.error('error');
           });
     }
-    return(
-        <>
-            <Script src="https://sdk.minepi.com/pi-sdk.js" onLoad={piinit} onError={PiError}/>
-            <BrowserContext.Provider value={{pimode:pimode,pi:piglobal}}>
-            {children}
-            </BrowserContext.Provider>            
-        </>
-    )
+    if(!pimode){
+        return(
+                <BrowserContext.Provider value={{pimode,pi:piglobal}}>
+                {children}
+                </BrowserContext.Provider>            
+
+        )
+    }else if(pimode){
+        return(
+            <>
+                <Script src="https://sdk.minepi.com/pi-sdk.js" onLoad={piinit}/>
+                <BrowserContext.Provider value={{pimode:pimode,pi:piglobal}}>
+                {children}
+                </BrowserContext.Provider>            
+            </>
+        )
+    }else{
+        return <Home/>
+    }
+    
 }

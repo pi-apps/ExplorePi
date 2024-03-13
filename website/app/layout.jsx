@@ -12,6 +12,8 @@ export default function RootLayout({ children,params }) {
     <html lang={params.lang}>
       <Head />
       <body>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3524983749365405"
+     crossorigin="anonymous"></script>
         <GetUser>
           {children}
         </GetUser>        

@@ -1,12 +1,12 @@
 'use client'
 import getago from "lib/time";
 import { useEffect, useState } from "react";
-import { Server } from "stellar-sdk";
+import { Horizon } from "stellar-sdk";
 import TableLoading from "./tableloading";
 import Link from "next/link";
 
 export default function Transaction({transcript,time,lang}){
-    const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const server = new Horizon.Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
     const [transaction,settransaction] = useState(null)
     useEffect(()=>{
         server.transactions()
