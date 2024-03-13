@@ -6,7 +6,7 @@ export default function Head() {
       <meta name="description" content="A novel, improved, and mobile friendly block explorer for the Pi blockchain made by Pioneers for Pioneers" />
       <link rel="icon" href="/favicon.ico" />
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3524983749365405"
-     crossorigin="anonymous"></script>
+     crossOrigin="anonymous"></script>
     </>
   )
 }

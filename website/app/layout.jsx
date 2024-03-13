@@ -13,7 +13,7 @@ export default function RootLayout({ children,params }) {
       <Head />
       <body>
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3524983749365405"
-     crossorigin="anonymous"></script>
+     crossOrigin="anonymous"></script>
         <GetUser>
           {children}
         </GetUser>        
