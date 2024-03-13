@@ -34,7 +34,7 @@ export default function SideBar({lang}){
                 </Sidebar.ItemGroup>
 
                 <Sidebar.ItemGroup>
-                    <p className=" font-semibold uppercase">Explorer<span className=" font-mono mt-0 font-normal normal-case tracking-tighter text-xs">(Development)</span></p>
+                    <p className=" font-semibold uppercase">Explorer<span className=" font-mono mt-0 font-normal normal-case tracking-tighter text-xs">(ComingSoon)</span></p>
                     <Sidebar.Item href={'/'+lang+'/block'} className=' pointer-events-none bg-slate-300'>
                     <FontAwesomeIcon icon={faCubes} />
                     <span className="ml-2">Block</span>
@@ -50,10 +50,10 @@ export default function SideBar({lang}){
                 </Sidebar.ItemGroup>
 
                 <Sidebar.ItemGroup>
-                    <p className=" font-semibold uppercase">Dashboard<span className=" font-mono mt-0 font-normal normal-case tracking-tighter text-xs">(Development)</span></p>
+                    <p className=" font-semibold uppercase">Dashboard</p>
                     
                     <Sidebar.Item
-                    href={'/'+lang+'/network'} className=' pointer-events-none bg-slate-300'
+                    href={'/'+lang+'/network'}
                     >
                     <FontAwesomeIcon icon={faNetworkWired} />
                     <span className="ml-2">Network</span>
@@ -65,7 +65,7 @@ export default function SideBar({lang}){
                     <span className="ml-2">Migration</span>
                     </Sidebar.Item>
                     <Sidebar.Item
-                    href={'/'+lang+'/activity'} className=' pointer-events-none bg-slate-300'
+                    href={'/'+lang+'/activity'}
                     >
                     <FontAwesomeIcon icon={faUsers} />
                     <span className="ml-2">Activity</span>
