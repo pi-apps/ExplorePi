@@ -24,8 +24,6 @@
     "eslint": "8.31.0",
     "eslint-config-next": "^14.0.0",
     "firebase-admin": "^11.5.0",
-    "flowbite": "^1.6.2",
-    "flowbite-react": "^0.3.8",
     "framer-motion": "^11.0.12",
     "luxon": "^3.2.1",
     "negotiator": "^0.6.3",
@@ -36,8 +34,7 @@
     "react-timeago": "^7.1.0",
     "react-toastify": "^9.1.1",
     "server-only": "^0.0.1",
-    "stellar-sdk": "^11.2.2",
-    "tw-elements": "^1.0.0-alpha13"
+    "stellar-sdk": "^11.2.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
