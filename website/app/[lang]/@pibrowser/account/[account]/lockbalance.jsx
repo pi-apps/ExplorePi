@@ -1,12 +1,12 @@
 'use client'
 import { Button } from "flowbite-react";
 import { useState,useEffect } from "react";
-import { Server } from "stellar-sdk"
+import { Horizon } from "stellar-sdk"
 
 export default function LockBalance({transcript,account}){
     const [load,setload] = useState(null)
     const [data,setdata] = useState(null)
-    const server = new Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
+    const server = new Horizon.Server(process.env['NEXT_PUBLIC_HORIZON_SERVER'])
 
     useEffect(()=>{
         if(!account)return
