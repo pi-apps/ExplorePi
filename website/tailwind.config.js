@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
+const { nextui } = require("@nextui-org/react");
+
 module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
@@ -28,8 +30,6 @@ module.exports = {
   },
   darkMode: "class",
   plugins: [
-    require('tw-elements/dist/plugin'),
-    require('flowbite/plugin'),
-    require("@nextui-org/theme")
+    nextui()
   ],
 }
