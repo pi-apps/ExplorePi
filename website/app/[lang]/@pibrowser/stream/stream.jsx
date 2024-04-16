@@ -2,11 +2,11 @@
 import styles from './stream.module.css'
 import { useEffect, useState } from "react"
 import { formatTrans } from "lib/translate";
-import { Button } from "flowbite-react";
 import Operation from "./operation";
 import Payment from "./payment";
 import Block from './block';
 import Transaction from './transaction';
+import { Button } from '@nextui-org/react';
 export default function StreamContent({transcript,explorer,time,lang}){
     const [selected,setselected] = useState('operation')
     const [Input,setInput] = useState('')
@@ -47,8 +47,8 @@ export default function StreamContent({transcript,explorer,time,lang}){
                 aria-label="Account option" 
                 placeholder={formatTrans(transcript.input,{need:placeholder})}/>}
             <div className="flex justify-center mt-1">
-                {start===false && <Button size="lg" gradientDuoTone='cyanToBlue' className="font-mono font-extrabold text-xl" onClick={handleStart}>{transcript.but_start}</Button>}
-                {start === true && <Button size="lg" gradientDuoTone='pinkToOrange' className="font-mono font-extrabold text-xl" onClick={handleStart}>{transcript.but_stop}</Button>}
+                {start===false && <Button size="lg" className="font-mono text-white font-extrabold text-base bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl" onClick={handleStart}>{transcript.but_start}</Button>}
+                {start === true && <Button size="lg" className="font-mono text-white font-extrabold text-base bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl" onClick={handleStart}>{transcript.but_stop}</Button>}
                 
             </div>
         </section>

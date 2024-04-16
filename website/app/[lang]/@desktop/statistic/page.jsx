@@ -1,8 +1,5 @@
 import 'server-only'
 import admin from "lib/database";
-import Block from "./block"
-import Top10 from "./top10"
-import Distribute from "./operation"
 import Claimant from "./claimant";
 import { translate } from "translate-config";
 import LockTime from "./locktime";
@@ -62,7 +59,7 @@ export default async function StatisticPage({params:{lang}}){
     return(
         <>
         
-        <div className="mx-4 h-[calc(100vh_-_58px)] w-[calc(100vw_-_16rem)] px-10 mt-2 pb-10 overflow-y-scroll ">
+        <div className="mx-4 h-[calc(100vh_-_58px)] md:w-[calc(100vw_-_16rem)] px-10 mt-2 pb-10 overflow-y-scroll ">
             <h2 className="text-center underline decoration-indigo-500 decoration-2 underline-offset-2 font-bold text-orange-400">Latest Update at : UTC {update.toISOString().substr(0,16).replace('T',' ')}</h2>
             
             <div className={roboto_Mono.className+' w-full'}>
@@ -117,13 +114,8 @@ export default async function StatisticPage({params:{lang}}){
                 </div>
             </div>
 
-            <Top10 data={dataobj} lang={lang} transcript={transcript.statistic.TOP10}/>
-
             <div className="w-full">
                 <Claimant data={dataobj} transcript={transcript.statistic.Migrate}/>
-            </div>
-            <div className="w-full">
-                <Block data={dataobj} transcript={transcript.statistic.Block}/>
             </div>
             <div className="w-full">
                 <LockTime data={dataobj} transcript={transcript.statistic.LockUP}/>

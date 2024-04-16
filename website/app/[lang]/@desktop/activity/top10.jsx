@@ -1,18 +1,17 @@
-'use client'
+"use client";
 import { faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, AccordionItem } from "@nextui-org/react";
 import Link from "next/link";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
-export default function Top10({data,lang,transcript}){
-    if(!data || !lang) return
-    return(
-        <>
-        <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
-            {transcript.title}
-        </div>
-        
-        <Accordion variant="splitted">
+export default function Top10({ data, lang, transcript }) {
+  if (!data || !lang) return;
+  return (
+    <>
+      <div className="text-center mb-2 font-bold text-lg bg-border bg-border-size bg-no-repeat bg-left-bottom">
+        {transcript.title}
+      </div>
+      <Accordion variant="splitted">
         <AccordionItem
           key="1"
           aria-label={transcript.AccountBalance}
@@ -221,12 +220,10 @@ export default function Top10({data,lang,transcript}){
           </div>
         </AccordionItem>
       </Accordion>
-        
 
-
-        <div className="text-transparent mb-2 bg-border bg-border-size bg-no-repeat bg-left-bottom text">
+      <div className="text-transparent mb-2 bg-border bg-border-size bg-no-repeat bg-left-bottom text">
         end block
-        </div>
-        </>
-    )
+      </div>
+    </>
+  );
 }
