@@ -39,14 +39,14 @@ export default function SideBar({ lang }) {
                 (ComingSoon)
               </span>
             </p>
-            <Listbox disabledKeys={["block", "tx","op"]} classNames={{list:'gap-1'}}>
-              <ListboxItem key="block" href={"/" + lang + "/block"} className="!bg-slate-300">
+            <Listbox aria-label="Explorer" disabledKeys={["block", "tx","op"]} classNames={{list:'gap-1'}}>
+              <ListboxItem key="block" aria-label="block" href={"/" + lang + "/block"} className="!bg-slate-300">
               <FontAwesomeIcon icon={faCubes} /> <span className="ml-2">Block</span>
               </ListboxItem>
-              <ListboxItem key="tx" href={"/" + lang + "/tx"} className="bg-slate-300">
+              <ListboxItem key="tx" aria-label="tx" href={"/" + lang + "/tx"} className="bg-slate-300">
               <FontAwesomeIcon icon={faHandshake} /><span className="ml-2">Transaction</span>
               </ListboxItem>
-              <ListboxItem key="op" href={"/" + lang + "/op"} className="bg-slate-300">
+              <ListboxItem key="op" aria-label="op" href={"/" + lang + "/op"} className="bg-slate-300">
               <FontAwesomeIcon icon={faPencil} /><span className="ml-2">Operation</span>
               </ListboxItem>
             </Listbox>
@@ -56,16 +56,16 @@ export default function SideBar({ lang }) {
             <p className="font-semibold uppercase">
             Dashboard
             </p>
-            <Listbox variant={'flat'} classNames={{list:'gap-1'}}>
-              <ListboxItem key="network" href={"/" + lang + "/network"}>
+            <Listbox aria-label="Dashboard" variant={'flat'} classNames={{list:'gap-1'}}>
+              <ListboxItem key="network" aria-label="network" href={"/" + lang + "/network"}>
               <FontAwesomeIcon icon={faNetworkWired} />
                 <span className="ml-2">Network</span>
               </ListboxItem>
-              <ListboxItem key="statistic" href={"/" + lang + "/statistic"}>
+              <ListboxItem key="statistic" aria-label="statistic" href={"/" + lang + "/statistic"}>
               <FontAwesomeIcon icon={faServer} />
                 <span className="ml-2">Migration</span>
               </ListboxItem>
-              <ListboxItem key="activity" href={"/" + lang + "/activity"}>
+              <ListboxItem key="activity" aria-label="activity" href={"/" + lang + "/activity"}>
               <FontAwesomeIcon icon={faUsers} />
                 <span className="ml-2">Activity</span>
               </ListboxItem>
