@@ -25,7 +25,7 @@
             "Hash":"Hash",
             "Pre":"Pre Hash",
             "Operation":"Operation",
-            "Transaction":"Transaction",
+            "Transaction":"Transactions",
             "BaseFee":"Base Fee",
             "BaseReserve":"Base Reserve",
             "FeePool":"Fee Pool",
@@ -147,8 +147,8 @@
     "statistic":{
         "Metrics":{
             "title":"METRICS",
-            "TotalAccount":"Total Account",
-            "TotalPioneer":"Total Pioneer",
+            "TotalAccount":"Total Accounts",
+            "TotalPioneer":"Total Pioneers",
             "MigratedPi":"Migrated Pi",
             "PioneerHold":"Pioneer Hold",
             "PiLocked":"Pi Locked"
