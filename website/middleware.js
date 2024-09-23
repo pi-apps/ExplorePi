@@ -33,6 +33,6 @@ export function middleware(req){
 }
 export const config = {
   matcher: [
-    '/((?!api|robots.txt|ads.txt|_next/static|$|_next/image|login|favicon.ico|.well-known|app-ads.txt|policy.html|en|zh-TW|zh-CN).*)',
+    '/((?!api|robots.txt|_next/static|$|_next/image|login|favicon.ico|.well-known|app-ads.txt|policy.html|en|zh-TW|zh-CN).*)',
   ],
 }
