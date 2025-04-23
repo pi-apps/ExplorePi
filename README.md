@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![Release](https://img.shields.io/github/v/release/pi-apps/ExplorePi.svg)](https://github.com/pi-apps/ExplorePi/releases)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 [![GitHub Issues](https://img.shields.io/github/issues/pi-apps/ExplorePi.svg)](https://github.com/pi-apps/ExplorePi/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/pi-apps/ExplorePi.svg)](https://github.com/pi-apps/ExplorePi/pulls)
