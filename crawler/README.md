@@ -61,7 +61,7 @@ npm start
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
-- [MYSQL](https://www.mysql.com/) - Database
+- [MYSQL](https://www.mongodb.com/) - Database
 - [NodeJs](https://nodejs.org/en/) - Server Environment
 - [StellarSDK](https://github.com/stellar/js-stellar-sdk) - BlockchainTool
 ## ✍️ Authors <a name = "authors"></a>

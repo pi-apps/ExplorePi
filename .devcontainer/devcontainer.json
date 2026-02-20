@@ -1,0 +1,42 @@
+{
+	"name": "ExplorePi Python Environment",
+	"image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
+	
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.black-formatter",
+				"ms-python.isort",
+				"ms-python.flake8",
+				"charliermarsh.ruff",
+				"github.copilot",
+				"eamodio.gitlens"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.linting.enabled": true,
+				"python.linting.flake8Enabled": true,
+				"python.formatting.provider": "black",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.organizeImports": "explicit"
+				},
+				"python.testing.pytestEnabled": true,
+				"python.testing.unittestEnabled": false
+			}
+		}
+	},
+
+	"forwardPorts": [8000, 5000, 3000],
+
+	"postCreateCommand": "pip install --upgrade pip && pip install -r requirements.txt",
+
+	"remoteUser": "vscode"
+}

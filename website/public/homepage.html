@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Network - Mine Cryptocurrency on Your Phone</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 30%, #7c3aed 60%, #a78bfa 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 55px;
+            height: 55px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: #7c3aed;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        nav {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .download-btn {
+            background: white;
+            color: #7c3aed;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .hero-content {
+            flex: 1;
+            z-index: 2;
+            animation: fadeInLeft 1s ease-out;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 100px;
+            font-weight: 800;
+            line-height: 0.95;
+            margin-bottom: 35px;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            letter-spacing: -2px;
+        }
+
+        .highlight {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-size: 22px;
+            margin-bottom: 45px;
+            opacity: 0.95;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 45px;
+            background: white;
+            color: #7c3aed;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.4s;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            border: 3px solid white;
+            color: white;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* ===== 3D GRAPHICS ===== */
+        .hero-graphic {
+            flex: 1;
+            position: relative;
+            height: 650px;
+            animation: fadeInRight 1s ease-out;
+            perspective: 1200px;
+        }
+
+        .floating-element {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* 3D Pi Coins with Enhanced Effects */
+        .pi-coin {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            position: relative;
+            transform-style: preserve-3d;
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #7c3aed 100%);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.5),
+                inset 0 5px 15px rgba(255, 255, 255, 0.3),
+                inset 0 -5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Highlight on coin */
+        .pi-coin::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 35%;
+            height: 35%;
+            background: radial-gradient(circle, rgba(255,255,255,0.6), transparent);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        /* Shimmer effect */
+        .pi-coin::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(255,255,255,0.1) 45%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 55%, 
+                transparent 100%);
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Individual coin sizes and positions */
+        .pi-coin-1 {
+            width: 150px;
+            height: 150px;
+            font-size: 70px;
+            border: 5px solid rgba(255, 255, 255, 0.4);
+            top: 80px;
+            right: 120px;
+            animation-delay: 0s;
+        }
+
+        .pi-coin-2 {
+            width: 120px;
+            height: 120px;
+            font-size: 55px;
+            border: 4px solid rgba(255, 255, 255, 0.4);
+            bottom: 180px;
+            right: 280px;
+            animation-delay: 1.2s;
+        }
+
+        .pi-coin-3 {
+            width: 90px;
+            height: 90px;
+            font-size: 42px;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            top: 340px;
+            right: 60px;
+            animation-delay: 2.5s;
+        }
+
+        .pi-coin-4 {
+            width: 75px;
+            height: 75px;
+            font-size: 35px;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            bottom: 80px;
+            right: 150px;
+            animation-delay: 1.8s;
+        }
+
+        /* Phone Mockup */
+        .phone-mockup {
+            width: 140px;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+            backdrop-filter: blur(15px);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            top: 180px;
+            right: 200px;
+            animation-delay: 1.5s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            overflow: hidden;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .phone-icon {
+            font-size: 60px;
+        }
+
+        .mining-indicator {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(251, 191, 36, 0.3);
+            border-top-color: #fbbf24;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+
+        /* Network Icon */
+        .network-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 18px 55px rgba(5, 150, 105, 0.5);
+            bottom: 280px;
+            right: 180px;
+            animation-delay: 0.75s;
+            position: relative;
+        }
+
+        .network-icon::after {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            border: 3px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            animation: ripple 2s ease-out infinite;
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 100px;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 45px 35px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            text-align: center;
+            transition: all 0.4s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .stat-number {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-it-works {
+            margin-top: 120px;
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+        }
+
+        .how-it-works h2 {
+            font-size: 56px;
+            text-align: center;
+            margin-bottom: 70px;
+            font-weight: 800;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 auto 25px;
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.4);
+        }
+
+        .step h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .step p {
+            opacity: 0.92;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* ===== FEATURES ===== */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            margin-top: 100px;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 45px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .feature-icon {
+            width: 75px;
+            height: 75px;
+            background: white;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 26px;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            opacity: 0.92;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* ===== DISCLAIMER ===== */
+        .disclaimer {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 50px;
+            margin-top: 120px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            animation: fadeInUp 1s ease-out 0.5s backwards;
+        }
+
+        .disclaimer h2 {
+            font-size: 36px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .disclaimer p {
+            font-size: 14px;
+            line-height: 1.9;
+            opacity: 0.92;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            margin-top: 120px;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 12px 35px rgba(124, 58, 237, 0.5);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero {
+                gap: 50px;
+            }
+
+            .hero h1 {
+                font-size: 80px;
+            }
+
+            .hero-graphic {
+                height: 550px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                min-height: auto;
+                gap: 40px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 56px;
+            }
+
+            .hero-tagline {
+                font-size: 18px;
+            }
+
+            .cta-group {
+                justify-content: center;
+            }
+
+            .cta-button {
+                padding: 16px 35px;
+                font-size: 16px;
+            }
+
+            .hero-graphic {
+                height: 400px;
+                width: 100%;
+            }
+
+            /* Adjust coin positions for mobile */
+            .pi-coin-1 {
+                top: 50px;
+                right: 50px;
+                width: 100px;
+                height: 100px;
+                font-size: 50px;
+            }
+
+            .pi-coin-2 {
+                bottom: 100px;
+                right: 150px;
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+
+            .pi-coin-3 {
+                top: 200px;
+                right: 30px;
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
+            }
+
+            .pi-coin-4 {
+                display: none;
+            }
+
+            .phone-mockup {
+                width: 110px;
+                height: 220px;
+                top: 120px;
+                right: 120px;
+            }
+
+            .phone-icon {
+                font-size: 45px;
+            }
+
+            .network-icon {
+                width: 75px;
+                height: 75px;
+                font-size: 35px;
+                bottom: 180px;
+                right: 100px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 60px;
+            }
+
+            .stat-card {
+                padding: 30px 20px;
+            }
+
+            .stat-number {
+                font-size: 42px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                margin-top: 60px;
+            }
+
+            .feature-card {
+                padding: 35px;
+            }
+
+            .how-it-works {
+                margin-top: 80px;
+            }
+
+            .how-it-works h2 {
+                font-size: 42px;
+                margin-bottom: 50px;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .disclaimer {
+                padding: 35px 25px;
+                margin-top: 80px;
+            }
+
+            .disclaimer h2 {
+                font-size: 28px;
+            }
+
+            footer {
+                margin-top: 80px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 28px;
+            }
+
+            .cta-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">π</div>
+                <span>Pi Network</span>
+            </div>
+            <nav>
+                <a href="#mine">Mine</a>
+                <a href="#about">About</a>
+                <a href="#ecosystem">Ecosystem</a>
+                <a href="#community">Community</a>
+                <a href="#download" class="download-btn">Download App</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Mine <span class="highlight">Pi</span><br>on Your<br>Phone</h1>
+                <p class="hero-tagline">
+                    Join millions of Pioneers mining cryptocurrency on mobile. 
+                    Build the world's most inclusive peer-to-peer marketplace and online experience, fueled by Pi.
+                </p>
+                <div class="cta-group">
+                    <a href="#download" class="cta-button">
+                        📱 Download Pi App
+                    </a>
+                    <a href="#learn" class="cta-button cta-secondary">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-graphic">
+                <div class="floating-element pi-coin pi-coin-1">
+                    <span>π</span>
+                </div>
+                <div class="floating-element pi-coin pi-coin-2">
+                    <span>π</span>
+                </div>
+                <div class="floating-element pi-coin pi-coin-3">
+                    <span>π</span>
+                </div>
+                <div class="floating-element pi-coin pi-coin-4">
+                    <span>π</span>
+                </div>
+                <div class="floating-element phone-mockup">
+                    <span class="phone-icon">📱</span>
+                    <div class="mining-indicator"></div>
+                </div>
+                <div class="floating-element network-icon">
+                    <span>🌐</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" data-target="55">0</div>
+                <div class="stat-label">Pioneers Worldwide</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-target="230">0</div>
+                <div class="stat-label">Countries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Daily Active Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$0</div>
+                <div class="stat-label">Mining Cost</div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="how-it-works">
+            <h2>How Pi Mining Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Download</h3>
+                    <p>Get the Pi Network app from your app store and create your account securely</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Verify</h3>
+                    <p>Complete identity verification to unlock full mining potential and features</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Mine</h3>
+                    <p>Tap once daily to activate mining and earn Pi cryptocurrency effortlessly</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Build</h3>
+                    <p>Grow your security circle and use Pi in the ecosystem marketplace</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile-First Mining</h3>
+                <p>Mine cryptocurrency directly from your smartphone without draining battery or consuming data</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure & Trusted</h3>
+                <p>Built by Stanford PhDs with cutting-edge Stellar Consensus Protocol and advanced security</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Community</h3>
+                <p>Join the largest decentralized community of everyday people building the future of Web3</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>Real Utility</h3>
+                <p>Use Pi to buy goods, services, and experiences in the rapidly growing Pi ecosystem</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Energy Efficient</h3>
+                <p>Eco-friendly mining that doesn't require massive computational power or electricity</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Fair Distribution</h3>
+                <p>Equal opportunity for everyone to earn Pi, no matter where you are in the world</p>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <h2>Disclaimer</h2>
+            <p>
+                This presentation is for informational purposes only and contains statements about the future, including anticipated programs and features, developments, and timelines for the rollout of these programs and features. These statements are only predictions and reflect current beliefs and expectations with respect to future events; they are based on assumptions and are subject to risk, uncertainties, and change at any time. There can be no guarantee that any of the contemplated programs or features will be implemented as specified nor any assurance that actual results will not differ materially from those expressed or implied in these statements, although we believe them to be based on reasonable assumptions. All statements are valid only as of the date first presented. The statements in this presentation also may not reflect future developments due to user feedback or later events and we may not update this presentation in response. Pi Network is not a financial advisor and this is not financial advice.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="logo">
+                    <div class="logo-icon">π</div>
+                    <span>Pi Network</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                    <a href="#support">Support</a>
+                </div>
+                <p>&copy; 2026 Pi Network. Built by Pioneers, for Pioneers.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // ===== 3D COIN ROTATION =====
+        const piCoins = document.querySelectorAll('.pi-coin');
+        let rotationAngle = 0;
+
+        function rotatePiCoins() {
+            rotationAngle += 0.8;
+            piCoins.forEach((coin, index) => {
+                const offset = index * 60;
+                const rotate = (rotationAngle + offset) % 360;
+                
+                coin.style.transform = `
+                    rotateY(${rotate}deg) 
+                    rotateX(${Math.sin(rotate * Math.PI / 180) * 15}deg)
+                    translateZ(${Math.cos(rotate * Math.PI / 180) * 20}px)
+                `;
+            });
+            requestAnimationFrame(rotatePiCoins);
+        }
+
+        rotatePiCoins();
+
+        // ===== PARALLAX EFFECT =====
+        let mouseX = 0.5;
+        let mouseY = 0.5;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX / window.innerWidth;
+            mouseY = e.clientY / window.innerHeight;
+        });
+
+        function animateParallax() {
+            const floatingElements = document.querySelectorAll('.floating-element');
+            
+            floatingElements.forEach((element, index) => {
+                const speed = (index + 1) * 12;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                
+                const currentTransform = element.style.transform || '';
+                if (element.classList.contains('pi-coin')) {
+                    element.style.transform = currentTransform + ` translate(${x}px, ${y}px)`;
+                } else {
+                    element.style.transform = `translate(${x}px, ${y}px)`;
+                }
+            });
+
+            requestAnimationFrame(animateParallax);
+        }
+
+        animateParallax();
+
+        // ===== SMOOTH SCROLL =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ===== INTERSECTION OBSERVER =====
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -80px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .stat-card, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+            el.style.transition = 'opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+
+        // ===== COUNTER ANIMATION =====
+        function animateCounter(element, target, suffix = '') {
+            const duration = 2500;
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target + suffix;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current) + suffix;
+                }
+            }, 16);
+        }
+
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                    const number = entry.target.querySelector('.stat-number');
+                    const target = parseInt(number.dataset.target);
+                    
+                    if (target) {
+                        const text = number.textContent;
+                        const suffix = text.includes('M') ? 'M+' : text.includes('+') ? '+' : '';
+                        animateCounter(number, target, suffix);
+                    }
+                    entry.target.classList.add('counted');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            statObserver.observe(card);
+        });
+
+        // ===== DYNAMIC COIN GLOW =====
+        piCoins.forEach((coin, index) => {
+            setInterval(() => {
+                const intensity = 0.4 + Math.random() * 0.4;
+                const hue = 280 + Math.random() * 20;
+                coin.style.filter = `drop-shadow(0 0 ${30 + Math.random() * 20}px hsla(${hue}, 80%, 70%, ${intensity}))`;
+            }, 1500 + index * 300);
+        });
+    </script>
+</body>
+</html>
