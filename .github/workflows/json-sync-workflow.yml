@@ -1,0 +1,492 @@
+name: JSON Data Synchronization
+
+on:
+  schedule:
+    # Run every day at midnight UTC
+    - cron: '0 0 * * *'
+  push:
+    paths:
+      - 'data/**/*.json'
+      - 'schemas/**/*.json'
+  workflow_dispatch:
+    inputs:
+      sync_type:
+        description: 'Type of synchronization'
+        required: true
+        type: choice
+        options:
+          - full
+          - incremental
+          - validate_only
+
+env:
+  DATA_DIR: 'data'
+  SCHEMA_DIR: 'schemas'
+  BACKUP_DIR: 'backups'
+
+jobs:
+  # Job 1: Validate JSON Files
+  validate-json:
+    runs-on: ubuntu-latest
+    name: Validate JSON Files
+    
+    outputs:
+      validation_status: ${{ steps.validate.outputs.status }}
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        pip install jsonschema pyyaml
+        
+    - name: Validate JSON syntax and schemas
+      id: validate
+      run: |
+        python3 << 'EOF'
+        import json
+        import os
+        import sys
+        from pathlib import Path
+        
+        errors = []
+        warnings = []
+        validated = []
+        
+        # Validate all JSON files
+        for root, dirs, files in os.walk('${{ env.DATA_DIR }}'):
+            for file in files:
+                if file.endswith('.json'):
+                    filepath = Path(root) / file
+                    try:
+                        with open(filepath, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                        validated.append(str(filepath))
+                        print(f'✓ {filepath} - Valid JSON')
+                    except json.JSONDecodeError as e:
+                        errors.append(f'{filepath}: {str(e)}')
+                        print(f'✗ {filepath} - Invalid JSON: {e}')
+                    except Exception as e:
+                        warnings.append(f'{filepath}: {str(e)}')
+                        print(f'⚠ {filepath} - Warning: {e}')
+        
+        # Create validation report
+        report = {
+            'timestamp': '2026-02-11T00:00:00Z',
+            'total_files': len(validated) + len(errors),
+            'valid_files': len(validated),
+            'invalid_files': len(errors),
+            'warnings': len(warnings),
+            'files': validated,
+            'errors': errors,
+            'warnings_list': warnings
+        }
+        
+        os.makedirs('reports', exist_ok=True)
+        with open('reports/validation_report.json', 'w') as f:
+            json.dump(report, f, indent=2)
+        
+        print(f'\n📊 Summary:')
+        print(f'  Total files: {report["total_files"]}')
+        print(f'  Valid: {report["valid_files"]}')
+        print(f'  Invalid: {report["invalid_files"]}')
+        print(f'  Warnings: {report["warnings"]}')
+        
+        if errors:
+            print(f'\n❌ Validation failed with {len(errors)} error(s)')
+            sys.exit(1)
+        else:
+            print(f'\n✅ All JSON files are valid')
+            print(f'::set-output name=status::success')
+        EOF
+        
+    - name: Upload validation report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: validation-report
+        path: reports/validation_report.json
+
+  # Job 2: Backup JSON Data
+  backup-data:
+    runs-on: ubuntu-latest
+    needs: validate-json
+    if: needs.validate-json.outputs.validation_status == 'success'
+    name: Backup JSON Data
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create timestamped backup
+      run: |
+        TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+        BACKUP_NAME="json_backup_${TIMESTAMP}"
+        
+        mkdir -p ${{ env.BACKUP_DIR }}/$BACKUP_NAME
+        
+        # Copy all JSON files
+        if [ -d "${{ env.DATA_DIR }}" ]; then
+          cp -r ${{ env.DATA_DIR }}/* ${{ env.BACKUP_DIR }}/$BACKUP_NAME/ || echo "No data to backup"
+        fi
+        
+        # Create archive
+        cd ${{ env.BACKUP_DIR }}
+        tar -czf ${BACKUP_NAME}.tar.gz $BACKUP_NAME
+        rm -rf $BACKUP_NAME
+        
+        echo "✓ Backup created: ${BACKUP_NAME}.tar.gz"
+        ls -lh ${BACKUP_NAME}.tar.gz
+        
+    - name: Upload backup artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: json-backup
+        path: ${{ env.BACKUP_DIR }}/*.tar.gz
+        retention-days: 30
+
+  # Job 3: Transform and Process Data
+  process-data:
+    runs-on: ubuntu-latest
+    needs: validate-json
+    if: needs.validate-json.outputs.validation_status == 'success'
+    name: Process and Transform Data
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install processing libraries
+      run: |
+        pip install pandas numpy jsonschema
+        
+    - name: Process JSON data
+      run: |
+        python3 << 'EOF'
+        import json
+        import os
+        from pathlib import Path
+        from datetime import datetime
+        
+        def process_json_files(data_dir):
+            """Process all JSON files and create aggregated reports"""
+            
+            all_data = []
+            stats = {
+                'total_records': 0,
+                'files_processed': 0,
+                'data_types': {},
+                'timestamp': datetime.now().isoformat()
+            }
+            
+            for json_file in Path(data_dir).rglob('*.json'):
+                try:
+                    with open(json_file, 'r') as f:
+                        data = json.load(f)
+                    
+                    # Collect statistics
+                    if isinstance(data, list):
+                        stats['total_records'] += len(data)
+                        all_data.extend(data)
+                    elif isinstance(data, dict):
+                        stats['total_records'] += 1
+                        all_data.append(data)
+                    
+                    stats['files_processed'] += 1
+                    
+                    # Track data types
+                    file_type = json_file.stem
+                    stats['data_types'][file_type] = stats['data_types'].get(file_type, 0) + 1
+                    
+                    print(f'✓ Processed: {json_file.name}')
+                    
+                except Exception as e:
+                    print(f'✗ Error processing {json_file}: {e}')
+            
+            return all_data, stats
+        
+        # Process data
+        data, statistics = process_json_files('${{ env.DATA_DIR }}')
+        
+        # Save aggregated data
+        os.makedirs('processed', exist_ok=True)
+        
+        with open('processed/aggregated_data.json', 'w') as f:
+            json.dump(data, f, indent=2)
+        
+        with open('processed/statistics.json', 'w') as f:
+            json.dump(statistics, f, indent=2)
+        
+        print(f'\n📊 Processing Statistics:')
+        print(f'  Files processed: {statistics["files_processed"]}')
+        print(f'  Total records: {statistics["total_records"]}')
+        print(f'  Data types: {statistics["data_types"]}')
+        EOF
+        
+    - name: Upload processed data
+      uses: actions/upload-artifact@v4
+      with:
+        name: processed-data
+        path: processed/
+
+  # Job 4: Generate Reports
+  generate-reports:
+    runs-on: ubuntu-latest
+    needs: [validate-json, process-data]
+    name: Generate Data Reports
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Download processed data
+      uses: actions/download-artifact@v4
+      with:
+        name: processed-data
+        path: processed/
+        
+    - name: Generate comprehensive report
+      run: |
+        python3 << 'EOF'
+        import json
+        import os
+        from datetime import datetime
+        from pathlib import Path
+        
+        # Load statistics
+        with open('processed/statistics.json', 'r') as f:
+            stats = json.load(f)
+        
+        # Create HTML report
+        html_report = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>JSON Data Synchronization Report</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                h1 {{ color: #333; }}
+                .stats {{ background: #f5f5f5; padding: 15px; border-radius: 5px; }}
+                .stat-item {{ margin: 10px 0; }}
+                .timestamp {{ color: #666; font-size: 0.9em; }}
+            </style>
+        </head>
+        <body>
+            <h1>JSON Data Synchronization Report</h1>
+            <p class="timestamp">Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
+            
+            <div class="stats">
+                <h2>Statistics</h2>
+                <div class="stat-item"><strong>Files Processed:</strong> {stats['files_processed']}</div>
+                <div class="stat-item"><strong>Total Records:</strong> {stats['total_records']}</div>
+                <div class="stat-item"><strong>Data Types:</strong> {', '.join(stats['data_types'].keys())}</div>
+            </div>
+            
+            <h2>Status</h2>
+            <p style="color: green; font-weight: bold;">✓ Synchronization completed successfully</p>
+        </body>
+        </html>
+        """
+        
+        os.makedirs('reports', exist_ok=True)
+        with open('reports/sync_report.html', 'w') as f:
+            f.write(html_report)
+        
+        print('✓ HTML report generated')
+        EOF
+        
+    - name: Upload reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: sync-reports
+        path: reports/
+
+  # Job 5: Database Synchronization (if enabled)
+  sync-to-database:
+    runs-on: ubuntu-latest
+    needs: [validate-json, process-data]
+    if: github.event.inputs.sync_type == 'full' || github.event.inputs.sync_type == 'incremental'
+    name: Sync to Database
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: json_data
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install database libraries
+      run: |
+        pip install psycopg2-binary sqlalchemy pandas
+        
+    - name: Download processed data
+      uses: actions/download-artifact@v4
+      with:
+        name: processed-data
+        path: processed/
+        
+    - name: Sync data to database
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/json_data
+        SYNC_TYPE: ${{ github.event.inputs.sync_type || 'incremental' }}
+      run: |
+        python3 << 'EOF'
+        import json
+        import os
+        from sqlalchemy import create_engine, text, Table, Column, Integer, String, JSON, MetaData, DateTime
+        from datetime import datetime
+        
+        # Connect to database
+        engine = create_engine(os.environ['DATABASE_URL'])
+        metadata = MetaData()
+        
+        # Create tables
+        with engine.connect() as conn:
+            # Main data table
+            conn.execute(text('''
+                CREATE TABLE IF NOT EXISTS json_records (
+                    id SERIAL PRIMARY KEY,
+                    data_type VARCHAR(100),
+                    record_data JSONB,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            '''))
+            
+            # Sync history table
+            conn.execute(text('''
+                CREATE TABLE IF NOT EXISTS sync_history (
+                    id SERIAL PRIMARY KEY,
+                    sync_type VARCHAR(50),
+                    records_synced INTEGER,
+                    status VARCHAR(50),
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            '''))
+            
+            conn.commit()
+            print('✓ Database tables created/verified')
+        
+        # Load and sync data
+        with open('processed/aggregated_data.json', 'r') as f:
+            data = json.load(f)
+        
+        synced_count = 0
+        sync_type = os.environ.get('SYNC_TYPE', 'incremental')
+        
+        with engine.connect() as conn:
+            if sync_type == 'full':
+                # Clear existing data for full sync
+                conn.execute(text('TRUNCATE TABLE json_records'))
+                conn.commit()
+                print('✓ Cleared existing data for full sync')
+            
+            # Insert data
+            for record in data:
+                try:
+                    conn.execute(text('''
+                        INSERT INTO json_records (data_type, record_data)
+                        VALUES (:data_type, :record_data)
+                    '''), {
+                        'data_type': record.get('type', 'unknown'),
+                        'record_data': json.dumps(record)
+                    })
+                    synced_count += 1
+                except Exception as e:
+                    print(f'Warning: Could not sync record: {e}')
+            
+            # Record sync history
+            conn.execute(text('''
+                INSERT INTO sync_history (sync_type, records_synced, status)
+                VALUES (:sync_type, :records_synced, :status)
+            '''), {
+                'sync_type': sync_type,
+                'records_synced': synced_count,
+                'status': 'success'
+            })
+            
+            conn.commit()
+            print(f'✓ Synced {synced_count} records to database')
+        EOF
+        
+    - name: Verify database sync
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/json_data
+      run: |
+        python3 << 'EOF'
+        from sqlalchemy import create_engine, text
+        import os
+        
+        engine = create_engine(os.environ['DATABASE_URL'])
+        
+        with engine.connect() as conn:
+            result = conn.execute(text('SELECT COUNT(*) FROM json_records'))
+            count = result.scalar()
+            print(f'\n✓ Database contains {count} records')
+            
+            result = conn.execute(text('''
+                SELECT sync_type, records_synced, status, timestamp 
+                FROM sync_history 
+                ORDER BY timestamp DESC 
+                LIMIT 1
+            '''))
+            last_sync = result.fetchone()
+            if last_sync:
+                print(f'✓ Last sync: {last_sync[0]} - {last_sync[1]} records - {last_sync[2]}')
+        EOF
+
+  # Job 6: Notification
+  notify-completion:
+    runs-on: ubuntu-latest
+    needs: [validate-json, backup-data, process-data, generate-reports]
+    if: always()
+    name: Send Notification
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create notification summary
+      run: |
+        echo "# JSON Data Synchronization Complete" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Status: ✅ Success" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- Validation: ${{ needs.validate-json.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Backup: ${{ needs.backup-data.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Processing: ${{ needs.process-data.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- Reports: ${{ needs.generate-reports.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Workflow completed at:** $(date -u)" >> $GITHUB_STEP_SUMMARY

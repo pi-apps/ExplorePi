@@ -1,0 +1,121 @@
+version: "3.9"
+
+# ============================================================
+# ExplorePi — Quantum Network Container Stack
+# Branch: revert-1-main
+# Features: Multi-language DB, API, Cache, Admin UI
+# ============================================================
+
+networks:
+  quantum_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+
+volumes:
+  pg_data:
+  redis_data:
+  mongo_data:
+
+services:
+
+  # ── PostgreSQL — primary relational store ──────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: explorePi_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: explorePi
+      POSTGRES_USER: piuser
+      POSTGRES_PASSWORD: pipass
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d   # runs all *.sql on first start
+    ports:
+      - "5432:5432"
+    networks:
+      quantum_net:
+        ipv4_address: 172.30.0.10
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U piuser -d explorePi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis — session cache / pub-sub ───────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: explorePi_redis
+    restart: unless-stopped
+    command: redis-server --requirepass redispass --save 60 1
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      quantum_net:
+        ipv4_address: 172.30.0.11
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redispass", "ping"]
+      interval: 10s
+      retries: 5
+
+  # ── MongoDB — unstructured / project content ───────────────
+  mongo:
+    image: mongo:7
+    container_name: explorePi_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: piuser
+      MONGO_INITDB_ROOT_PASSWORD: pipass
+      MONGO_INITDB_DATABASE: explorePi
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      quantum_net:
+        ipv4_address: 172.30.0.12
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 15s
+      retries: 5
+
+  # ── ExplorePi App ──────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: explorePi_app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://piuser:pipass@postgres:5432/explorePi
+      REDIS_URL: redis://:redispass@redis:6379
+      MONGO_URI: mongodb://piuser:pipass@mongo:27017/explorePi?authSource=admin
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      quantum_net:
+        ipv4_address: 172.30.0.20
+
+  # ── Adminer — DB admin UI (all engines) ───────────────────
+  adminer:
+    image: adminer:latest
+    container_name: explorePi_adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      quantum_net:
+        ipv4_address: 172.30.0.30
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres

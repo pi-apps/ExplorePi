@@ -1,0 +1,122 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: explorepi-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-json_data}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - explorepi-network
+    restart: unless-stopped
+
+  # Redis Cache (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: explorepi-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - explorepi-network
+    restart: unless-stopped
+
+  # ExplorePi API Application
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: explorepi-api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/json_data
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=production
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    volumes:
+      - ./data:/app/data
+      - ./schemas:/app/schemas
+      - ./backups:/app/backups
+      - ./processed:/app/processed
+      - ./reports:/app/reports
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - explorepi-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # pgAdmin (Database Management UI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: explorepi-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@explorepi.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - explorepi-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: explorepi-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+    networks:
+      - explorepi-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  explorepi-network:
+    driver: bridge

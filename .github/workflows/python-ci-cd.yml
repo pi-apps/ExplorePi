@@ -1,0 +1,348 @@
+name: Python CI/CD with JSON Data Processing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+  JSON_DATA_PATH: 'data'
+
+jobs:
+  # Job 1: Code Quality and Linting
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Check
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint black isort mypy
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+        
+    - name: Lint with flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        
+    - name: Check code formatting with black
+      run: |
+        black --check --diff .
+        
+    - name: Check import sorting with isort
+      run: |
+        isort --check-only --diff .
+        
+    - name: Type checking with mypy
+      run: |
+        mypy . --ignore-missing-imports || true
+
+  # Job 2: JSON Validation and Schema Check
+  json-validation:
+    runs-on: ubuntu-latest
+    name: Validate JSON Files
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install JSON validation tools
+      run: |
+        pip install jsonschema pyjson5 pyyaml
+        
+    - name: Validate JSON syntax
+      run: |
+        echo "Validating JSON files..."
+        python -c "
+        import json
+        import os
+        import sys
+        
+        errors = []
+        for root, dirs, files in os.walk('.'):
+            for file in files:
+                if file.endswith('.json'):
+                    filepath = os.path.join(root, file)
+                    try:
+                        with open(filepath, 'r', encoding='utf-8') as f:
+                            json.load(f)
+                        print(f'✓ {filepath} is valid')
+                    except json.JSONDecodeError as e:
+                        errors.append(f'{filepath}: {str(e)}')
+                        print(f'✗ {filepath} is invalid: {e}')
+        
+        if errors:
+            print(f'\n{len(errors)} JSON file(s) failed validation')
+            sys.exit(1)
+        else:
+            print(f'\nAll JSON files are valid!')
+        "
+        
+    - name: Upload JSON validation report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: json-validation-report
+        path: |
+          **/*.json
+          
+  # Job 3: Unit Tests
+  test:
+    runs-on: ubuntu-latest
+    needs: [code-quality, json-validation]
+    name: Run Tests
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov pytest-mock pytest-asyncio
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
+    - name: Run tests with pytest
+      run: |
+        pytest --cov=. --cov-report=xml --cov-report=html --cov-report=term -v
+        
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+        
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.python-version }}
+        path: |
+          htmlcov/
+          coverage.xml
+
+  # Job 4: JSON Data Processing
+  process-json-data:
+    runs-on: ubuntu-latest
+    needs: [test]
+    name: Process JSON Data
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install data processing libraries
+      run: |
+        pip install pandas numpy jsonschema
+        
+    - name: Process JSON data files
+      run: |
+        python -c "
+        import json
+        import os
+        from datetime import datetime
+        
+        # Create processing report
+        report = {
+            'timestamp': datetime.now().isoformat(),
+            'files_processed': [],
+            'total_files': 0,
+            'status': 'success'
+        }
+        
+        for root, dirs, files in os.walk('${{ env.JSON_DATA_PATH }}'):
+            for file in files:
+                if file.endswith('.json'):
+                    filepath = os.path.join(root, file)
+                    try:
+                        with open(filepath, 'r') as f:
+                            data = json.load(f)
+                        report['files_processed'].append({
+                            'file': filepath,
+                            'size': os.path.getsize(filepath),
+                            'keys': list(data.keys()) if isinstance(data, dict) else 'array'
+                        })
+                        report['total_files'] += 1
+                    except Exception as e:
+                        report['status'] = 'failed'
+                        print(f'Error processing {filepath}: {e}')
+        
+        # Save report
+        os.makedirs('reports', exist_ok=True)
+        with open('reports/json_processing_report.json', 'w') as f:
+            json.dump(report, f, indent=2)
+        
+        print(f'Processed {report[\"total_files\"]} JSON files')
+        " || echo "No JSON data files found in ${{ env.JSON_DATA_PATH }}"
+        
+    - name: Upload processing report
+      uses: actions/upload-artifact@v4
+      with:
+        name: json-processing-report
+        path: reports/
+
+  # Job 5: Database Operations (if applicable)
+  database-operations:
+    runs-on: ubuntu-latest
+    needs: [process-json-data]
+    name: Database Sync
+    if: github.ref == 'refs/heads/main'
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install database libraries
+      run: |
+        pip install psycopg2-binary sqlalchemy pandas
+        
+    - name: JSON to Database migration
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/testdb
+      run: |
+        python -c "
+        import json
+        import os
+        from sqlalchemy import create_engine, text
+        
+        engine = create_engine(os.environ['DATABASE_URL'])
+        
+        with engine.connect() as conn:
+            # Create sample table
+            conn.execute(text('''
+                CREATE TABLE IF NOT EXISTS json_data (
+                    id SERIAL PRIMARY KEY,
+                    filename VARCHAR(255),
+                    data JSONB,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            '''))
+            conn.commit()
+            print('Database table created successfully')
+        
+        print('Database operations completed')
+        "
+
+  # Job 6: Build and Deploy
+  build-deploy:
+    runs-on: ubuntu-latest
+    needs: [test, process-json-data]
+    name: Build and Deploy
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Build package
+      run: |
+        pip install build setuptools wheel
+        python -m build
+        
+    - name: Create deployment artifact
+      run: |
+        mkdir -p deployment
+        cp -r dist deployment/
+        cp -r ${{ env.JSON_DATA_PATH }} deployment/ || echo "No data directory"
+        
+    - name: Upload deployment artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-package
+        path: deployment/
+        retention-days: 30
+
+  # Job 7: Security Scan
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scanning
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: Install security tools
+      run: |
+        pip install bandit safety
+        
+    - name: Run Bandit security scan
+      run: |
+        bandit -r . -f json -o bandit-report.json || true
+        
+    - name: Check dependencies for vulnerabilities
+      run: |
+        safety check --json || true
+        
+    - name: Upload security reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json

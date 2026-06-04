@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .input-section input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-section input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-section button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .input-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .input-section button:active {
+            transform: translateY(0);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+
+        .todos-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .todos-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .todos-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .todos-container::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .todos-container::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .todo-item:hover {
+            background: #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-item.completed {
+            opacity: 0.7;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .todo-content {
+            flex: 1;
+        }
+
+        .todo-text {
+            color: #333;
+            font-size: 1em;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .todo-meta {
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .todo-priority {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .priority-high {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .priority-medium {
+            background-color: #ffd93d;
+            color: #333;
+        }
+
+        .priority-low {
+            background-color: #95e1d3;
+            color: #333;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .todo-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .edit-btn {
+            background-color: #4ecdc4;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #45b8af;
+        }
+
+        .delete-btn {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #ee5a5a;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+            text-align: center;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .footer button {
+            padding: 8px 15px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+
+        .footer button:hover {
+            background: #e0e0e0;
+            border-color: #667eea;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-buttons .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .modal-buttons .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-buttons .cancel-btn {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal-buttons .cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .input-section {
+                flex-direction: column;
+            }
+
+            .filter-buttons {
+                justify-content: space-between;
+            }
+
+            .filter-btn {
+                flex: 1;
+                min-width: calc(33.33% - 7px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 My Todo List</h1>
+            <p>Stay organized and productive</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="total-count">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="active-count">0</div>
+                <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="completed-count">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="todo-input" 
+                placeholder="Add a new task..." 
+                onkeypress="handleKeyPress(event)"
+            >
+            <button onclick="addTodo()">Add</button>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterTodos('all')">All</button>
+            <button class="filter-btn" onclick="filterTodos('active')">Active</button>
+            <button class="filter-btn" onclick="filterTodos('completed')">Completed</button>
+        </div>
+
+        <div class="todos-container" id="todos-list">
+            <div class="empty-state">
+                <p>📭 No todos yet. Add one to get started!</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button onclick="clearCompleted()">Clear Completed</button>
+            <button onclick="openExportModal()">Export</button>
+            <button onclick="openClearAllModal()">Clear All</button>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">Edit Task</div>
+            <div class="modal-form">
+                <div class="form-group">
+                    <label for="edit-title">Task Title</label>
+                    <input type="text" id="edit-title" placeholder="Enter task title">
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" placeholder="Enter task description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-priority">Priority</label>
+                    <select id="edit-priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="saveEdit()">Save</button>
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="export-modal">
+        <div class="modal-content">
+            <div class="modal-header">Export Todos</div>
+            <textarea id="export-text" readonly style="width: 100%; height: 200px; padding: 10px; border: 2px solid #ddd; border-radius: 6px; font-family: monospace;"></textarea>
+            <div class="modal-buttons">
+                <button class="save-btn" onclick="copyExport()">Copy to Clipboard</button>
+                <button class="cancel-btn" onclick="closeExportModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear All Modal -->
+    <div class="modal" id="clear-all-modal">
+        <div class="modal-content">
+            <div class="modal-header">Clear All Tasks?</div>
+            <p style="color: #666; margin-bottom: 20px;">This will permanently delete all tasks. This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="delete-btn" onclick="confirmClearAll()" style="background: #ff6b6b;">Yes, Delete All</button>
+                <button class="cancel-btn" onclick="closeClearAllModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const STORAGE_KEY = 'explorapi_todos';
+        let todos = [];
+        let currentFilter = 'all';
+        let editingId = null;
+
+        // Initialize app
+        function init() {
+            loadTodos();
+            renderTodos();
+            updateStats();
+        }
+
+        // Load todos from localStorage
+        function loadTodos() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            todos = stored ? JSON.parse(stored) : [];
+        }
+
+        // Save todos to localStorage
+        function saveTodos() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+        }
+
+        // Add new todo
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            const text = input.value.trim();
+
+            if (!text) {
+                alert('Please enter a task');
+                return;
+            }
+
+            const todo = {
+                id: Date.now(),
+                text: text,
+                description: '',
+                completed: false,
+                priority: 'medium',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            todos.unshift(todo);
+            saveTodos();
+            renderTodos();
+            updateStats();
+            input.value = '';
+            input.focus();
+        }
+
+        // Toggle todo completion
+        function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                todo.updatedAt = new Date().toISOString();
+                saveTodos();
+                renderTodos();
+                updateStats();
+            }
+        }
+
+        // Delete todo
+        function deleteTodo(id) {
+            todos = todos.filter(t => t.id !== id);
+            saveTodos();
+            renderTodos();
+            updateStats();
+        }
+
+        // Open edit modal
+        function openEditModal(id) {
+            const todo = todos.find(t => t.id === id);
+            if (!todo) return;
+
+            editingId = id;
+            document.getElementById('edit-title').value = todo.text;
+            document.getElementById('edit-description').value = todo.description;
+            document.getElementById('edit-priority').value = todo.priority;
+            document.getElementById('edit-modal').classList.add('active');
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('edit-modal').classList.remove('active');
+            editingId = null;
+        }
+
+        // Save edit
+        function saveEdit() {
+            const todo = todos.find(t => t.id === editingId);
+            if (!todo) return;
+
+            todo.text = document.getElementById('edit-title').value.trim();
+            todo.description = document.getElementById('edit-description').value.trim();
+            todo.priority = document.getElementById('edit-priority').value;
+            todo.updatedAt = new Date().toISOString();
+
+            saveTodos();
+            renderTodos();
+            updateStats();
+            closeEditModal();
+        }
+
+        // Filter todos
+        function filterTodos(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            renderTodos();
+        }
+
+        // Get filtered todos
+        function getFilteredTodos() {
+            switch (currentFilter) {
+                case 'active':
+                    return todos.filter(t => !t.completed);
+                case 'completed':
+                    return todos.filter(t => t.completed);
+                default:
+                    return todos;
+            }
+        }
+
+        // Render todos
+        function renderTodos() {
+            const container = document.getElementById('todos-list');
+            const filtered = getFilteredTodos();
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>📭 No tasks to show</p></div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(todo => `
+                <div class="todo-item ${todo.completed ? 'completed' : ''}">
+                    <input 
+                        type="checkbox" 
+                        class="todo-checkbox" 
+                        ${todo.completed ? 'checked' : ''}
+                        onchange="toggleTodo(${todo.id})"
+                    >
+                    <div class="todo-content">
+                        <div class="todo-text">${escapeHtml(todo.text)}</div>
+                        <div class="todo-meta">
+                            <span class="todo-priority priority-${todo.priority}">${todo.priority.toUpperCase()}</span>
+                            <span>${formatDate(todo.createdAt)}</span>
+                        </div>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="todo-btn edit-btn" onclick="openEditModal(${todo.id})">Edit</button>
+                        <button class="todo-btn delete-btn" onclick="deleteTodo(${todo.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update stats
+        function updateStats() {
+            const total = todos.length;
+            const completed = todos.filter(t => t.completed).length;
+            const active = total - completed;
+
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('active-count').textContent = active;
+            document.getElementById('completed-count').textContent = completed;
+        }
+
+        // Clear completed todos
+        function clearCompleted() {
+            if (todos.filter(t => t.completed).length === 0) {
+                alert('No completed tasks to clear');
+                return;
+            }
+            todos = todos.filter(t => !t.completed);
+            saveTodos();
+            renderTodos();
+            updateStats();
+        }
+
+        // Open export modal
+        function openExportModal() {
+            const exportData = JSON.stringify(todos, null, 2);
+            document.getElementById('export-text').value = exportData;
+            document.getElementById('export-modal').classList.add('active');
+        }
+
+        // Close export modal
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.remove('active');
+        }
+
+        // Copy export to clipboard
+        function copyExport() {
+            const textarea = document.getElementById('export-text');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard!');
+        }
+
+        // Open clear all modal
+        function openClearAllModal() {
+            document.getElementById('clear-all-modal').classList.add('active');
+        }
+
+        // Close clear all modal
+        function closeClearAllModal() {
+            document.getElementById('clear-all-modal').classList.remove('active');
+        }
+
+        // Confirm clear all
+        function confirmClearAll() {
+            todos = [];
+            saveTodos();
+            renderTodos();
+            updateStats();
+            closeClearAllModal();
+        }
+
+        // Handle keyboard press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTodo();
+            }
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

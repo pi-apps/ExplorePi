@@ -1,0 +1,127 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+.pytest_cache/
+htmlcov/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Documentation
+docs/_build/
+.sphinx/
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups
+backups/
+*.tar.gz
+*.zip
+*.bak
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Reports
+reports/*.html
+reports/*.json
+!reports/.gitkeep
+
+# Processed data (keep structure, ignore content)
+processed/*
+!processed/.gitkeep
+
+# Security
+*.pem
+*.key
+*.cert
+secrets/
+
+# Node (if using any JS tools)
+node_modules/
+package-lock.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Profiling
+*.prof
+*.lprof
+.profiling/
+
+# Docker
+docker-compose.override.yml
